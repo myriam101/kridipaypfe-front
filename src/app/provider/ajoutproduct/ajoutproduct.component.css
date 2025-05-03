@@ -1,0 +1,24 @@
+body {
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  .form-card {
+    width: 100%;
+    max-width: 700px;
+    padding: 2rem;
+  }
+  
+  .text-primary {
+    color: #216490 !important;
+  }
+  
+  .btn-primary {
+    background-color: #216490;
+    border-color: #216490;
+  }
+  
+  .btn-primary:hover {
+    background-color: #1a4f76;
+    border-color: #1a4f76;
+  }
+  

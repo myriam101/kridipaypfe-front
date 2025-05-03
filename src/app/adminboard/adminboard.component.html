@@ -1,0 +1,35 @@
+<div class="dashboard-wrapper d-flex">
+    <!-- Sidebar -->
+    <aside class="sidebar bg-white shadow-sm p-3">
+      <h4 class="text-primary fw-bold mb-4">Dashboard</h4>
+      <nav class="nav flex-column">
+        <a class="nav-link active" routerLink="/admin/overview">
+          <i class="zmdi zmdi-view-dashboard me-2"></i> Overview
+        </a>
+        <a class="nav-link" routerLink="/admin/products">
+          <i class="zmdi zmdi-label me-2"></i> Products
+        </a>
+        <a class="nav-link" routerLink="/admin/users">
+          <i class="zmdi zmdi-accounts me-2"></i> Users
+        </a>
+        <a class="nav-link" routerLink="/admin/reports">
+          <i class="zmdi zmdi-chart me-2"></i> Reports
+        </a>
+        <a class="nav-link" routerLink="/admin/settings">
+          <i class="zmdi zmdi-settings me-2"></i> Settings
+        </a>
+      </nav>
+    </aside>
+  
+    <!-- Content -->
+    <main class="content flex-grow-1 p-4">
+      <div class="mb-4">
+        <h2 class="fw-bold">Welcome back, Admin 👋</h2>
+        <p class="text-muted">Here is your dashboard summary.</p>
+      </div>
+  
+      <!-- Actual routed content -->
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+  

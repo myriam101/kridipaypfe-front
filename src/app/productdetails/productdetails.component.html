@@ -1,0 +1,23 @@
+<h2 mat-dialog-title class="dialog-title">{{ data.product.name }}</h2>
+
+<div mat-dialog-content class="dialog-content">
+  <div class="image-wrapper">
+    <img [src]="data.product.imageUrl || 'assets/imagenotavailble.png'" alt="{{ data.product.name }}">
+  </div>
+  <p class="description">{{ data.product.short_description }}</p>
+
+  <div class="product-meta">
+    <span class="brand">{{ data.product.brand }}</span>
+    <span class="price">{{ data.product.price | currency:'USD' }}</span>
+  </div>
+
+  <div class="carbon-score" [ngClass]="data.carbonScore">
+    CO₂ foot print: 
+    <strong>{{ data.carbonScore === 'undefined' ? 'Non défini' : (data.carbonScore | titlecase) }}</strong>
+  </div>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close color="warn">Close</button>
+  <button mat-raised-button color="primary">Buy Now</button>
+</div>

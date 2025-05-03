@@ -1,0 +1,44 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
+<div class="container">
+    <div class="row clearfix">
+       
+       
+      
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
+
+        <div class="container">
+          <div class="row clearfix">
+            <div *ngFor="let product of products" class="col-lg-3 col-md-4 col-sm-12">
+              <div class="card product_item" (click)="openProductDetailDialog(product)">
+                 <!-- Floating Carbon Badge -->
+  <div *ngIf="carbonBadges[product.id]" class="carbon-badge" [ngClass]="carbonBadges[product.id]">
+    {{ carbonBadges[product.id] === 'undefined' ? 'Non défini' : (carbonBadges[product.id] | titlecase) }} CO₂
+  </div>
+                <div class="body">
+                  <div class="cp_img">
+                    <!-- Display product image or a default image if not available -->
+                    <img [src]="product.imageUrl || 'assets/imagenotavailble.png'" alt="{{ product.name }}" class="img-fluid">
+                    <div class="hover">
+                      <a href="javascript:void(0);" class="btn btn-primary btn-sm waves-effect"><i class="zmdi zmdi-plus"></i></a>
+                      <a href="javascript:void(0);" class="btn btn-primary btn-sm waves-effect"><i class="zmdi zmdi-shopping-cart"></i></a>
+                    </div>
+                  </div>
+        
+                  <div class="product_details">
+                    <!-- Product Name -->
+                    <h5><a href="javascript:void(0);">{{ product.name }}</a></h5>
+                    
+                    <!-- Product Short Description -->
+                    <p class="product-description">{{ product.short_description }}</p>
+    
+                    <p class="product-brand">{{ product.brand }}</p>
+        
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+    </div>
+</div>

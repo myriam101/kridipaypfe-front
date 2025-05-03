@@ -1,0 +1,28 @@
+export interface Admin {
+    id:number;
+    full_name:string;
+    first_name:string;
+    last_name:string;
+    sexe:string;
+    phone:string;
+    email:string;
+    password:string;
+    roles:Array<any>;
+    role:any;
+    rolelist:Array<any>;
+    profiles:Array<any>;
+    active:boolean;
+    banqueUser:any;
+    providerUser:any;
+    banque:number|null;
+    provider:number|null;
+    agence:number|null;
+    dossiers:Array<any>;
+    lastDemande:any;
+    lastProject:any;
+    acceptedDemande:any;
+    secteur:number|null;
+    operation?:string;
+    code?:string;
+    function?:string;
+}
