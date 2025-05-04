@@ -8,10 +8,19 @@ import { AdminboardComponent } from './adminboard/adminboard.component';
 import { ProviderComponent } from './provider/provider.component';
 import { ProductsComponent } from './products/products.component';
 import { AjoutproductComponent } from './provider/ajoutproduct/ajoutproduct.component';
+import { CatalogComponent } from './provider/catalog/catalog.component';
+import { ProfileComponent } from './client/profile/profile.component';
+import { CardsComponent } from './adminboard/cards/cards.component';
 
 const routes: Routes = [
-  {path:'client',component: ClientComponent,canActivate: [AuthGuard],data: { roles: ['ROLE_CLIENT']}},
-  {path:'adminboard',component: AdminboardComponent,canActivate: [AuthGuard],data: { roles: ['ROLE_ADMIN']}},
+  {path:'client',component: ClientComponent,
+    children :[{path:'profile',component:ProfileComponent}],
+    canActivate: [AuthGuard],data: { roles: ['ROLE_CLIENT']}},
+  {path:'adminboard',component: AdminboardComponent,
+    children:[
+      {path:'cards',component:CardsComponent}
+    ],
+    canActivate: [AuthGuard],data: { roles: ['ROLE_ADMIN']}},
   {path: 'checkout', component:CheckoutComponent},
   {path:'products', component:ProductsComponent},
   {path:'login',component:AuthLoginComponent},
@@ -20,6 +29,10 @@ const routes: Routes = [
       {
         path: 'addproduct',
         component: AjoutproductComponent
+      },
+      {
+        path: 'catalog',
+        component: CatalogComponent
       }],
     canActivate: [AuthGuard],data: { roles: ['ROLE_PROVIDER']}},];
 

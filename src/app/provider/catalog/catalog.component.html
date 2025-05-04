@@ -1,0 +1,27 @@
+<div *ngIf="catalogs.length > 0; else noCatalogs" class="d-flex flex-column align-items-center my-4">
+    <div class="mb-3 w-100" style="max-width: 400px;">
+      <label for="catalogSelect" class="form-label fw-semibold">Sélectionnez un catalogue :</label>
+      <select
+        id="catalogSelect"
+        [(ngModel)]="selectedCatalogId"
+        class="form-select shadow-sm"
+      >
+        <option *ngFor="let catalog of catalogs" [value]="catalog.id">
+          {{ catalog.name }}
+        </option>
+      </select>
+    </div>
+  
+    <p *ngIf="selectedCatalogId" class="text-muted">
+      Catalogue sélectionné : <strong>{{ getSelectedCatalogName() }}</strong>
+    </p>
+  </div>
+  
+  <ng-template #noCatalogs>
+    <div class="text-center mt-4">
+      <p class="text-danger">Aucun catalogue trouvé.</p>
+    </div>
+  </ng-template>
+  
+  <app-listproducts [catalogId]="selectedCatalogId"></app-listproducts>
+  

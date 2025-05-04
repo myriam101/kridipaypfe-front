@@ -14,6 +14,8 @@ import { ProductService } from 'src/app/services/product.service';
   styleUrls: ['./ajoutproduct.component.css']
 })
 export class AjoutproductComponent {
+    successMessage: string = '';  // Variable pour afficher le message de succès
+
   catalogs: any[] = [];
   productForm!: FormGroup;
   providerId!: number;
@@ -116,6 +118,13 @@ console.log("selected catalog",id);
       this.productService.addProduct(this.providerId, formValue).subscribe({
         next: (response) => {
           console.log('Produit + Feature ajoutés', response);
+          this.successMessage = 'Produit ajouté avec succès !'; // Afficher le message de succès
+          this.productForm.reset(); // Réinitialiser le formulaire
+        // Masquer le message après 5 secondes
+        setTimeout(() => {
+          this.successMessage = '';
+        }, 3000);
+      
           // toast ou redirection
         },
         error: (err) => {

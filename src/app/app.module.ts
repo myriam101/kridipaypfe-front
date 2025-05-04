@@ -30,6 +30,10 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { AdminboardComponent } from './adminboard/adminboard.component';
 import { ProviderComponent } from './provider/provider.component';
 import { AjoutproductComponent } from './provider/ajoutproduct/ajoutproduct.component';
+import { CatalogComponent } from './provider/catalog/catalog.component';
+import { ListproductsComponent } from './provider/listproducts/listproducts.component';
+import { ProfileComponent } from './client/profile/profile.component';
+import { CardsComponent } from './adminboard/cards/cards.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -48,7 +52,11 @@ ProductdetailsComponent,
 SidebarComponent,
 AdminboardComponent,
 ProviderComponent,
-AjoutproductComponent  ],
+AjoutproductComponent,
+CatalogComponent,
+ListproductsComponent,
+ProfileComponent,
+CardsComponent  ],
   imports: [
     BrowserModule,
     CommonModule,

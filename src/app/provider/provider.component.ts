@@ -16,5 +16,8 @@ export class ProviderComponent {
   goToAddProduct() {
     this.router.navigate(['addproduct'], { relativeTo: this.route });
   }
+  goToCatalog() {
+    this.router.navigate(['catalog'], { relativeTo: this.route });
+  }
   
 }

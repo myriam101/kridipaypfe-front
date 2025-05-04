@@ -1,24 +1,30 @@
 body {
-    font-family: 'Poppins', sans-serif;
-  }
-  
-  .form-card {
-    width: 100%;
-    max-width: 700px;
-    padding: 2rem;
-  }
-  
-  .text-primary {
-    color: #216490 !important;
-  }
-  
-  .btn-primary {
-    background-color: #216490;
-    border-color: #216490;
-  }
-  
-  .btn-primary:hover {
-    background-color: #1a4f76;
-    border-color: #1a4f76;
-  }
-  
+  font-family: 'Poppins', sans-serif;
+  background-color: #ffffff;
+  color: #216490; /* Dark text for readability */
+}
+
+.form-card {
+  width: 100%;
+  max-width: 700px;
+  padding: 2rem;
+  background-color: #f4f8fb; /* Light background for card */
+  border: 1px solid #d0dfe8;
+  border-radius: 8px;
+}
+
+.text-primary {
+  color: #1a4f76 !important; /* Darker primary text */
+}
+
+.btn-primary {
+  background-color: #216490;  /* Light blue */
+  border-color: #c0d4e4;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #d0e4f2;
+  border-color: #b0c4d8;
+  color: #163e5c;
+}

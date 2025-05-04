@@ -25,13 +25,13 @@
           </li>
           
           <li class="nav-item">
-            <a class="nav-link" href="#">About</a>
+            <a class="nav-link" (click)="goToProfile()">Profile</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">Services</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Contact</a>
+            <a class="nav-link" href="#">LogOut</a>
           </li>
         </ul>
       </div>
@@ -39,14 +39,14 @@
   </nav>
   
   <!-- Full Page Image Header with Vertically Centered Content -->
-  <header class="masthead">
+  <header class="masthead" style=" background-size: cover; background-position: center; height: 70vh;">
     <div class="container h-100">
       <div class="row h-100 align-items-center">
-        <div class="col-12 text-center">
-          <h1 class="fw-light">Vertically Centered Masthead Content</h1>
-          <p class="lead">A great starter layout for a landing page</p>
-        
-          
+        <div class="col-12 text-center text-white">
+          <h1 class="display-4 fw-bold">Vers la sensibilisation et au-delà 🌱</h1>
+          <p class="lead mt-3">
+            Ensemble, faisons des choix plus responsables. En tant que consommateur, vous avez le pouvoir d'agir pour un avenir plus durable.
+          </p>
         </div>
       </div>
     </div>
@@ -56,7 +56,7 @@
   <section class="py-5">
     <div class="container">
      <app-products [catalogId]="selectedCatalogId"></app-products>
-
+     <router-outlet></router-outlet>
     </div>
   </section>
   <app-footer></app-footer>

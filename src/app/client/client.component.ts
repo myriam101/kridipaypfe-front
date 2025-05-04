@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { ProductService } from '../services/product.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-client',
@@ -8,12 +9,12 @@ import { ProductService } from '../services/product.service';
 })
 export class ClientComponent {
   catalogs: any[] = [];
-  selectedCatalogId: number = 1;
+  selectedCatalogId!: number;
   isSidebarOpen = false;
 
   @Output() catalogSelected = new EventEmitter<number>();
 
-  constructor(private productService: ProductService) {}
+  constructor(private productService: ProductService,private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.productService.getCatalogs().subscribe((data) => {
@@ -38,5 +39,7 @@ export class ClientComponent {
     this.isSidebarOpen = !this.isSidebarOpen;
   }
 
-
+  goToProfile() {
+    this.router.navigate(['profile'], { relativeTo: this.route });
+  }
 }

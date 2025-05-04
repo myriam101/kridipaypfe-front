@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
@@ -21,7 +21,7 @@ export class AuthLoginComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private jwtHelper: JwtHelperService,
-    private providerService:ProviderService
+    private providerService: ProviderService
   ) {}
 
   ngOnInit(): void {
@@ -29,23 +29,6 @@ export class AuthLoginComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
-    const token = localStorage.getItem('token');
-    if (token) {
-      const decoded: any = jwtDecode(token);
-      const email = decoded.email;
-
-      this.providerService.getProviderByEmail(email).subscribe({
-        next: (provider) => {
-          this.providerId = provider.id;
-          // 💾 Tu peux aussi le sauvegarder dans le localStorage si tu veux
-          localStorage.setItem('providerId', this.providerId.toString());
-        },
-        error: (err) => {
-          console.error('Erreur récupération ID provider', err);
-        }
-      });
-    }
-  
   }
 
   onLogin(): void {
@@ -60,25 +43,33 @@ export class AuthLoginComponent implements OnInit {
         const token = response.token;
         localStorage.setItem('token', token);
 
-        const decodedToken = this.jwtHelper.decodeToken(token);
+        const decodedToken: any = this.jwtHelper.decodeToken(token);
         const roles = decodedToken.roles || [];
+        const userEmail = decodedToken.email;
 
-        if (roles.includes('ROLE_ADMIN')) {
+        if (roles.includes('ROLE_PROVIDER')) {
+          this.providerService.getProviderByEmail(userEmail).subscribe({
+            next: (provider) => {
+              this.providerId = provider.id;
+              localStorage.setItem('providerId', this.providerId.toString());
+              this.router.navigate(['/provider']);
+            },
+            error: (err) => {
+              console.error('Erreur récupération ID provider', err);
+              this.errorMessage = 'Erreur lors de la récupération du compte fournisseur.';
+            }
+          });
+        } else if (roles.includes('ROLE_ADMIN')) {
           this.router.navigate(['/adminboard']);
         } else if (roles.includes('ROLE_CLIENT')) {
           this.router.navigate(['/client']);
-        } else if (roles.includes('ROLE_PROVIDER')) {
-          this.router.navigate(['/provider']);
-        }
-         else {
+        } else {
           this.router.navigate(['/unauthorized']);
         }
       },
       (error) => {
-        this.errorMessage = 'Identifiants incorrects!';
+        this.errorMessage = 'Identifiants incorrects !';
       }
     );
   }
 }
-
-
