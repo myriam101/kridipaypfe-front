@@ -11,7 +11,7 @@ export interface Product {
     bonifpoint: number;
     bonifvisible: boolean;
     reference: string;
-    catalog: Catalog;
+    id_catalog: number;
     categories: Category[];
     id_provider:number;
   

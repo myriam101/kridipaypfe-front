@@ -8,7 +8,7 @@
             <div class="mb-3">
             <mat-form-field appearance="fill" class="w-100">
               <mat-label>Choisir un catalogue</mat-label>
-              <mat-select (selectionChange)="onSelectCatalog($event.value)">
+              <mat-select formControlName="id_catalog" (selectionChange)="onSelectCatalog($event.value)">
                 <mat-option *ngFor="let catalog of catalogs" [value]="catalog.id_catalog">
                   {{ catalog.name }}
                 </mat-option>
@@ -24,24 +24,446 @@
               <input formControlName="brand" class="form-control"placeholder="Entrez la marque">
             </div>
           </div>
-  
+          <div class="row">
+            <div class="col-md-6 mb-3">
+                <input formControlName="reference" class="form-control"placeholder="Entrez la reference">
+              </div>
+            <div class="col-md-6 mb-3">
+              <input formControlName="weight" class="form-control"placeholder="Entrez le poids(en kg)">
+            </div>
+          </div>
+         
           <div class="mb-3">
             <textarea formControlName="short_description" class="form-control" rows="3" placeholder="Brève description..."></textarea>
           </div>
           
-  
           <div class="mb-4">
             <label for="category" class="form-label">Désignation</label>
-            <select class="form-select" formControlName="category_id" id="category">
+            <select class="form-select" formControlName="category_id" id="category" (change)="onDesignationChange($event)">
               <option selected disabled>Choisissez une désignation</option>
               <option *ngFor="let cat of categories" [value]="cat.id">
                 {{ getDesignationName(cat.designation) }}
               </option>
             </select>
           </div>
-          
-          
+          <div formGroupName="features">
+
+<!-- Champs spécifiques aux Lave-Linge -->
+<div *ngIf="isLaveLinge">
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <input type="number" class="form-control" formControlName="cycle_duration" placeholder="Duree du cycle" />
+          </div>
+          <div class="col-md-6 mb-3">
+            <input type="number" class="form-control" formControlName="consumption_liter" placeholder="Consommation LITRES"/>
+          </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+            <input type="number" class="form-control" formControlName="consumption_watt" placeholder="Consommation WATT" />
+          </div>
+          <div class="col-md-6 mb-3">
+            <input type="number" class="form-control" formControlName="power" placeholder="Puissance"/>
+          </div>
+      </div>
+      <div class="row">
+      <div class="col-md-6 mb-3">
+        <mat-form-field appearance="fill" class="w-100">
+            <mat-select formControlName="energy_class" placeholder="Classe Énergétique">
+              <mat-option *ngFor="let classe of energyClasses" [value]="classe">{{ classe }}</mat-option>
+            </mat-select>
+          </mat-form-field>          
+      </div>
+      <div class="col-md-6 mb-3">
+        <input type="number" class="form-control" formControlName="capacity" placeholder="Capacité"/>
+      </div>
+      </div>
+  </div>
   
+  <!-- Champs spécifiques aux Réfrigérateurs -->
+  <div *ngIf="isRefrigerateur">
+    <div class="row">
+    <div class="col-md-6 mb-3">
+      <input type="number" class="form-control" formControlName="volume_refrigeration" placeholder=" Volume refrigeration"  />
+    </div>
+    <div class="col-md-6 mb-3">
+      <input type="number" class="form-control" formControlName="volume_freezer" placeholder="Volume congelateur"  />
+    </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+          <input type="number" class="form-control" formControlName="noise" placeholder=" Bruit (decibel)"  />
+        </div>
+        <div class="col-md-6 mb-3">
+          <input type="number" class="form-control" formControlName="power" placeholder="Puissance"  />
+        </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <input type="number" class="form-control" formControlName="consumption_watt" placeholder="Consommation WATT" />
+              </div>
+            <div class="col-md-6 mb-3">
+                <input type="number" class="form-control" formControlName="capacity" placeholder="Capacité"/>
+              </div>
+            </div>
+            <div class="mb-3">
+                <mat-form-field appearance="fill" class="w-100">
+                    <mat-select formControlName="energy_class" placeholder="Classe Énergétique">
+                      <mat-option *ngFor="let classe of energyClasses" [value]="classe">{{ classe }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>          
+              </div>
+  </div>
+         <!-- Champs spécifiques aux SecheLinge -->
+<div *ngIf="isSecheLinge">
+    <div class="row">
+        <div class="col-md-6 mb-3">
+          <input type="number" class="form-control" formControlName="noise" placeholder=" Bruit (decibel)"  />
+        </div>
+        <div class="col-md-6 mb-3">
+          <input type="number" class="form-control" formControlName="capacity" placeholder="Capacité"  />
+        </div>
+        <div class="col-md-6 mb-3">
+            <input type="number" class="form-control" formControlName="cycle_duration"  placeholder="Duree du cycle" />
+          </div>
+          <div class="col-md-6 mb-3">
+            <input type="number" class="form-control" formControlName="consumption_watt" placeholder="Consommation WATT" />
+          </div>
+          <div class="col-md-6 mb-3">
+            <input type="number" class="form-control" formControlName="power" placeholder="Puissance"/>
+          </div>
+        </div>
+   
+    
+      <div class="mb-3">
+        <mat-form-field appearance="fill" class="w-100">
+            <mat-select formControlName="energy_class" placeholder="Classe Énergétique">
+              <mat-option *ngFor="let classe of energyClasses" [value]="classe">{{ classe }}</mat-option>
+            </mat-select>
+          </mat-form-field>          
+      </div>
+  </div> 
+  <!-- Champs spécifiques aux lavante sechante -->
+<div *ngIf="isLavanteSechante">
+    <div class="row">
+        <div class="col-md-6 mb-3">
+          <input type="number" class="form-control" formControlName="noise" placeholder=" Bruit (decibel)"  />
+        </div>
+        <div class="col-md-6 mb-3">
+          <input type="number" class="form-control" formControlName="capacity" placeholder="Capacité"  />
+        </div>
+        <div class="col-md-6 mb-3">
+            <input type="number" class="form-control" formControlName="cycle_duration"  placeholder="Duree du cycle" />
+          </div>
+          <div class="col-md-6 mb-3">
+            <input type="number" class="form-control" formControlName="consumption_watt" placeholder="Consommation WATT" />
+          </div>
+          <div class="col-md-6 mb-3">
+            <input type="number" class="form-control" formControlName="power" placeholder="Puissance"/>
+          </div>
+          <div class="col-md-6 mb-3">
+            <input type="number" class="form-control" formControlName="consumption_liter" placeholder="Consommation LITRES"/>
+          </div>
+        </div>
+      <div class="mb-3">
+        <mat-form-field appearance="fill" class="w-100">
+            <mat-select formControlName="energy_class" placeholder="Classe Énergétique">
+              <mat-option *ngFor="let classe of energyClasses" [value]="classe">{{ classe }}</mat-option>
+            </mat-select>
+          </mat-form-field>          
+      </div>
+  </div> 
+  
+   <!-- Champs spécifiques aux lave vaisselle -->
+<div *ngIf="isLaveVaisselle">
+    <div class="row">
+        <div class="col-md-6 mb-3">
+          <input type="number" class="form-control" formControlName="noise" placeholder=" Bruit (decibel)"  />
+        </div>
+        <div class="col-md-6 mb-3">
+          <input type="number" class="form-control" formControlName="capacity" placeholder="Capacité"  />
+        </div>
+        <div class="col-md-6 mb-3">
+            <input type="number" class="form-control" formControlName="cycle_duration"  placeholder="Duree du cycle" />
+          </div>
+          <div class="col-md-6 mb-3">
+            <input type="number" class="form-control" formControlName="consumption_watt" placeholder="Consommation WATT" />
+          </div>
+          <div class="col-md-6 mb-3">
+            <input type="number" class="form-control" formControlName="power" placeholder="Puissance"/>
+          </div>
+          <div class="col-md-6 mb-3">
+            <input type="number" class="form-control" formControlName="consumption_liter" placeholder="Consommation LITRES"/>
+          </div>
+          <div class="col-md-6 mb-3">
+            <input type="number" class="form-control" formControlName="nbr_couvert" placeholder="Nbr de couvert"/>
+          </div>
+        </div>
+      <div class="mb-3">
+        <mat-form-field appearance="fill" class="w-100">
+            <mat-select formControlName="energy_class" placeholder="Classe Énergétique">
+              <mat-option *ngFor="let classe of energyClasses" [value]="classe">{{ classe }}</mat-option>
+            </mat-select>
+          </mat-form-field>          
+      </div>
+  </div> 
+  <!-- Champs spécifiques aux fours -->
+<div *ngIf="isFour">
+    <div class="row">
+        <div class="col-md-6 mb-3">
+          <input type="number" class="form-control" formControlName="noise" placeholder=" Bruit (decibel)"  />
+        </div>
+          <div class="col-md-6 mb-3">
+            <input type="number" class="form-control" formControlName="consumption_watt" placeholder="Consommation WATT" />
+          </div>
+          <div class="col-md-6 mb-3">
+            <input type="number" class="form-control" formControlName="power" placeholder="Puissance"/>
+          </div>
+          
+        </div>
+        <div class="row">
+        <div class="col-md-6 mb-3">
+            <mat-form-field appearance="fill" class="w-100">
+                <mat-select formControlName="type" placeholder="Type ">
+                  <mat-option *ngFor="let type of typefeatures" [value]="type">{{ type }}</mat-option>
+                </mat-select>
+              </mat-form-field>          
+          </div>
+      <div class="col-md-6 mb-3">
+        <mat-form-field appearance="fill" class="w-100">
+            <mat-select formControlName="energy_class" placeholder="Classe Énergétique">
+              <mat-option *ngFor="let classe of energyClasses" [value]="classe">{{ classe }}</mat-option>
+            </mat-select>
+          </mat-form-field>          
+      </div>
+        </div>
+  </div> 
+  <!-- Champs spécifiques aux clim -->
+<div *ngIf="isClimatiseur">
+    <div class="row">
+        <div class="col-md-6 mb-3">
+          <input type="number" class="form-control" formControlName="noise" placeholder=" Bruit (decibel)"  />
+        </div>
+          <div class="col-md-6 mb-3">
+            <input type="number" class="form-control" formControlName="consumption_watt" placeholder="Consommation WATT" />
+          </div>
+          <div class="col-md-6 mb-3">
+            <input type="number" class="form-control" formControlName="power" placeholder="Puissance"/>
+          </div>
+          <div class="col-md-6 mb-3">
+            <input type="number" class="form-control" formControlName="scop" placeholder="SCOP"/>
+          </div> <div class="col-md-6 mb-3">
+            <input type="number" class="form-control" formControlName="seer" placeholder="SEER"/>
+          </div>
+          
+        </div>
+        <div class="row">
+        <div class="col-md-6 mb-3">
+            <mat-form-field appearance="fill" class="w-100">
+                <mat-select formControlName="type" placeholder="Type ">
+                  <mat-option *ngFor="let type of typefeatures" [value]="type">{{ type }}</mat-option>
+                </mat-select>
+              </mat-form-field>          
+          </div>
+      <div class="col-md-6 mb-3">
+        <mat-form-field appearance="fill" class="w-100">
+            <mat-select formControlName="energy_class" placeholder="Classe Énergétique">
+              <mat-option *ngFor="let classe of energyClasses" [value]="classe">{{ classe }}</mat-option>
+            </mat-select>
+          </mat-form-field>          
+      </div>
+        </div>
+  </div> 
+  <!-- Champs spécifiques aux isCaveVin -->
+<div *ngIf="isCaveVin">
+    <div class="row">
+        <div class="col-md-6 mb-3">
+          <input type="number" class="form-control" formControlName="noise" placeholder=" Bruit (decibel)"  />
+        </div>
+          <div class="col-md-6 mb-3">
+            <input type="number" class="form-control" formControlName="consumption_watt" placeholder="Consommation WATT" />
+          </div>
+          <div class="col-md-6 mb-3">
+            <input type="number" class="form-control" formControlName="power" placeholder="Puissance"/>
+          </div>
+          <div class="col-md-6 mb-3">
+            <input type="number" class="form-control" formControlName="nb_bottle" placeholder="Nbr de bouteilles"/>
+          
+        </div>
+      <div class=" mb-3">
+        <mat-form-field appearance="fill" class="w-100">
+            <mat-select formControlName="energy_class" placeholder="Classe Énergétique">
+              <mat-option *ngFor="let classe of energyClasses" [value]="classe">{{ classe }}</mat-option>
+            </mat-select>
+          </mat-form-field>          
+      </div>
+  </div> 
+</div>
+<!-- Champs spécifiques aux congelo -->
+<div *ngIf="isCongelateur">
+    <div class="row">
+    <div class="col-md-6 mb-3">
+      <input type="number" class="form-control" formControlName="volume_freezer" placeholder="Volume congelateur"  />
+    </div>
+        <div class="col-md-6 mb-3">
+          <input type="number" class="form-control" formControlName="noise" placeholder=" Bruit (decibel)"  />
+        </div>
+        <div class="col-md-6 mb-3">
+          <input type="number" class="form-control" formControlName="power" placeholder="Puissance"  />
+        </div>
+            <div class="col-md-6 mb-3">
+                <input type="number" class="form-control" formControlName="consumption_watt" placeholder="Consommation WATT" />
+              </div>
+            <div class="col-md-6 mb-3">
+                <input type="number" class="form-control" formControlName="capacity" placeholder="Capacité"/>
+              </div>
+            </div>
+            <div class="mb-3">
+                <mat-form-field appearance="fill" class="w-100">
+                    <mat-select formControlName="energy_class" placeholder="Classe Énergétique">
+                      <mat-option *ngFor="let classe of energyClasses" [value]="classe">{{ classe }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>          
+              </div>
+  </div>
+   <!-- Champs spécifiques aux hottes -->
+<div *ngIf="isHotte">
+    <div class="row">
+        <div class="col-md-6 mb-3">
+          <input type="number" class="form-control" formControlName="noise" placeholder=" Bruit (decibel)"  />
+        </div>
+          <div class="col-md-6 mb-3">
+            <input type="number" class="form-control" formControlName="consumption_watt" placeholder="Consommation WATT" />
+          </div>
+          <div class="col-md-6 mb-3">
+            <input type="number" class="form-control" formControlName="power" placeholder="Puissance"/>
+          </div>
+          
+        </div>
+        <div class="row">
+        <div class="col-md-6 mb-3">
+            <mat-form-field appearance="fill" class="w-100">
+                <mat-select formControlName="type" placeholder="Type ">
+                  <mat-option *ngFor="let type of typefeatures" [value]="type">{{ type }}</mat-option>
+                </mat-select>
+              </mat-form-field>          
+          </div>
+      <div class="col-md-6 mb-3">
+        <mat-form-field appearance="fill" class="w-100">
+            <mat-select formControlName="energy_class" placeholder="Classe Énergétique">
+              <mat-option *ngFor="let classe of energyClasses" [value]="classe">{{ classe }}</mat-option>
+            </mat-select>
+          </mat-form-field>          
+      </div>
+        </div>
+  </div> 
+  <!-- Champs spécifiques aux isTableCuisson -->
+<div *ngIf="isTableCuisson">
+    <div class="row">
+          <div class="col-md-6 mb-3">
+            <input type="number" class="form-control" formControlName="consumption_watt" placeholder="Consommation WATT" />
+          </div>
+          <div class="col-md-6 mb-3">
+            <input type="number" class="form-control" formControlName="power" placeholder="Puissance"/>
+          </div>
+          
+        </div>
+        <div class="row">
+        <div class="col-md-6 mb-3">
+            <mat-form-field appearance="fill" class="w-100">
+                <mat-select formControlName="type" placeholder="Type ">
+                  <mat-option *ngFor="let type of typefeatures" [value]="type">{{ type }}</mat-option>
+                </mat-select>
+              </mat-form-field>          
+          </div>
+      <div class="col-md-6 mb-3">
+        <mat-form-field appearance="fill" class="w-100">
+            <mat-select formControlName="energy_class" placeholder="Classe Énergétique">
+              <mat-option *ngFor="let classe of energyClasses" [value]="classe">{{ classe }}</mat-option>
+            </mat-select>
+          </mat-form-field>          
+      </div>
+        </div>
+  </div> 
+  <!-- Champs spécifiques aux isAspirateur -->
+<div *ngIf="isAspirateur">
+    <div class="row">
+          <div class="col-md-6 mb-3">
+            <input type="number" class="form-control" formControlName="consumption_watt" placeholder="Consommation WATT" />
+          </div>
+          <div class="col-md-6 mb-3">
+            <input type="number" class="form-control" formControlName="power" placeholder="Puissance"/>
+          </div>
+          <div class="col-md-6 mb-3">
+            <input type="number" class="form-control" formControlName="noise" placeholder="Bruit (decibel)"/>
+          </div>
+          <div class="col-md-6 mb-3">
+            <input type="number" class="form-control" formControlName="volume_collect" placeholder="Vollume collecte"/>
+          </div>
+        </div>
+        <div class="row">
+      <div class="col-md-6 mb-3">
+        <mat-form-field appearance="fill" class="w-100">
+            <mat-select formControlName="energy_class" placeholder="Classe Énergétique">
+              <mat-option *ngFor="let classe of energyClasses" [value]="classe">{{ classe }}</mat-option>
+            </mat-select>
+          </mat-form-field>          
+      </div>
+        </div>
+  </div> 
+  <!-- Champs spécifiques  -->
+<div *ngIf="isChauffage||isChauffeEau||isChaudiere">
+    <div class="row">
+        <div class="col-md-6 mb-3">
+          <input type="number" class="form-control" formControlName="power" placeholder="Puissance"  />
+        </div>
+            <div class="col-md-6 mb-3">
+                <input type="number" class="form-control" formControlName="consumption_watt" placeholder="Consommation WATT" />
+              </div>
+            <div class="col-md-6 mb-3">
+                <input type="number" class="form-control" formControlName="debit" placeholder="Debit"/>
+              </div>
+            </div>
+            <div class="mb-4">
+                <mat-form-field appearance="fill" class="w-100">
+                    <mat-select formControlName="energy_class" placeholder="Classe Énergétique">
+                      <mat-option *ngFor="let classe of energyClasses" [value]="classe">{{ classe }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>          
+              </div>
+  </div>
+  <!-- Champs spécifiques TV  -->
+<div *ngIf="isTv">
+    <div class="row">
+        <div class="col-md-6 mb-3">
+          <input type="number" class="form-control" formControlName="power" placeholder="Puissance"  />
+        </div>
+            <div class="col-md-6 mb-3">
+                <input type="number" class="form-control" formControlName="consumption_watt" placeholder="Consommation WATT" />
+              </div>
+            <div class="col-md-6 mb-3">
+                <input type="number" class="form-control" formControlName="hdr_consumption" placeholder="Conso mode HDR"/>
+              </div>
+              <div class="col-md-6 mb-3">
+                <input type="number" class="form-control" formControlName="sdr_consumption" placeholder="Conso mode SDR"/>
+              </div>
+              <div class="col-md-6 mb-3">
+                <input type="number" class="form-control" formControlName="diagonal" placeholder="La diagonale"/>
+              </div>
+              <div class="col-md-6 mb-3">
+                <input type="number" class="form-control" formControlName="resolution" placeholder="La resolution"/>
+              </div>
+              
+            </div>
+            <div class="mb-4">
+                <mat-form-field appearance="fill" class="w-100">
+                    <mat-select formControlName="energy_class" placeholder="Classe Énergétique">
+                      <mat-option *ngFor="let classe of energyClasses" [value]="classe">{{ classe }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>          
+              </div>
+  </div>
+          </div>
           <div class="d-grid">
             <button type="submit" class="btn btn-primary">Ajouter le produit</button>
         </div>

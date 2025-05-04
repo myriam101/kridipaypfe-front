@@ -6,6 +6,7 @@ export interface Feature{
     weight:number;
     noise:number;
     power:number;
+    energy_class:EnergyClass;
     consumption_liter:number;
     consumption_watt:number;
     hdr_consumption:number;
@@ -21,13 +22,14 @@ export interface Feature{
     nbr_couvert:number;
     nb_bottle:number;
     resolution:number;
-    diagonale:number;
+    diagonal:number;
     condens_perform:EnergyClass;
     spindry_class:EnergyClass;
     steam_class:EnergyClass;
     light_class:EnergyClass;
     filtre_class:EnergyClass;
     type:Typefeature;
+    debit:number;
     id_product:number;
     
 
