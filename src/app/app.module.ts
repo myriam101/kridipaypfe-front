@@ -34,6 +34,11 @@ import { CatalogComponent } from './provider/catalog/catalog.component';
 import { ListproductsComponent } from './provider/listproducts/listproducts.component';
 import { ProfileComponent } from './client/profile/profile.component';
 import { CardsComponent } from './adminboard/cards/cards.component';
+import { SimulateurComponent } from './client/simulateur/simulateur.component';
+import { ProductsCornerComponent } from './adminboard/products-corner/products-corner.component';
+import { CatalogsCornerComponent } from './adminboard/catalogs-corner/catalogs-corner.component';
+import { HomeCornerComponent } from './adminboard/home-corner/home-corner.component';
+import { ClientsCornerComponent } from './adminboard/clients-corner/clients-corner.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -56,7 +61,12 @@ AjoutproductComponent,
 CatalogComponent,
 ListproductsComponent,
 ProfileComponent,
-CardsComponent  ],
+CardsComponent,
+SimulateurComponent,
+ProductsCornerComponent,
+CatalogsCornerComponent,
+HomeCornerComponent,
+ClientsCornerComponent  ],
   imports: [
     BrowserModule,
     CommonModule,

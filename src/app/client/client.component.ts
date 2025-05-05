@@ -42,4 +42,12 @@ export class ClientComponent {
   goToProfile() {
     this.router.navigate(['profile'], { relativeTo: this.route });
   }
+  confirmLogout() {
+    const confirmed = window.confirm("Êtes-vous sûr de vouloir vous déconnecter ?");
+    if (confirmed) {
+      localStorage.removeItem('token'); 
+      this.router.navigate(['/login']);
+    }
+  }
+  
 }

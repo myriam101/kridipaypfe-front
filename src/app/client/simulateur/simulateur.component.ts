@@ -1,0 +1,18 @@
+import { Component, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+
+@Component({
+  selector: 'app-simulateur',
+  templateUrl: './simulateur.component.html',
+  styleUrls: ['./simulateur.component.css']
+})
+export class SimulateurComponent {
+  constructor(
+    public dialogRef: MatDialogRef<SimulateurComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {}
+
+  close(): void {
+    this.dialogRef.close();
+  }
+}

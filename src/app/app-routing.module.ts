@@ -11,6 +11,10 @@ import { AjoutproductComponent } from './provider/ajoutproduct/ajoutproduct.comp
 import { CatalogComponent } from './provider/catalog/catalog.component';
 import { ProfileComponent } from './client/profile/profile.component';
 import { CardsComponent } from './adminboard/cards/cards.component';
+import { SimulateurComponent } from './client/simulateur/simulateur.component';
+import { CatalogsCornerComponent } from './adminboard/catalogs-corner/catalogs-corner.component';
+import { HomeCornerComponent } from './adminboard/home-corner/home-corner.component';
+import { ClientsCornerComponent } from './adminboard/clients-corner/clients-corner.component';
 
 const routes: Routes = [
   {path:'client',component: ClientComponent,
@@ -18,10 +22,12 @@ const routes: Routes = [
     canActivate: [AuthGuard],data: { roles: ['ROLE_CLIENT']}},
   {path:'adminboard',component: AdminboardComponent,
     children:[
-      {path:'cards',component:CardsComponent}
-    ],
-    canActivate: [AuthGuard],data: { roles: ['ROLE_ADMIN']}},
+      {path:'cards',component:CardsComponent},
+      {path:'catalogues',component:CatalogsCornerComponent},
+      {path:'home',component:HomeCornerComponent},
+      {path:'clients',component:ClientsCornerComponent}],canActivate: [AuthGuard],data: { roles: ['ROLE_ADMIN']}},
   {path: 'checkout', component:CheckoutComponent},
+  {path: 'simulateur', component:SimulateurComponent},
   {path:'products', component:ProductsComponent},
   {path:'login',component:AuthLoginComponent},
   {path:'provider',component:ProviderComponent,

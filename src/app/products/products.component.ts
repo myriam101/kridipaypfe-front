@@ -3,6 +3,7 @@ import { ProductService } from '../services/product.service';
 import { CarbonService } from '../services/carbon.service';
 import { MatDialog } from '@angular/material/dialog'; // Importer MatDialog
 import { ProductdetailsComponent } from '../productdetails/productdetails.component';
+import { SimulateurComponent } from '../client/simulateur/simulateur.component';
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
@@ -54,6 +55,12 @@ export class ProductsComponent implements OnChanges {
       console.log('Le modal a été fermé');
     });
   }
+  openSimulateur(product: any): void {
+    this.dialog.open(SimulateurComponent, {
+      width: '700px'
+    });
+  }
+  
   
 
 }

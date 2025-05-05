@@ -7,4 +7,9 @@ body {
     box-sizing: border-box;
 
   }
-  
+ /* Classe personnalisée appliquée au modal Angular Material */
+.custom-dialog .mat-dialog-container {
+  border-radius: 16px !important; /* Bord arrondi */
+  padding: 20px !important; /* Optionnel : Ajouter un peu de padding */
+}
+
