@@ -7,23 +7,6 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item active">
-           
-            <div class="dropdown">
-              <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Catalogues
-              </button>
-              <ul class="dropdown-menu">
-                <li *ngFor="let catalog of catalogs">
-                  <a class="dropdown-item" (click)="onSelectCatalog(catalog.id_catalog)">
-                    {{ catalog.name }}
-                  </a>
-                </li>
-              </ul>
-            </div>
-            
-          </li>
-          
           <li class="nav-item">
             <a class="nav-link" (click)="goToProfile()">Profile</a>
           </li>
@@ -58,7 +41,7 @@
   <!-- Page Content -->
   <section class="py-5">
     <div class="container">
-     <app-products [catalogId]="selectedCatalogId"></app-products>
+   <app-catalog-display></app-catalog-display> 
      <router-outlet></router-outlet>
     </div>
   </section>

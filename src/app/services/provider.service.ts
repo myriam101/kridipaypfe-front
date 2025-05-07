@@ -14,4 +14,7 @@ export class ProviderService {
   getProviderByEmail(email: string): Observable<any> {
     return this.http.get(`${this.apiurl}/email/${email}`);
   }
+  getAllProviders(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiurl}/all`);
+  }
 }

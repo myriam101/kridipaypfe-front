@@ -1,17 +1,20 @@
-body{
-    margin-top:20px;
+/* Global body styling */
+body {
+    margin-top: 20px;
     color: #1a202c;
     text-align: left;
-    background-color: #e2e8f0;    
+    background-color: #e2e8f0;
+    font-family: 'Arial', sans-serif;
 }
+
+/* Main body with padding */
 .main-body {
     padding: 15px;
 }
-.card {
-    box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06);
-}
 
+/* Card styling */
 .card {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .1), 0 1px 2px rgba(0, 0, 0, .06);
     position: relative;
     display: flex;
     flex-direction: column;
@@ -19,60 +22,138 @@ body{
     word-wrap: break-word;
     background-color: #fff;
     background-clip: border-box;
-    border: 0 solid rgba(0,0,0,.125);
-    border-radius: .25rem;
+    border: 2px solid #ccc; /* Thin light border */
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+    margin-top: 0.5rem; /* espace vertical entre les lignes */
+
 }
 
+/* Card body with padding */
 .card-body {
     flex: 1 1 auto;
     min-height: 1px;
     padding: 1rem;
+    padding-top: 2rem; /* espace en haut pour la photo */
+    text-align: center; /* Align content centrally */
 }
 
+/* Grid gutters */
 .gutters-sm {
     margin-right: -8px;
     margin-left: -8px;
 }
 
-.gutters-sm>.col, .gutters-sm>[class*=col-] {
+.gutters-sm > .col,
+.gutters-sm > [class^="col-"] {
     padding-right: 8px;
     padding-left: 8px;
 }
-.mb-3, .my-3 {
-    margin-bottom: 1rem!important;
+
+/* Margin bottom for elements */
+.mb-3,
+.my-3 {
+    margin-bottom: 1rem !important;
 }
 
+/* Background color styling */
 .bg-gray-300 {
     background-color: #e2e8f0;
 }
+
+/* Ensure card takes up full height */
 .h-100 {
-    height: 100%!important;
-}
-.shadow-none {
-    box-shadow: none!important;
+    height: 100% !important;
 }
 
-.bg-white {
-    background-color: #fff!important;
+/* Remove shadow on cards when needed */
+.shadow-none {
+    box-shadow: none !important;
 }
+
+/* White background */
+.bg-white {
+    background-color: #fff !important;
+}
+
+/* Button light styling */
 .btn-light {
     color: #1a202c;
     background-color: #fff;
     border-color: #cbd5e0;
 }
-.ml-2, .mx-2 {
-    margin-left: .5rem!important;
+
+/* Add margin to the left of elements */
+.ml-2,
+.mx-2 {
+    margin-left: .5rem !important;
 }
 
+/* Card footer adjustments */
 .card-footer:last-child {
-    border-radius: 0 0 .25rem .25rem;
+    border-radius: 1rem;
+    padding-bottom: 1rem;
 }
-.card-footer, .card-header {
+
+.card-footer,
+.card-header {
     display: flex;
     align-items: center;
-}
-.card-footer {
     padding: .5rem 1rem;
     background-color: #fff;
-    border-top: 0 solid rgba(0,0,0,.125);
+    border-top: 0 solid rgba(0, 0, 0, .125);
 }
+
+/* Profile picture styling */
+.profile-pic {
+    border: 2px solid #ccc; /* Thin light border */
+    width: 80px;             /* Set a standard size */
+    height: 80px;            /* Ensure it's a square */
+    object-fit: cover;       /* Ensure proper image fit inside the circle */
+    border-radius: 50%;      /* Make it round */
+    margin-top: -50px;       /* Adjust to pull the image slightly upwards */
+}
+
+/* Card responsiveness */
+@media (max-width: 576px) {
+    .card-body {
+        padding: 1rem;
+    }
+
+    .profile-pic {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+@media (min-width: 768px) {
+    .profile-pic {
+        width: 80px;
+        height: 80px;
+    }
+}
+.btn-action {
+    background-color: #216490;
+    color: white;
+    border: none;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-action:hover {
+    background-color: #1a4f73; /* Slightly darker on hover */
+  }
+  .star-rating {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .star-rating span {
+    font-size: 20px;
+    color: #ccc; /* étoile vide */
+    margin: 0 2px;
+  }
+  
+  .star-rating span.filled {
+    color: #FFD700; /* étoile pleine jaune doré */
+  }
+    

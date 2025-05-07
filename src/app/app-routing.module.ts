@@ -6,7 +6,6 @@ import { AuthLoginComponent } from './pages/auth-login/auth-login.component';
 import { AuthGuard } from './guards/auth.guard';
 import { AdminboardComponent } from './adminboard/adminboard.component';
 import { ProviderComponent } from './provider/provider.component';
-import { ProductsComponent } from './products/products.component';
 import { AjoutproductComponent } from './provider/ajoutproduct/ajoutproduct.component';
 import { CatalogComponent } from './provider/catalog/catalog.component';
 import { ProfileComponent } from './client/profile/profile.component';
@@ -15,6 +14,7 @@ import { SimulateurComponent } from './client/simulateur/simulateur.component';
 import { CatalogsCornerComponent } from './adminboard/catalogs-corner/catalogs-corner.component';
 import { HomeCornerComponent } from './adminboard/home-corner/home-corner.component';
 import { ClientsCornerComponent } from './adminboard/clients-corner/clients-corner.component';
+import { ProductsComponent } from './client/products/products.component';
 
 const routes: Routes = [
   {path:'client',component: ClientComponent,

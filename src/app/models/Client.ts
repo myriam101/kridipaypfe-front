@@ -3,6 +3,8 @@ export interface Client {
     first_name:string;
     last_name:string;
     full_name:string;
+    totalBonifPts:number;
+    score_carbone:number;
     sexe:string;
     email:string;
     phone:string;

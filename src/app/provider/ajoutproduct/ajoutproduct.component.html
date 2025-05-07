@@ -8,8 +8,9 @@
             <div class="mb-3">
             <mat-form-field appearance="fill" class="w-100">
               <mat-label>Choisir un catalogue</mat-label>
+
               <mat-select formControlName="id_catalog" (selectionChange)="onSelectCatalog($event.value)">
-                <mat-option *ngFor="let catalog of catalogs" [value]="catalog.id_catalog">
+                <mat-option *ngFor="let catalog of catalogs" [value]="catalog.id">
                   {{ catalog.name }}
                 </mat-option>
               </mat-select>

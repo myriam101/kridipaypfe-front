@@ -12,6 +12,9 @@ export class ListproductsComponent implements OnInit, OnChanges {
   products: any[] = [];
   carbonBadges: { [key: number]: string } = {};
   carbonVisible: boolean = true;
+  catalogs: any[] = []; // Tableau pour stocker les catalogues disponibles
+  isLoading :boolean= false;
+
 
   constructor(
     private productService: ProductService,
@@ -19,75 +22,104 @@ export class ListproductsComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit(): void {
-    this.carbonService.getCarbonVisibilityStatus().subscribe({
-      next: (response) => {
-        this.carbonVisible = response.visible;
-        this.loadProducts();
-      },
-      error: (err) => {
-        console.error('Erreur de récupération du statut carbone', err);
-      }
-    });
+    this.loadCatalogs(); // Charger les catalogues dès l'initialisation
   }
 
   ngOnChanges(): void {
     if (this.catalogId) {
-      this.loadProducts();
+      this.onCatalogChange(); // Vérifier la visibilité du carbone à chaque changement de catalogue
     }
   }
 
+  loadCatalogs(): void {
+    // Charger la liste des catalogues depuis l'API
+    this.productService.getCatalogs().subscribe({
+      next: (response) => {
+
+        this.catalogs = response;
+        if (this.catalogId) {
+          this.onCatalogChange(); 
+        }
+      },
+      error: (err) => {
+        console.error('Erreur de récupération des catalogues', err);
+      }
+    });
+  }
+
+  onCatalogChange(): void {
+    if (this.catalogId) {
+      // Vérifier la visibilité pour le catalogue sélectionné
+      this.carbonService.getCarbonVisibilityStatusByCatalog(this.catalogId).subscribe({
+        next: (response) => {
+          this.carbonVisible = response.visible;
+          this.loadProducts(); 
+        },
+        error: (err) => {
+          console.error('Erreur lors de la récupération du statut carbone', err);
+        }
+      });
+    }
+  }
   loadProducts(): void {
     if (!this.catalogId) return;
-
+  
+    this.isLoading = true; // lancement du chargement
+  
     this.productService.getProductsByCatalog(this.catalogId).subscribe({
       next: (products) => {
         this.products = products;
         this.carbonBadges = {};
-
-        // Charger les scores carbone pour chaque produit
+  
+        if (products.length === 0) {
+          this.isLoading = false; //Rien à charger
+          return;
+        }
+  
+        let loadedCount = 0;
         for (let product of products) {
           this.carbonService.getCarbonScore(product.id).subscribe({
             next: (res) => {
               const badgeEnum = res.badge;
-              switch (badgeEnum) {
-                case 0:
-                  this.carbonBadges[product.id] = 'undefined';
-                  break;
-                case 1:
-                  this.carbonBadges[product.id] = 'low';
-                  break;
-                case 2:
-                  this.carbonBadges[product.id] = 'medium';
-                  break;
-                case 3:
-                  this.carbonBadges[product.id] = 'high';
-                  break;
+              this.carbonBadges[product.id] =
+                badgeEnum === 0 ? 'undefined' :
+                badgeEnum === 1 ? 'low' :
+                badgeEnum === 2 ? 'medium' :
+                badgeEnum === 3 ? 'high' : '';
+  
+              loadedCount++;
+              if (loadedCount === products.length) {
+                this.isLoading = false; // Fin du chargement des scores
               }
             },
             error: (err) => {
-              console.error(`Erreur score carbone du produit ${product.id}`, err);
+              console.error(`Erreur score carbone produit ${product.id}`, err);
+              loadedCount++;
+              if (loadedCount === products.length) {
+                this.isLoading = false;
+              }
             }
           });
         }
       },
       error: (err) => {
         console.error('Erreur de chargement des produits', err);
+        this.isLoading = false; // Fin même en cas d’erreur
       }
     });
   }
+  
 
   toggleCarbonVisibility(): void {
-    const action = this.carbonVisible
-      ? this.carbonService.setAllCarbonVisibleToOne()
-      : this.carbonService.setAllCarbonVisibleToZero();
-
-    action.subscribe({
+    if (!this.catalogId) return;
+  
+    this.carbonService.setVisibilityByCatalog(this.catalogId, this.carbonVisible ? 1 : 0).subscribe({
       next: () => {
-        console.log('Visibilité carbone mise à jour');
-        this.loadProducts(); // Recharge les produits pour refléter le nouveau statut
+        console.log('Visibilité carbone mise à jour pour le catalogue', this.catalogId);
+        this.loadProducts(); // Recharger les produits après la mise à jour
       },
       error: (err) => {
-        console.error('Erreur lors du changement de visibilité carbone', err);
+        console.error('Erreur de mise à jour de visibilité carbone', err);
       }
     });
   }

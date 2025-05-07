@@ -1,77 +1,81 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
-<div *ngIf="catalogId">
+<!-- Spinner de chargement -->
+<div *ngIf="isLoading" class="text-center my-4">
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Chargement...</span>
+  </div>
+</div>
 
-<div class="container">
-  <!-- Toggle switch carbone -->
-  <div class="bg-light border rounded p-3 mb-4">
-    <div class="d-flex align-items-center justify-content-between">
-      <label for="carbonToggle" class="form-label mb-0">Visibilité empreinte carbone :</label>
-      <div class="form-check form-switch d-flex align-items-center">
-        <input
-          class="form-check-input"
-          type="checkbox"
-          id="carbonToggle"
-          [(ngModel)]="carbonVisible"
-          (change)="toggleCarbonVisibility()"
-        />
-        <label
-          class="form-check-label ms-2"
-          for="carbonToggle"
-          style="min-width: 80px; white-space: nowrap;"
-        >
-          {{ carbonVisible ? 'Activée' : 'Désactivée' }}
-        </label>
+<!-- Cas : aucun catalogue sélectionné -->
+<div *ngIf="!isLoading && !catalogId" class="text-center mt-4">
+  <p class="text-muted">Sélectionnez un catalogue pour afficher ses produits.</p>
+</div>
+
+<!-- Cas : catalogue sélectionné -->
+<div *ngIf="!isLoading && catalogId">
+  <div class="container">
+    
+    <!-- Toggle switch carbone -->
+    <div class="bg-light border rounded p-3 mb-4">
+      <div class="d-flex align-items-center justify-content-between">
+        <label for="carbonToggle" class="form-label mb-0">Visibilité empreinte carbone :</label>
+        <div class="form-check form-switch d-flex align-items-center">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="carbonToggle"
+            [(ngModel)]="carbonVisible"
+            (change)="toggleCarbonVisibility()"
+          />
+          <label class="form-check-label ms-2" for="carbonToggle" style="min-width: 80px; white-space: nowrap;">
+            {{ carbonVisible ? 'Activée' : 'Désactivée' }}
+          </label>
+        </div>
       </div>
     </div>
-  </div>
-  
 
-  <!-- Liste des produits -->
-  <div class="row clearfix" *ngIf="products.length > 0; else noProducts">
-    <div *ngFor="let product of products" class="col-lg-3 col-md-4 col-sm-12">
-      <div class="card product_item">
-        
-        <!-- Floating Carbon Badge -->
-        <div
-          *ngIf="carbonVisible && carbonBadges[product.id]"
-          class="carbon-badge"
-          [ngClass]="carbonBadges[product.id]"
-        >
-          {{ carbonBadges[product.id] === 'undefined' ? 'Non défini' : (carbonBadges[product.id] | titlecase) }} CO₂
-        </div>
+    <!-- Liste des produits -->
+    <div class="row clearfix" *ngIf="products.length > 0; else noProducts">
+      <div *ngFor="let product of products" class="col-lg-3 col-md-4 col-sm-12">
+        <div class="card product_item">
 
-        <div class="body">
-          <div class="cp_img">
-            <img
-              [src]="product.imageUrl || 'assets/imagenotavailble.png'"
-              alt="{{ product.name }}"
-              class="img-fluid"
-            />
-            <div class="hover">
-              <a href="javascript:void(0);" class="btn btn-primary btn-sm waves-effect">
-                <i class="zmdi zmdi-plus"></i>
-              </a>
-              <a href="javascript:void(0);" class="btn btn-primary btn-sm waves-effect">
-                <i class="zmdi zmdi-shopping-cart"></i>
-              </a>
+          <!-- Floating Carbon Badge -->
+          <div *ngIf="carbonVisible && carbonBadges[product.id]" class="carbon-badge" [ngClass]="carbonBadges[product.id]">
+            {{ carbonBadges[product.id] === 'undefined' ? 'Non défini' : (carbonBadges[product.id] | titlecase) }} CO₂
+          </div>
+
+          <div class="body">
+            <div class="cp_img">
+              <img
+                [src]="product.imageUrl || 'assets/imagenotavailble.png'"
+                alt="{{ product.name }}"
+                class="img-fluid"
+              />
+              <div class="hover">
+                <a href="javascript:void(0);" class="btn btn-primary btn-sm waves-effect">
+                  <i class="zmdi zmdi-plus"></i>
+                </a>
+                <a href="javascript:void(0);" class="btn btn-primary btn-sm waves-effect">
+                  <i class="zmdi zmdi-shopping-cart"></i>
+                </a>
+              </div>
+            </div>
+
+            <div class="product_details">
+              <h5><a href="javascript:void(0);">{{ product.name }}</a></h5>
+              <p class="product-description">{{ product.short_description }}</p>
+              <p class="product-brand">{{ product.brand }}</p>
             </div>
           </div>
-
-          <div class="product_details">
-            <h5><a href="javascript:void(0);">{{ product.name }}</a></h5>
-            <p class="product-description">{{ product.short_description }}</p>
-            <p class="product-brand">{{ product.brand }}</p>
-          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Message aucun produit -->
-  <ng-template #noProducts>
-    <div class="text-center mt-4">
-      <p class="text-danger">Aucun produit trouvé.</p>
-    </div>
-  </ng-template>
-</div>
+    <!-- Message aucun produit -->
+    <ng-template #noProducts>
+      <div class="text-center mt-4">
+        <p class="text-danger">Aucun produit trouvé.</p>
+      </div>
+    </ng-template>
+
+  </div>
 </div>

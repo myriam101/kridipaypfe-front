@@ -30,11 +30,6 @@ export class ClientComponent {
 
   }
  
-
-
-  onCatalogSelect(id: number) {
-    this.selectedCatalogId = id;
-  }
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;
   }

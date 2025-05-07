@@ -1,1 +1,21 @@
-<app-catalog></app-catalog>
+<!-- Select Provider -->
+<mat-form-field appearance="fill" class="w-100">
+    <mat-label>Choisir un fournisseur</mat-label>
+    <mat-select [(value)]="selectedProviderId" (selectionChange)="onProviderSelect($event.value)">
+      <mat-option *ngFor="let provider of providers" [value]="provider.User.id">
+        {{ provider.User.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  
+  <!-- Select Catalog (Filtered by Provider) -->
+  <mat-form-field appearance="fill" class="w-100" *ngIf="catalogs.length > 0">
+    <mat-label>Choisir un catalogue</mat-label>
+    <mat-select [(value)]="selectedCatalogId" (selectionChange)="onSelectCatalog($event.value)">
+      <mat-option *ngFor="let catalog of catalogs" [value]="catalog.id">
+        {{ catalog.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  
+  <app-listproducts [catalogId]="selectedCatalogId"></app-listproducts>

@@ -5,6 +5,7 @@ import { Category } from 'src/app/models/category';
 import { Designation } from 'src/app/models/enum/designation';
 import { EnergyClass } from 'src/app/models/enum/EnergyClass';
 import { Typefeature } from 'src/app/models/enum/Typefeature';
+import { CatalogService } from 'src/app/services/catalog.service';
 import { CategoryService } from 'src/app/services/category.service';
 import { ProductService } from 'src/app/services/product.service';
 
@@ -14,8 +15,8 @@ import { ProductService } from 'src/app/services/product.service';
   styleUrls: ['./ajoutproduct.component.css']
 })
 export class AjoutproductComponent {
-    successMessage: string = '';  // Variable pour afficher le message de succès
-
+  
+  successMessage: string = '';
   catalogs: any[] = [];
   productForm!: FormGroup;
   providerId!: number;
@@ -23,7 +24,7 @@ export class AjoutproductComponent {
   categories: Category[] = [];
   designationEnum = Designation;
 
-  // Variables pour gérer les champs spécifiques en fonction de la désignation
+  // var pour gérer les champs spécifiques en fonction de la désignation
   isLaveLinge = false;
   isSecheLinge=false;
   isLavanteSechante=false;
@@ -47,14 +48,23 @@ export class AjoutproductComponent {
 
   constructor( private fb: FormBuilder,
     private productService: ProductService,
-    private route: ActivatedRoute,private categoryservice:CategoryService) {}
+    private route: ActivatedRoute,private categoryservice:CategoryService,private catalogService:CatalogService) {}
 
   ngOnInit(): void {
-    this.productService.getCatalogs().subscribe((data) => {
+    this.providerId = Number(localStorage.getItem('providerId'));
+
+   /* this.productService.getCatalogs().subscribe((data) => {
       console.log("Catalogs reçus :", data);
       this.catalogs = data;
+    });*/
+    this.catalogService.getCatalogsByProvider(this.providerId).subscribe({
+      next: (data) => {
+        this.catalogs = data;
+      },
+      error: (err) => {
+        console.error('Erreur de récupération des catalogues', err);
+      }
     });
-    this.providerId = Number(localStorage.getItem('providerId'));
 console.log("povierid",this.providerId);
 this.productForm = this.fb.group({
   name: ['', Validators.required],
@@ -108,9 +118,10 @@ this.productForm = this.fb.group({
 
   onSelectCatalog(id: number) {
     this.catalogSelected.emit(id);
-    this.selectedCatalogId = id;
-console.log("selected catalog",id);
+    console.log("selected catalog", id);
   }
+  
+  
  
   onSubmit(): void {
     if (this.productForm.valid) {
@@ -120,12 +131,11 @@ console.log("selected catalog",id);
           console.log('Produit + Feature ajoutés', response);
           this.successMessage = 'Produit ajouté avec succès !'; // Afficher le message de succès
           this.productForm.reset(); // Réinitialiser le formulaire
-        // Masquer le message après 5 secondes
+        // Masquer le message après 3 secondes
         setTimeout(() => {
           this.successMessage = '';
         }, 3000);
       
-          // toast ou redirection
         },
         error: (err) => {
           console.error('Erreur ajout', err);

@@ -14,16 +14,12 @@ export class CarbonService {
     return this.http.get<{
       badge: number; score: number 
 }>(`${this.apiCarbon}/${productId}`);
+  }  
+  setVisibilityByCatalog(catalogId: number, visible: number): Observable<any> {
+    return this.http.post(`${this.apiCarbon}/set-visible/${catalogId}/${visible}`, {});
   }
-  setAllCarbonVisibleToOne(): Observable<any> {
-    return this.http.post(`${this.apiCarbon}/visible`, {});
-  }
-
-  setAllCarbonVisibleToZero(): Observable<any> {
-    return this.http.post(`${this.apiCarbon}/notvisible`, {});
-  }
-  getCarbonVisibilityStatus(): Observable<{ visible: boolean }> {
-    return this.http.get<{ visible: boolean }>(`${this.apiCarbon}/carbon/visible-status`);
+  getCarbonVisibilityStatusByCatalog(catalogId: number): Observable<any> {
+    return this.http.get(`${this.apiCarbon}/visible-status/${catalogId}`);
   }
   
 }

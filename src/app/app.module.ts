@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { CheckoutComponent } from './checkout/checkout.component';
-import { ProductsComponent } from './products/products.component';
+import { ProductsComponent } from './client/products/products.component';
 import { FooterComponent } from './footer/footer.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
@@ -25,7 +25,6 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatOptionModule } from '@angular/material/core';
 import { MatDialogActions, MatDialogModule } from '@angular/material/dialog';
-import { ProductdetailsComponent } from './productdetails/productdetails.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { AdminboardComponent } from './adminboard/adminboard.component';
 import { ProviderComponent } from './provider/provider.component';
@@ -35,10 +34,11 @@ import { ListproductsComponent } from './provider/listproducts/listproducts.comp
 import { ProfileComponent } from './client/profile/profile.component';
 import { CardsComponent } from './adminboard/cards/cards.component';
 import { SimulateurComponent } from './client/simulateur/simulateur.component';
-import { ProductsCornerComponent } from './adminboard/products-corner/products-corner.component';
 import { CatalogsCornerComponent } from './adminboard/catalogs-corner/catalogs-corner.component';
 import { HomeCornerComponent } from './adminboard/home-corner/home-corner.component';
 import { ClientsCornerComponent } from './adminboard/clients-corner/clients-corner.component';
+import { ProductdetailsComponent } from './client/productdetails/productdetails.component';
+import { CatalogDisplayComponent } from './client/catalog-display/catalog-display.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -53,7 +53,6 @@ export function tokenGetter() {
     FooterComponent,
   AuthLoginComponent,
   ProductdetailsComponent,
-ProductdetailsComponent,
 SidebarComponent,
 AdminboardComponent,
 ProviderComponent,
@@ -63,10 +62,10 @@ ListproductsComponent,
 ProfileComponent,
 CardsComponent,
 SimulateurComponent,
-ProductsCornerComponent,
 CatalogsCornerComponent,
 HomeCornerComponent,
-ClientsCornerComponent  ],
+ClientsCornerComponent,
+CatalogDisplayComponent  ],
   imports: [
     BrowserModule,
     CommonModule,

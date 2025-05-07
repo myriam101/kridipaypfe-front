@@ -1,0 +1,60 @@
+
+<div class="container">
+  <div class="row clearfix">
+    <div *ngIf="isLoading" class="text-center my-4">
+      
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Chargement...</span>
+
+      </div>
+
+    </div>
+    
+    <ng-container *ngIf="!isLoading && products.length > 0; else noProducts">
+      <!-- Affiche les produits -->
+      <div class="row clearfix">
+        <div *ngFor="let product of products" class="col-lg-3 col-md-4 col-sm-12">
+          <div class="card product_item">
+
+            <!-- Badge Carbone -->
+            <div *ngIf="carbonBadges[product.id]" class="carbon-badge" [ngClass]="carbonBadges[product.id]">
+              {{ carbonBadges[product.id] === 'undefined' ? 'Non défini' : (carbonBadges[product.id] | titlecase) }} CO₂
+            </div>
+
+            <div class="cp_img" data-bs-toggle="tooltip" data-bs-placement="top">
+              <img src="assets/imagenotavailble.png" alt="Nom du produit" class="img-fluid">
+              <div class="hover">
+                <a (click)="openSimulateur(product)" class="btn btn-primary btn-sm" title="Simulez votre consommation énergétique">
+                  <i class="zmdi zmdi-flash"></i>
+                </a>
+                <a (click)="openProductDetailDialog(product)" class="btn btn-primary btn-sm waves-effect" title="Détails du produit">
+                  <i class="zmdi zmdi-info"></i>
+                </a>
+                <a href="javascript:void(0);" class="btn btn-primary btn-sm waves-effect" title="Ajouter au panier">
+                  <i class="zmdi zmdi-shopping-cart"></i>
+                </a>
+              </div>
+            </div>
+
+            <div class="product_details">
+              <h5><a href="javascript:void(0);">{{ product.name }}</a></h5>
+              <p class="product-description">{{ product.short_description }}</p>
+              <p class="product-brand">{{ product.brand }}</p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- Cas où il n'y a pas de produits -->
+    <ng-template #noProducts >
+      <div class="text-center mt-4" *ngIf="!isLoading">
+        <p class="text-danger" *ngIf="catalogId">Aucun produit trouvé.</p>
+        <p class="text-muted" *ngIf="!catalogId">Veuillez sélectionner un catalogue.</p>
+
+      </div>
+    </ng-template>
+
+  </div>
+</div>
