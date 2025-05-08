@@ -39,6 +39,8 @@ import { HomeCornerComponent } from './adminboard/home-corner/home-corner.compon
 import { ClientsCornerComponent } from './adminboard/clients-corner/clients-corner.component';
 import { ProductdetailsComponent } from './client/productdetails/productdetails.component';
 import { CatalogDisplayComponent } from './client/catalog-display/catalog-display.component';
+import { ShoppingCartComponent } from './client/shopping-cart/shopping-cart.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -65,7 +67,8 @@ SimulateurComponent,
 CatalogsCornerComponent,
 HomeCornerComponent,
 ClientsCornerComponent,
-CatalogDisplayComponent  ],
+CatalogDisplayComponent,
+ShoppingCartComponent  ],
   imports: [
     BrowserModule,
     CommonModule,
@@ -93,9 +96,9 @@ CatalogDisplayComponent  ],
     MatButtonToggleModule,
     MatCheckboxModule,
     AppRoutingModule,
-    MatDialogModule
-
-  ],
+    MatDialogModule, 
+    MatSnackBarModule
+     ],
   providers: [],
   bootstrap: [AppComponent]
 })

@@ -1,21 +1,28 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { ProductService } from '../../services/product.service';
 import { CarbonService } from '../../services/carbon.service';
 import { MatDialog } from '@angular/material/dialog'; // Importer MatDialog
 import { ProductdetailsComponent } from '../productdetails/productdetails.component';
 import { SimulateurComponent } from '../simulateur/simulateur.component';
+import { ClientService } from 'src/app/services/client.service';
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.css']
 })
-export class ProductsComponent implements OnChanges {
+export class ProductsComponent implements OnChanges,OnInit {
   @Input() catalogId!: number;
   products: any[] = [];
   isLoading :boolean= false;
   carbonBadges: { [key: number]: string } = {};  // This will hold the badge class based on score
+  clientId: number | null = null;  // Variable to hold the client ID
 
-  constructor(private productService: ProductService, private carbonService: CarbonService,private dialog: MatDialog) {}
+  constructor(private productService: ProductService, private carbonService: CarbonService,private dialog: MatDialog,private clientService:ClientService) {}
+
+  ngOnInit(): void {
+    this.clientId = Number(localStorage.getItem('clientId'));
+
+  }
   ngOnChanges() {
   if (this.catalogId) {
     this.products = [];
@@ -69,6 +76,20 @@ export class ProductsComponent implements OnChanges {
     });
   }
   
-  
+  addToCart(productId: number): void {
+    if (this.clientId) {
+
+    this.productService.addToCart(this.clientId, productId).subscribe({
+      next: response => {
+        alert('Product added to cart!');
+        console.log(response);
+      },
+      error: error => {
+        console.error('Failed to add to cart', error);
+      }
+    }); }
+    else     {  console.error('Client ID is missing!');}
+
+  }
 
 }

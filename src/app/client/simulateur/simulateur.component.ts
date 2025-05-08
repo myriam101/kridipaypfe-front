@@ -16,12 +16,10 @@ export class SimulateurComponent {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
-  // Fermer sans retour
   close(): void {
     this.dialogRef.close();
   }
 
-  // Fermer avec retour des données saisies
   simulate(): void {
     const totalMinutes = this.usageHours * 60 + this.usageMinutes;
     this.dialogRef.close({

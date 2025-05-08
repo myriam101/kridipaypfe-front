@@ -30,7 +30,7 @@
                 <a (click)="openProductDetailDialog(product)" class="btn btn-primary btn-sm waves-effect" title="Détails du produit">
                   <i class="zmdi zmdi-info"></i>
                 </a>
-                <a href="javascript:void(0);" class="btn btn-primary btn-sm waves-effect" title="Ajouter au panier">
+                <a (click)="addToCart(product.id)" class="btn btn-primary btn-sm waves-effect" title="Ajouter au panier">
                   <i class="zmdi zmdi-shopping-cart"></i>
                 </a>
               </div>

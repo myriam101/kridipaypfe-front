@@ -5,6 +5,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { ProviderService } from 'src/app/services/provider.service';
 import { jwtDecode } from 'jwt-decode';
+import { ClientService } from 'src/app/services/client.service';
 
 @Component({
   selector: 'app-auth-login',
@@ -21,7 +22,9 @@ export class AuthLoginComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private jwtHelper: JwtHelperService,
-    private providerService: ProviderService
+    private providerService: ProviderService,
+    private clientService: ClientService // <-- ajout
+
   ) {}
 
   ngOnInit(): void {
@@ -61,9 +64,20 @@ export class AuthLoginComponent implements OnInit {
           });
         } else if (roles.includes('ROLE_ADMIN')) {
           this.router.navigate(['/adminboard']);
-        } else if (roles.includes('ROLE_CLIENT')) {
-          this.router.navigate(['/client']);
-        } else {
+        } if (roles.includes('ROLE_CLIENT')) {
+          this.clientService.getClientByEmail(userEmail).subscribe({
+            next: (res) => {
+              localStorage.setItem('clientId', res.client_id);
+              this.router.navigate(['/client']);
+            },
+            error: (err) => {
+              console.error('Erreur récupération ID client', err);
+              this.errorMessage = 'Erreur lors de la récupération du compte client.';
+            }
+          });
+        
+        }
+         else {
           this.router.navigate(['/unauthorized']);
         }
       },

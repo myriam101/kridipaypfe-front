@@ -15,10 +15,11 @@ import { CatalogsCornerComponent } from './adminboard/catalogs-corner/catalogs-c
 import { HomeCornerComponent } from './adminboard/home-corner/home-corner.component';
 import { ClientsCornerComponent } from './adminboard/clients-corner/clients-corner.component';
 import { ProductsComponent } from './client/products/products.component';
+import { ShoppingCartComponent } from './client/shopping-cart/shopping-cart.component';
 
 const routes: Routes = [
   {path:'client',component: ClientComponent,
-    children :[{path:'profile',component:ProfileComponent}],
+    children :[{path:'profile',component:ProfileComponent},{path:'shopping-cart',component:ShoppingCartComponent}],
     canActivate: [AuthGuard],data: { roles: ['ROLE_CLIENT']}},
   {path:'adminboard',component: AdminboardComponent,
     children:[

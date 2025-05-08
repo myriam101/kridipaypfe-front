@@ -1,48 +1,63 @@
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top">
-    <div class="container">
-      <a class="navbar-brand" href="#">Welcome</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarResponsive">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link" (click)="goToProfile()">Profile</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Services</a>
-          </li>
-            <a class="nav-link" (click)="confirmLogout()">
-              <i class="zmdi zmdi-power me-2"></i>
-            </a>
-            
-            
-          
-        </ul>
+  <div class="container">
+    <a class="navbar-brand">Bienvenue cher client</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
+      aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a (click)="opencart()" class="nav-link position-relative">
+            <i class="zmdi zmdi-shopping-cart me-3"></i>
+            <span *ngIf="cartItemCount > 0"
+              class="badge rounded-pill badge-notification bg-danger position-absolute top-2 start-90 translate-middle">{{ cartItemCount }}</span>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link position-relative" (click)="goToProfile()">
+            <i class="zmdi zmdi-account-circle me-2"></i>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" (click)="confirmLogout()">
+            <i class="zmdi zmdi-sign-in me-5"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Header affiché seulement sur la page d'accueil -->
+<header *ngIf="currentRoute === '/client'" class="masthead"
+  style="background-size: cover; background-position: center; height: 70vh; margin-top: 80px;">
+  <div class="container h-100">
+    <div class="row h-100 align-items-center">
+      <div class="col-12 text-center text-white">
+        <h1 class="display-4 fw-bold">Vers la sensibilisation et au-delà 🌱</h1>
+        <p class="lead mt-3">
+          Ensemble, faisons des choix plus responsables. En tant que consommateur, vous avez le pouvoir d'agir pour un
+          avenir plus durable.
+        </p>
       </div>
     </div>
-  </nav>
-  
-  <!-- Full Page Image Header with Vertically Centered Content -->
-  <header class="masthead" style=" background-size: cover; background-position: center; height: 70vh;">
-    <div class="container h-100">
-      <div class="row h-100 align-items-center">
-        <div class="col-12 text-center text-white">
-          <h1 class="display-4 fw-bold">Vers la sensibilisation et au-delà 🌱</h1>
-          <p class="lead mt-3">
-            Ensemble, faisons des choix plus responsables. En tant que consommateur, vous avez le pouvoir d'agir pour un avenir plus durable.
-          </p>
-        </div>
-      </div>
-    </div>
-  </header>
-  
-  <!-- Page Content -->
-  <section class="py-5">
-    <div class="container">
-   <app-catalog-display></app-catalog-display> 
-     <router-outlet></router-outlet>
-    </div>
-  </section>
-  <app-footer></app-footer>
+  </div>
+</header>
+
+<!-- Contenu de la page -->
+<section class="py-5 mt-5">
+  <div class="container">
+    <!-- Affichage du catalog uniquement sur la page home -->
+    <app-catalog-display *ngIf="currentRoute === '/client'"></app-catalog-display>
+
+    <!-- Affichage du contenu route -->
+    <router-outlet></router-outlet>
+  </div>
+</section>
+
+<!-- Footer affiché uniquement sur la page home -->
+<app-footer *ngIf="currentRoute === '/client'"></app-footer>

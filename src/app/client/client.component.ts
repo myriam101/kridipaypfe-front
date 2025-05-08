@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { ProductService } from '../services/product.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ClientService } from '../services/client.service';
 
 @Component({
   selector: 'app-client',
@@ -11,16 +12,31 @@ export class ClientComponent {
   catalogs: any[] = [];
   selectedCatalogId!: number;
   isSidebarOpen = false;
+  clientId!: number;
+  cartItemCount: number=0;
+  currentRoute: string = '';
 
+  
   @Output() catalogSelected = new EventEmitter<number>();
 
-  constructor(private productService: ProductService,private router: Router, private route: ActivatedRoute) {}
+  constructor(private productService: ProductService,private router: Router, private route: ActivatedRoute,private clientservice : ClientService) {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.currentRoute = event.url;
+      }
+    });
+  }
 
   ngOnInit(): void {
+    const clientId = Number(localStorage.getItem('clientId'));
+  this.productService.getCartCount(clientId).subscribe(count => {
+    this.cartItemCount = count;
+  });
     this.productService.getCatalogs().subscribe((data) => {
       console.log("Catalogs reçus :", data);
       this.catalogs = data;
     });
+   
   }
 
   onSelectCatalog(id: number) {
@@ -36,6 +52,9 @@ export class ClientComponent {
 
   goToProfile() {
     this.router.navigate(['profile'], { relativeTo: this.route });
+  }
+  opencart() {
+    this.router.navigate(['shopping-cart'], { relativeTo: this.route });
   }
   confirmLogout() {
     const confirmed = window.confirm("Êtes-vous sûr de vouloir vous déconnecter ?");
