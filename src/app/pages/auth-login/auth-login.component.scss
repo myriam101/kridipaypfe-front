@@ -1,99 +1,35 @@
-// Définition des variables
-$primary-color: #007bff;
-$background-color: #f4f4f4;
-$white-color: #fff;
-$border-radius: 5px;
-
-.login-container {
+body {
+  background: linear-gradient(to right, #216490, #33AEFF);
+  min-height: 100vh;
   display: flex;
-  justify-content: center;
   align-items: center;
-  height: 100vh;
-  background-color: $background-color;
+  justify-content: center;
 }
 
-.login-card {
-  background-color: $white-color;
-  border-radius: $border-radius;
-  padding: 30px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 400px;
+.btn-login {
+  background-color: #216490;
+  color: #fff;
+  font-size: 1rem;
+  letter-spacing: 0.05rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.3s ease-in-out;
+  border: none;
+}
 
-  .login-title {
-    text-align: center;
-    color: $primary-color;
-    margin-bottom: 20px;
-  }
+.btn-login:hover {
+  background-color: #174d70;
+}
 
-  .input-group {
-    margin-bottom: 15px;
+.card {
+  background-color: #ffffff;
+  border-radius: 1rem;
+}
 
-    label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: bold;
-      color: #555;
-    }
-
-    input {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: $border-radius;
-      font-size: 16px;
-
-      // Ajouter un effet au focus
-      &:focus {
-        outline: none;
-        border-color: $primary-color;
-      }
-
-      // Appliquer un style de bordure rouge pour les entrées invalides
-      &.invalid {
-        border-color: #e74c3c;
-      }
-    }
-  }
-
-  .btn-submit {
-    width: 100%;
-    padding: 10px;
-    background-color: $primary-color;
-    color: $white-color;
-    border: none;
-    border-radius: $border-radius;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-
-    &:hover {
-      background-color: darken($primary-color, 10%);
-    }
-
-    &:disabled {
-      background-color: #ccc;
-      cursor: not-allowed;
-    }
-  }
-
-  .other-links {
-    text-align: center;
-    margin-top: 15px;
-
-    a {
-      color: $primary-color;
-      text-decoration: none;
-
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-  }
-
-  // Ajouter des erreurs sous les champs
-  small.error {
-    color: #e74c3c;
-    font-size: 12px;
-  }
+.spinner-border {
+  vertical-align: middle;
+}
+.snackbar-error {
+  background-color: #d9534f !important;
+  color: white;
 }

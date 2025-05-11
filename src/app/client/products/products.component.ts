@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog'; // Importer MatDialog
 import { ProductdetailsComponent } from '../productdetails/productdetails.component';
 import { SimulateurComponent } from '../simulateur/simulateur.component';
 import { ClientService } from 'src/app/services/client.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
@@ -17,7 +18,7 @@ export class ProductsComponent implements OnChanges,OnInit {
   carbonBadges: { [key: number]: string } = {};  // This will hold the badge class based on score
   clientId: number | null = null;  // Variable to hold the client ID
 
-  constructor(private productService: ProductService, private carbonService: CarbonService,private dialog: MatDialog,private clientService:ClientService) {}
+  constructor(private productService: ProductService, private carbonService: CarbonService,private dialog: MatDialog,private clientService:ClientService, private snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
     this.clientId = Number(localStorage.getItem('clientId'));
@@ -59,7 +60,7 @@ export class ProductsComponent implements OnChanges,OnInit {
       width: '500px',
       data: {
         product: product, // Passer le produit complet
-        carbonScore: this.carbonBadges[product.id] || 'undefined' // Passer le score carbone ou 'undefined' s'il n'est pas défini
+            carbonScore: this.carbonBadges[product.id] || 'undefined' // Passer le score carbone ou 'undefined' s'il n'est pas défini
       },
     });
   
@@ -71,24 +72,35 @@ export class ProductsComponent implements OnChanges,OnInit {
     this.dialog.open(SimulateurComponent, {
       width: '95vw',
       maxWidth: '600px',
-      panelClass: 'custom-dialog-container'
-
+       data: {
+      product
+    }
     });
   }
   
   addToCart(productId: number): void {
+      const clientId = Number(localStorage.getItem('clientId'));
+
     if (this.clientId) {
 
     this.productService.addToCart(this.clientId, productId).subscribe({
-      next: response => {
-        alert('Product added to cart!');
-        console.log(response);
+      next:() => {   
+    this.productService.refreshCartCount(clientId);
+            
+        this.snackBar.open('Produit ajouté au panier avec succés', 'Fermer', {
+  duration: 3000});
+
       },
       error: error => {
         console.error('Failed to add to cart', error);
+        this.snackBar.open('Une erreur s^est produite lors de l^ajout au panier.', 'Fermer', {
+  duration: 3000,
+  panelClass: ['snackbar-error']
+});
       }
     }); }
-    else     {  console.error('Client ID is missing!');}
+    else
+    {  console.error('Client ID is missing!');}
 
   }
 

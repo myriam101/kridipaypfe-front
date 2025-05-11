@@ -4,8 +4,8 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { ProviderService } from 'src/app/services/provider.service';
-import { jwtDecode } from 'jwt-decode';
 import { ClientService } from 'src/app/services/client.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-auth-login',
@@ -16,6 +16,7 @@ export class AuthLoginComponent implements OnInit {
   loginForm!: FormGroup;
   errorMessage: string = '';
   providerId: number = 0;
+  isLoading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -23,7 +24,7 @@ export class AuthLoginComponent implements OnInit {
     private router: Router,
     private jwtHelper: JwtHelperService,
     private providerService: ProviderService,
-    private clientService: ClientService // <-- ajout
+    private clientService: ClientService,  private snackBar: MatSnackBar
 
   ) {}
 
@@ -35,9 +36,10 @@ export class AuthLoginComponent implements OnInit {
   }
 
   onLogin(): void {
-    if (this.loginForm.invalid) {
-      return;
-    }
+    if (this.loginForm.invalid) return;
+
+    this.isLoading = true;
+    this.errorMessage = '';
 
     const { email, password } = this.loginForm.value;
 
@@ -55,35 +57,51 @@ export class AuthLoginComponent implements OnInit {
             next: (provider) => {
               this.providerId = provider.id;
               localStorage.setItem('providerId', this.providerId.toString());
+              this.isLoading = false;
               this.router.navigate(['/provider']);
             },
             error: (err) => {
               console.error('Erreur récupération ID provider', err);
               this.errorMessage = 'Erreur lors de la récupération du compte fournisseur.';
+              this.isLoading = false;
             }
           });
         } else if (roles.includes('ROLE_ADMIN')) {
+          this.isLoading = false;
           this.router.navigate(['/adminboard']);
-        } if (roles.includes('ROLE_CLIENT')) {
+        } else if (roles.includes('ROLE_CLIENT')) {
           this.clientService.getClientByEmail(userEmail).subscribe({
             next: (res) => {
               localStorage.setItem('clientId', res.client_id);
+              this.isLoading = false;
               this.router.navigate(['/client']);
             },
             error: (err) => {
               console.error('Erreur récupération ID client', err);
               this.errorMessage = 'Erreur lors de la récupération du compte client.';
+              this.isLoading = false;
             }
           });
-        
-        }
-         else {
+        } else {
+          this.isLoading = false;
           this.router.navigate(['/unauthorized']);
         }
       },
       (error) => {
-        this.errorMessage = 'Identifiants incorrects !';
-      }
+  if (error.status === 401) {
+this.snackBar.open('Email ou mot de passe incorrect.', 'Fermer', {
+  duration: 3000,
+  panelClass: ['snackbar-error']
+});
+  } else {
+    this.snackBar.open('Une erreur est survenue. Veuillez réessayer.', 'Fermer', {
+  duration: 3000,
+  panelClass: ['snackbar-error']
+});
+  }
+  this.isLoading = false;
+}
+
     );
   }
 }

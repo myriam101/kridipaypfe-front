@@ -1,91 +1,119 @@
 .dialog-title {
-    font-size: 24px;
-    font-weight: 600;
-    text-align: center;
-    margin-bottom: 10px;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 10px;
-    color: #333;
-  }
-  
-  .dialog-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 15px;
-  }
-  
-  .image-wrapper {
-    width: 180px;
-    height: 180px;
-    margin-bottom: 15px;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .image-wrapper img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .description {
-    font-size: 14px;
-    color: #666;
-    text-align: center;
-    margin-bottom: 12px;
-  }
-  
-  .product-meta {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    padding: 0 10px;
-    font-size: 15px;
-    margin-bottom: 12px;
-  }
-  
-  .product-meta .price {
-    font-weight: bold;
-    color: #007BFF;
-  }
-  
-  .carbon-score {
-    padding: 6px 12px;
-    border-radius: 20px;
-    background-color: #eee;
-    font-size: 14px;
-    margin-top: 10px;
-    text-align: center;
-  }
-  
-  /* Optional carbon score badge styles */
-  .carbon-score.low {
-    background-color: #c8e6c9;
-    color: #2e7d32;
-  }
-  
-  .carbon-score.medium {
-    background-color: #fff9c4;
-    color: #f9a825;
-  }
-  
-  .carbon-score.high {
-    background-color: #ffcdd2;
-    color: #c62828;
-  }
-  
-  .carbon-score.undefined {
-    background-color: #e0e0e0;
-    color: #616161;
-  }
-  
-  mat-dialog-actions {
-    padding: 16px;
-    border-top: 1px solid #eee;
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-  }
-  
+  font-size: 24px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 10px;
+  color: #216490; /* Your primary color */
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 8px;
+}
+
+.dialog-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+  gap: 12px;
+}
+.image-wrapper img {
+  max-width: 80px;
+  max-height: 80px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+}
+
+.image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.carbon-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 12px;
+  background-color: #e0e0e0;
+  color: #616161;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* CO2 score styles */
+.carbon-badge.low {
+  background-color: #c8e6c9;
+  color: #2e7d32;
+}
+.carbon-badge.medium {
+  background-color: #fff9c4;
+  color: #f9a825;
+}
+.carbon-badge.high {
+  background-color: #ffcdd2;
+  color: #c62828;
+}
+.carbon-badge.undefined {
+  background-color: #eeeeee;
+  color: #777;
+}
+
+.description {
+  font-size: 14px;
+  color: #444;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.product-meta {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
+  padding: 0 12px;
+}
+
+.product-meta .brand {
+  font-style: italic;
+  color: #555;
+}
+
+.product-meta .price {
+  font-weight: bold;
+  color: #216490; /* Primary color for price */
+}
+
+mat-dialog-actions {
+  padding: 16px;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* Specific primary color for Raised Button */
+button.mat-raised-button {
+  background-color: #216490 !important; /* Primary color */
+  color: #fff !important;
+  font-weight: 600;
+  border-radius: 4px;
+  text-transform: none;
+  padding: 10px 20px;
+}
+
+button.mat-raised-button:hover {
+  background-color: #174f73 !important; /* Darker shade for hover */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Styling for the 'Fermer' button */
+button.mat-button {
+  color: #216490 !important; /* Primary color */
+  font-weight: 600;
+}
+
+button.mat-button:hover {
+  background-color: rgba(33, 100, 144, 0.1);
+}

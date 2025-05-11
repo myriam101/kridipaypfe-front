@@ -7,12 +7,8 @@ body {
     box-sizing: border-box;
 
   }
- 
-  .custom-dialog-container .mat-dialog-container {
-    padding: 0 !important;
-    border-radius: 20px;
-    overflow: hidden;
-    background: transparent; /* Pour laisser passer ton bg-light Bootstrap */
-    box-shadow: none;
-  }
-  
+
+  .navbar .zmdi {
+  font-size: 1.5rem; /* Augmente la taille des icônes */
+  color: #216490 !important; /* Applique la couleur */
+}

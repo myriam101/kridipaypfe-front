@@ -24,26 +24,46 @@ export class ShoppingCartComponent implements OnInit {
       }
     });
   }
-  
-  removeItem(item: any): void {
-    const clientId = Number(localStorage.getItem('clientId'));
-    this.cartService.removeItemFromCart(clientId, item.product_id).subscribe({
-      next: () => {
-        // Met à jour l'interface après la suppression
-        this.cartItems = this.cartItems.filter(cartItem => cartItem.id !== item.id);
-      },
-      error: (err) => {
-        console.error('Erreur lors de la suppression de l\'élément', err);
-      }
-    });
-  }
-  
+  removeItem(index: number): void {
+  const clientId = Number(localStorage.getItem('clientId'));
+      if (clientId) {
+
+  // Get the item to be removed by its index
+  const item = this.cartItems[index];
+
+  // Remove the item locally by using the index
+  this.cartItems.splice(index, 1);
+
+  // Show success message
+  this.snackBar.open('Élément supprimé avec succès', 'Fermer', {
+    duration: 3000
+  });
+
+  // Call the backend to remove the item
+  this.cartService.removeItemFromCart(clientId, item.product_id).subscribe({
+    next: () => {
+    this.cartService.refreshCartCount(clientId);
+
+    },
+    error: (err) => {
+      console.error('Erreur lors de la suppression de l\'élément', err);
+
+      // If there's an error, restore the item back to the cart
+      this.cartItems.splice(index, 0, item);  // Reinsert the item at the same index
+      this.snackBar.open('Erreur lors de la suppression de l\'élément', 'Fermer', {
+        duration: 3000
+      });
+    }
+  });}
+
+}
+
 
  closeCart() {
   this.router.navigate(['/client']);
 }
 showToast() {
-  this.snackBar.open('Panier mis à jour avec succes', 'Close', {
+  this.snackBar.open('Panier mis à jour avec succes', 'Fermer', {
     duration: 3000,
   });
 }

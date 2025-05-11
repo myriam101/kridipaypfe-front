@@ -1,38 +1,58 @@
-<div class="container p-4">
-  <div class="card shadow border-0 rounded-4 bg-light">
-    <div class="card-body p-4">
-      <h3 class="text-center mb-4 fw-bold text-primary">
-        <i class="bi bi-lightning-charge-fill me-2"></i>
-        Simulateur de facture énergétique
-      </h3>
+<h1 mat-dialog-title class="text-center fw-bold mb-4 border-bottom pb-2" style="color: #216490;">
+  <i class="bi bi-lightning-charge-fill me-2"></i>
+  Simulation pour {{ data.product.name }}
+</h1>
 
-      <form (ngSubmit)="simulate()">
-        <!-- Sections sliders -->
-        <div class="mb-3">
-          <label class="form-label fw-semibold">Nombre d'utilisations par jour</label>
-          <div class="d-flex align-items-center gap-3">
-            <input type="range" class="form-range" min="1" max="10" [(ngModel)]="dailyUsage" name="dailyUsage" />
-            <span class="badge bg-primary">{{ dailyUsage }}</span>
-          </div>
-        </div>
-
-        <!-- Minutes -->
-        <div class="mb-3">
-          <label class="form-label fw-semibold">Durée par utilisation — Minutes</label>
-          <div class="d-flex align-items-center gap-3">
-            <input type="range" class="form-range" min="0" max="59" [(ngModel)]="usageMinutes" name="usageMinutes" />
-            <span class="badge bg-secondary">{{ usageMinutes }}</span>
-          </div>
-        </div>
-
-        <div class="text-center">
-          <button class="btn btn-success w-100 fw-bold" type="submit">
-            <i class="bi bi-calculator me-2"></i> Simuler
-          </button>
-          <button type="button" class="btn btn-outline-secondary w-100 mt-2" (click)="close()">Fermer</button>
-
-        </div>
-      </form>
+<div mat-dialog-content class="p-3">
+  <!-- Choix de période -->
+  <div class="mb-4">
+    <label class="form-label fw-semibold mb-2">Sur combien de jours ?</label>
+    <div class="d-flex gap-4 flex-wrap">
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="periode" id="mois" value="month" [(ngModel)]="selectedPeriod">
+        <label class="form-check-label" for="mois">30 Jours</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="periode" id="trimestre" value="three_months" [(ngModel)]="selectedPeriod">
+        <label class="form-check-label" for="trimestre">90 Jours</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="periode" id="annee" value="year" [(ngModel)]="selectedPeriod">
+        <label class="form-check-label" for="annee">365 Jours</label>
+      </div>
     </div>
   </div>
+
+  <!-- Durée par utilisation -->
+  <div class="mb-4">
+    <label class="form-label fw-semibold">Durée par utilisation (en minutes)</label>
+    <div class="d-flex align-items-center gap-3">
+      <input type="range" class="form-range slider" min="1" max="60" [(ngModel)]="duration_use" />
+      <span class="value-badge primary">{{ duration_use }} min</span>
+    </div>
+  </div>
+
+  <!-- Nombre d’utilisations -->
+  <div class="mb-4">
+    <label class="form-label fw-semibold">Nombre d’utilisations par jour</label>
+    <div class="d-flex align-items-center gap-3">
+      <input type="range" class="form-range slider" min="1" max="10" [(ngModel)]="nbr_use" />
+      <span class="value-badge primary">{{ nbr_use }} fois</span>
+    </div>
+  </div>
+
+  <!-- Résultat de la simulation dans une bulle de succès -->
+  <div *ngIf="simulationResult" class="alert alert-success p-3 mt-4 text-center">
+    <h4>Résultat :</h4>
+    <div><strong>Consommation d'énergie (kWh) :</strong> {{ simulationResult.estimated_consumption.kwh }} kWh</div>
+    <div><strong>Consommation d'eau (litres) :</strong> {{ simulationResult.estimated_consumption.litres }} litres</div>
+  </div>
+</div>
+
+<!-- Actions -->
+<div mat-dialog-actions class="d-flex justify-content-end px-3 pb-3 gap-2">
+  <button mat-button mat-dialog-close color="warn">Fermer</button>
+  <button class="btn btn-primary" (click)="submit()">
+    <i class="bi bi-graph-up-arrow me-1"></i> Simuler
+  </button>
 </div>

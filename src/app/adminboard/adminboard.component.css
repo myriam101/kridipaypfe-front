@@ -4,39 +4,82 @@ body {
   display: flex;
   height: 100vh;
   overflow: hidden;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f5f7fa;
 }
 
+.navbar {
+  background-color: #216490;
+  color: white;
+}
+
+.navbar .navbar-brand {
+  color: white;
+  font-weight: bold;
+}
+
+.navbar .nav-link {
+  color: white !important;
+  font-size: 1.1rem;
+}
+
+.navbar .nav-link i {
+  font-size: 1.4rem;
+  vertical-align: middle;
+  margin-right: 0.3rem;
+}
+
+/* Sidebar */
 .sidebar {
   width: 250px;
-  background-color: #f8f9fa;
-  padding-top: 60px; /* correspond à la hauteur de la navbar */
+  background-color: #ffffff;
+  padding-top: 36px;
   height: 100vh;
   position: fixed;
   left: 0;
   top: 0;
   border-right: 1px solid #dee2e6;
+  z-index: 1020;
 }
 
 .sidebar .nav-link {
-  color: #333;
-  padding: 0.75rem 1.25rem;
-  display: block;
+  color: #216490;
+  font-weight: 500;
+  padding: 0.70rem 1rem;
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  transition: background 0.2s ease-in-out;
 }
 
-.sidebar .nav-link:hover {
-  background-color: #e9ecef;
-  color: #000;
+.sidebar .nav-link i {
+  font-size: 1.4rem;
+  margin-right: 0.5rem;
 }
+
+/* Hover effect */
+.sidebar .nav-link:hover {
+  background-color: #e9f0f5;
+  color: #0d3b66;
+}
+
+/* Active state (optional) */
+.sidebar .nav-link.active {
+  background-color: #216490;
+  color: white;
+  font-weight: 600;
+}
+
+.sidebar .nav-link.active i {
+  color: white;
+}
+
+/* Content */
 .main-content {
-  margin-left: 250px;
+  margin-left: 220px;
   padding: 2rem;
-  padding-top: 70px; /* Ajouté pour éviter que la navbar ne cache le haut */
+  padding-top: 10px;
   flex-grow: 1;
   overflow-y: auto;
   width: calc(100% - 250px);
-}
-
-
-.navbar .navbar-brand {
-  margin-left: 0 !important;
 }

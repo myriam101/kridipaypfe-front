@@ -7,7 +7,13 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./adminboard.component.css']
 })
 export class AdminboardComponent {
-  constructor(private router: Router, private route: ActivatedRoute) {}
+  currentRoute: string = '';
+
+  constructor(private router: Router, private route: ActivatedRoute) {
+     this.router.events.subscribe(() => {
+    this.currentRoute = this.router.url;
+  });
+  }
 
   ngOnInit() {
     const toggleButton = document.getElementById("menu-toggle");
@@ -23,7 +29,7 @@ export class AdminboardComponent {
     this.router.navigate(['catalogues'], { relativeTo: this.route });
   }
   goToHome() {
-    this.router.navigate(['home'], { relativeTo: this.route });
+    this.router.navigate(['cards'], { relativeTo: this.route });
   }
   goToClients() {
     this.router.navigate(['clients'], { relativeTo: this.route });

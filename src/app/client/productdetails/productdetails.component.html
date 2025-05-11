@@ -3,21 +3,31 @@
 <div mat-dialog-content class="dialog-content">
   <div class="image-wrapper">
     <img [src]="data.product.imageUrl || 'assets/imagenotavailble.png'" alt="{{ data.product.name }}">
+    <span class="carbon-badge" [ngClass]="data.carbonScore">
+      {{ data.carbonScore === 'undefined' ? 'Non défini' : (data.carbonScore | titlecase) }}
+    </span>
   </div>
-  <p class="description">{{ data.product.short_description }}</p>
+
+  <p class="description" *ngIf="data.product.short_description">{{ data.product.short_description }}</p>
 
   <div class="product-meta">
-    <span class="brand">{{ data.product.brand }}</span>
-    <span class="price">{{ data.product.price | currency:'USD' }}</span>
+    <span class="brand" *ngIf="data.product.brand">{{ data.product.brand }}</span>
+    <span class="reference" *ngIf="data.product.reference">{{ data.product.reference }}</span>
   </div>
 
-  <div class="carbon-score" [ngClass]="data.carbonScore">
-    CO₂ foot print: 
-    <strong>{{ data.carbonScore === 'undefined' ? 'Non défini' : (data.carbonScore | titlecase) }}</strong>
+    <!-- Affichage des caractéristiques -->
+  <div *ngIf="product?.features && objectKeys(product.features).length">
+    <h4>Caractéristiques :</h4>
+    <ul>
+      <li *ngFor="let feature of objectKeys(product.features)">
+        <strong>{{ feature | titlecase }}:</strong>
+        <span>{{ product.features[feature] }}</span>
+      </li>
+    </ul>
   </div>
 </div>
 
-<div mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close color="warn">Close</button>
-  <button mat-raised-button color="primary">Buy Now</button>
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close color="warn">Fermer</button>
+  <button (click)="addToCart()" mat-raised-button color="primary">Ajouter au panier</button>
 </div>

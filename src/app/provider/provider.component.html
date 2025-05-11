@@ -1,47 +1,43 @@
 <!-- Navigation -->
+<!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top">
-    <div class="container">
-      <a class="navbar-brand" href="#">Bienvenue au fournisseur #</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarResponsive">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="catalogueDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Actions
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="catalogueDropdown">
-              <li><a class="dropdown-item" (click)="goToAddProduct()">Ajouter produit</a></li>
-              <li><a class="dropdown-item" (click)="goToCatalog()">Consulter catalogue</a></li>
-              <li><a class="dropdown-item" href="#">Action 3</a></li>
-            </ul>
-          </li>
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" >About</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" >Services</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" >Contact</a>
-          </li>
-          <li>
-            <a class="nav-link" (click)="confirmLogout()">
-              <i class="zmdi zmdi-power me-2"> Déconnexion</i>
-            </a>
-          </li>
-          
-          
-        </ul>
-      </div>
+  <div class="container">
+    <a class="navbar-brand" href="#">Bienvenue au fournisseur</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
+      aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ms-auto">
+
+        <!-- Dropdown Actions -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle"  id="catalogueDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            <i class="zmdi zmdi-apps"></i>
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="catalogueDropdown">
+            <li><a class="dropdown-item" (click)="goToAddProduct()"><i class="zmdi zmdi-plus me-2"></i> Ajouter produit</a></li>
+            <li><a class="dropdown-item" (click)="goToCatalog()"><i class="zmdi zmdi-view-list me-2"></i> Consulter catalogue</a></li>
+          </ul>
+        </li>
+
+
+        <!-- Déconnexion -->
+        <li class="nav-item">
+          <a class="nav-link" (click)="confirmLogout()">
+            <i class="zmdi zmdi-sign-in me-5"></i>
+          </a>
+        </li>
+      </ul>
     </div>
-  </nav>
+  </div>
+</nav>
+
   
   <!-- Full Page Image Header with Vertically Centered Content -->
-  <header class="masthead" style=" background-size: cover; background-position: center; height: 70vh;">
+  <header *ngIf="!isSubRoute" class="masthead" style=" background-size: cover; background-position: center; height: 70vh;">
     <div class="container h-100">
       <div class="row h-100 align-items-center">
         <div class="col-12 text-center text-white">
@@ -58,7 +54,12 @@
   <!-- Page Content -->
   <section class="py-5">
     <div class="container">
-        <router-outlet></router-outlet>
+      <div *ngIf="loading" class="text-center my-5">
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Chargement...</span>
+  </div>
+</div>
+<router-outlet (activate)="onActivate()" (deactivate)="onDeactivate()"></router-outlet>
     </div>
   </section>
   <app-footer></app-footer>

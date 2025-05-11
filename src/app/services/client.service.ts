@@ -20,5 +20,8 @@ export class ClientService {
   getClientByEmail(email: string): Observable<any> {
     return this.http.get(`${this.urlclients}/email/${email}`);
   }
-  
+  getOneClient(id: number): Observable<any> {
+  return this.http.get<any>(`${this.urlclients}/one/${id}`);
+}
+
   }

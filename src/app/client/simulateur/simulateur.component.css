@@ -1,0 +1,44 @@
+/* Ajout esthétique sur le titre */
+h1[mat-dialog-title] {
+  font-size: 1.4rem;
+  border-bottom: 2px solid #d9e6ef;
+}
+
+/* Espacement et arrondi des boutons radio */
+.form-check-input:checked {
+  background-color: #216490;
+  border-color: #216490;
+  box-shadow: 0 0 0 0.15rem rgba(33, 100, 144, 0.3);
+}
+
+/* Badge modernisé */
+.value-badge {
+  padding: 0.35em 1em;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: white;
+  background-color: #216490;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Bouton "Simuler" amélioré */
+.btn-primary {
+  background-color: #216490;
+  border-color: #216490;
+  color: #fff;
+  font-weight: 500;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #1a5076;
+  color: #fff;
+}
+
+/* Ajoute un peu d'air autour des sliders */
+.slider {
+  flex: 1;
+}
+
+ 

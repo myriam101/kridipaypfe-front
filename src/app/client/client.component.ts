@@ -36,7 +36,12 @@ export class ClientComponent {
       console.log("Catalogs reçus :", data);
       this.catalogs = data;
     });
-   
+  if (clientId) {
+    this.productService.refreshCartCount(+clientId); // charge au démarrage
+    this.productService.cartItemCount$.subscribe(count => {
+      this.cartItemCount = count;
+    });
+  }
   }
 
   onSelectCatalog(id: number) {
@@ -63,5 +68,4 @@ export class ClientComponent {
       this.router.navigate(['/login']);
     }
   }
-  
 }

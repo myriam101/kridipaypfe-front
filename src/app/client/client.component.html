@@ -8,13 +8,17 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav ms-auto">
-        <li class="nav-item">
-          <a (click)="opencart()" class="nav-link position-relative">
-            <i class="zmdi zmdi-shopping-cart me-3"></i>
-            <span *ngIf="cartItemCount > 0"
-              class="badge rounded-pill badge-notification bg-danger position-absolute top-2 start-90 translate-middle">{{ cartItemCount }}</span>
-          </a>
-        </li>
+       <li class="nav-item">
+  <a (click)="opencart()" class="nav-link position-relative">
+    <i class="zmdi zmdi-shopping-cart me-3"></i>
+    <span *ngIf="cartItemCount > 0" 
+          class="badge rounded-pill badge-notification bg-danger position-absolute top-2 start-90 translate-middle">
+      {{ cartItemCount }}
+    </span>
+  </a>
+</li>
+
+
 
         <li class="nav-item">
           <a class="nav-link position-relative" (click)="goToProfile()">

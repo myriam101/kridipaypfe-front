@@ -41,6 +41,7 @@ import { ProductdetailsComponent } from './client/productdetails/productdetails.
 import { CatalogDisplayComponent } from './client/catalog-display/catalog-display.component';
 import { ShoppingCartComponent } from './client/shopping-cart/shopping-cart.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatInputModule } from '@angular/material/input';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -97,8 +98,8 @@ ShoppingCartComponent  ],
     MatCheckboxModule,
     AppRoutingModule,
     MatDialogModule, 
-    MatSnackBarModule
-     ],
+    MatSnackBarModule,
+    MatInputModule     ],
   providers: [],
   bootstrap: [AppComponent]
 })

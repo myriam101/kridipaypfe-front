@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-provider',
@@ -8,7 +8,17 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class ProviderComponent {
   showForm = false;
-  constructor(private router: Router, private route: ActivatedRoute) {}
+    isSubRoute = false;
+    loading = false;
+
+  constructor(private router: Router, private route: ActivatedRoute) {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        // Cache le header si ce n'est pas la route racine du fournisseur
+        this.isSubRoute = !event.urlAfterRedirects.endsWith('/provider');
+      }
+    });
+  }
 
   showAddProductForm() {
     this.showForm = true;
@@ -26,4 +36,16 @@ export class ProviderComponent {
       this.router.navigate(['/login']);
     }
   }
+  
+onActivate() {
+  this.loading = true;
+  // Simule un chargement court
+  setTimeout(() => {
+    this.loading = false;
+  }, 500); // ajuste le temps selon tes besoins
+}
+
+onDeactivate() {
+  this.loading = true;
+}
 }
