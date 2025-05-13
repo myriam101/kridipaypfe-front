@@ -93,27 +93,16 @@ mat-dialog-actions {
   gap: 10px;
 }
 
-/* Specific primary color for Raised Button */
-button.mat-raised-button {
-  background-color: #216490 !important; /* Primary color */
-  color: #fff !important;
-  font-weight: 600;
-  border-radius: 4px;
-  text-transform: none;
-  padding: 10px 20px;
+/* Bouton "Simuler" amélioré */
+.btn-primary {
+  background-color: #216490;
+  border-color: #216490;
+  color: #fff;
+  font-weight: 400;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-button.mat-raised-button:hover {
-  background-color: #174f73 !important; /* Darker shade for hover */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-/* Styling for the 'Fermer' button */
-button.mat-button {
-  color: #216490 !important; /* Primary color */
-  font-weight: 600;
-}
-
-button.mat-button:hover {
-  background-color: rgba(33, 100, 144, 0.1);
+.btn-primary:hover {
+  background-color: #1a5076;
+  color: #fff;
 }

@@ -27,7 +27,10 @@
   </div>
 </div>
 
-<div mat-dialog-actions>
+<!-- Actions -->
+<div mat-dialog-actions class="d-flex justify-content-end px-3 pb-3 gap-2">
   <button mat-button mat-dialog-close color="warn">Fermer</button>
-  <button (click)="addToCart()" mat-raised-button color="primary">Ajouter au panier</button>
+  <button class="btn btn-primary" (click)="addToCart()">
+    <i class="bi bi-graph-up-arrow me-1"></i> Ajouter au panier
+  </button>
 </div>
