@@ -1,17 +1,21 @@
 <!-- Top Navbar -->
 <nav class="navbar navbar-expand-lg shadow fixed-top top-navbar">
   <div class="container-fluid">
-    <a class="navbar-brand ms-3 fw-bold text-white">Tableau de bord</a>
-    <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
+    
+    <a class="navbar-brand ms-3">Tableau de bord</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
       aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse justify-content-end" id="navbarResponsive">
       <ul class="navbar-nav">
+         <button class="icon-btn" (click)="toggleSidebar()">
+    <i class="zmdi zmdi-menu"></i>
+  </button>
         <li class="nav-item">
-          <a class="nav-link text-white" (click)="confirmLogout()">
-            <i class="zmdi zmdi-sign-in me-5" style="color: white !important;"></i>
+          <a class="icon-btn" (click)="confirmLogout()">
+            <i class="zmdi zmdi-sign-in"></i>
           </a>
         </li>
       </ul>
@@ -20,28 +24,32 @@
 </nav>
 
 <!-- Sidebar -->
-<nav class="sidebar bg-white shadow-sm">
+<nav class="sidebar shadow-sm" [class.hidden]="!sidebarVisible">
   <ul class="nav flex-column pt-4">
-    <li class="nav-item mb-2">
-      <a class="nav-link" [class.active]="currentRoute.includes('cards')" (click)="goToHome()">
+    <li class="nav-item">
+      <a class="nav-link" [class.active]="currentRoute.includes('home')" (click)="goToHome()">
         <i class="zmdi zmdi-home me-2"></i> Accueil
       </a>
     </li>
-    <li class="nav-item mb-2">
-<a class="nav-link" [class.active]="currentRoute.includes('catalog')" (click)="goToCatalogues()">
+    <li class="nav-item">
+      <a class="nav-link" [class.active]="currentRoute.includes('catalog')" (click)="goToCatalogues()">
         <i class="zmdi zmdi-layers me-2"></i> Catalogues
       </a>
     </li>
-    <li class="nav-item mb-2">
-      <a class="nav-link"[class.active]="currentRoute.includes('clients')"  (click)="goToClients()">
+    <li class="nav-item">
+      <a class="nav-link" [class.active]="currentRoute.includes('clients')" (click)="goToClients()">
         <i class="zmdi zmdi-account me-2"></i> Clients
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" [class.active]="currentRoute.includes('carts')" (click)="goToCarts()">
+        <i class="zmdi zmdi-shopping-basket me-2"></i> Paniers
       </a>
     </li>
   </ul>
 </nav>
 
-<!-- Main Content -->
-<div class="main-content">
+<div class="main-content" [class.full-width]="!sidebarVisible">
   <section class="py-5 mt-5">
     <div class="container">
       <router-outlet></router-outlet>

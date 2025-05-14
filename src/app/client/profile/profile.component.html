@@ -15,11 +15,11 @@
     <div class="col-lg-4">
       <div class="card shadow-sm border-0 h-100">
         <div class="card-body text-center">
-          <img src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="User Avatar" class="rounded-circle mb-3" width="100" height="100">
+          <img src="assets/prflpic.jpg" alt="User Avatar" class="rounded-circle mb-3" width="100" height="100">
           <h4 class="fw-bold">{{ client?.User?.name }}</h4>
           <p class="text-muted">{{ client?.User?.username }}</p>
 
-        <!-- ⭐ Score carbone étoilé centré -->
+        <!-- Score carbone -->
   <div class="d-flex justify-content-center mb-3">
     <div class="star-rating">
       <ng-container *ngFor="let star of [1,2,3,4,5]">
@@ -31,10 +31,9 @@
   </div>
 
           <ul class="list-unstyled text-start mt-4">
-            <li class="mb-2"><i class="fas fa-map-marker-alt me-2 text-primary"></i>{{ client?.adress }}</li>
-            <li class="mb-2"><i class="far fa-envelope me-2 text-primary"></i>{{ client?.User?.email }}</li>
-            <li class="mb-2"><i class="fas fa-leaf me-2 text-success"></i>Score carbone : {{ client?.score_carbone }}</li>
-            <li class="mb-2"><i class="fas fa-gift me-2 text-info"></i>Points : {{ client?.totalBonifPts }}</li>
+            <li class="mb-2"><i class="zmdi zmdi-pin  me-3 " style="color: #216490;"></i>{{ client?.adress }}</li>
+            <li class="mb-2"><i class="zmdi zmdi-email me-3 " style="color: #216490;"></i>{{ client?.User?.email }}</li>
+            <li class="mb-2"><i class="fas fa-gift me-3 "style="color: #216490;"></i>Points : {{ client?.totalBonifPts }}</li>
           </ul>
         </div>
       </div>
@@ -46,7 +45,7 @@
         <div class="card-header bg-light border-bottom-0">
           <ul class="nav nav-pills justify-content-center" id="profileTabs" role="tablist">
             <li class="nav-item">
-              <a class="nav-link active" data-bs-toggle="pill" href="#tab-work" role="tab">Expérience</a>
+              <a class="nav-link active" data-bs-toggle="pill" href="#paniers" role="tab">Vos paniers</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" data-bs-toggle="pill" href="#tab-simulations" role="tab">Simulations</a>
@@ -54,10 +53,64 @@
           </ul>
         </div>
         <div class="card-body tab-content">
-          <div class="tab-pane fade show active" id="tab-work" role="tabpanel">
-            <h5 class="fw-bold">Tech Lead - World of Internet</h5>
-            <p class="text-muted"><i class="far fa-calendar-alt me-1"></i>Janvier 2017 - <span class="badge bg-info">Actuel</span></p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Excepteur sint occaecat cupidatat non proident...</p>
+          <div class="tab-pane fade show active" id="paniers" role="tabpanel">
+<div class="tab-pane fade show active" id="paniers" role="tabpanel">
+
+  <!-- Si erreur lors du chargement -->
+  <div *ngIf="cartLoadError" class="alert alert-danger text-center">
+    Une erreur est survenue lors du chargement de vos paniers. Veuillez réessayer plus tard.
+  </div>
+
+  <!-- Si aucun panier en attente -->
+  <div *ngIf="!cartLoadError && waitingCarts.length === 0" class="alert alert-info text-center">
+    Aucun panier en attente pour le moment.
+  </div>
+
+  <!-- Affichage des paniers si disponibles -->
+  <div *ngFor="let cart of waitingCarts" class="mb-4">
+    <div class="card shadow-sm border-0">
+      <div class="card-header d-flex justify-content-between align-items-center bg-light">
+        <div>
+          <strong>Panier n°{{ cart.cart_id }}</strong>
+          <small class="text-muted ms-2">({{ cart.products.length }} produit{{ cart.products.length > 1 ? 's' : '' }})</small>
+        </div>
+        <span 
+          class="badge"
+          [ngClass]="{
+            'bg-warning ': cart.status === 'waiting',
+            'bg-success': cart.status === 'validated',
+            'bg-danger': cart.status === 'cancelled',
+            'bg-secondary': cart.status !== 'waiting' && cart.status !== 'validated' && cart.status !== 'cancelled'
+          }">
+          {{
+            cart.status === 'waiting' ? 'En attente d\'expédition' :
+            cart.status === 'validated' ? 'Expédié' :
+            cart.status === 'cancelled' ? 'Annulé' :
+            cart.status
+          }}
+        </span>
+      </div>
+
+      <div class="card-body p-3">
+        <div *ngIf="cart.products.length > 0; else noProducts">
+          <ul class="list-group list-group-flush">
+            <li *ngFor="let product of cart.products" class="list-group-item d-flex justify-content-between align-items-center">
+              <div>
+                <strong>{{ product.name }}</strong>
+                <small class="text-muted ms-2">({{ product.brand }})</small>
+              </div>
+              <span class="badge " style="background-color: #216490;">x{{ product.quantity }}</span>
+            </li>
+          </ul>
+        </div>
+        <ng-template #noProducts>
+          <p class="text-muted">Aucun produit dans ce panier.</p>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+
+</div>
           </div>
 
           <div class="tab-pane fade" id="tab-simulations" role="tabpanel">

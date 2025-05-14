@@ -56,7 +56,7 @@ export class AuthLoginComponent implements OnInit {
           this.providerService.getProviderByEmail(userEmail).subscribe({
             next: (provider) => {
               this.providerId = provider.id;
-              localStorage.setItem('providerId', this.providerId.toString());
+              localStorage.setItem('providerId', provider.id);
               this.isLoading = false;
               this.router.navigate(['/provider']);
             },
@@ -68,7 +68,7 @@ export class AuthLoginComponent implements OnInit {
           });
         } else if (roles.includes('ROLE_ADMIN')) {
           this.isLoading = false;
-          this.router.navigate(['/adminboard']);
+          this.router.navigate(['/adminboard/home']);
         } else if (roles.includes('ROLE_CLIENT')) {
           this.clientService.getClientByEmail(userEmail).subscribe({
             next: (res) => {

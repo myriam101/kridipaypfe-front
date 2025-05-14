@@ -10,46 +10,70 @@ body {
 
 .navbar {
   background-color: #216490;
-  color: white;
 }
 
 .navbar .navbar-brand {
-  color: white;
+  color: #fff;
   font-weight: bold;
+  font-size: 1.25rem;
 }
 
-.navbar .nav-link {
-  color: white !important;
+.navbar .navbar-toggler {
+  color: #fff;
+  border: none;
+}
+
+.navbar .navbar-nav .nav-link {
+  color: #fff;
   font-size: 1.1rem;
+  display: flex;
+  align-items: center;
 }
 
-.navbar .nav-link i {
-  font-size: 1.4rem;
-  vertical-align: middle;
-  margin-right: 0.3rem;
-}
 
-/* Sidebar */
 .sidebar {
   width: 250px;
-  background-color: #ffffff;
-  padding-top: 36px;
+  background-color: #fff;
+  padding-top: 32px;
   height: 100vh;
   position: fixed;
   left: 0;
   top: 0;
   border-right: 1px solid #dee2e6;
   z-index: 1020;
+  transition: transform 0.3s ease;
+
 }
+
+.sidebar.hidden {
+  transform: translateX(-100%);
+}
+
+/* Main Content */
+.main-content {
+  margin-left: 250px;
+  padding: 2rem;
+  padding-top: 10px;
+  flex-grow: 1;
+  overflow-y: auto;
+  width: calc(100% - 250px);
+  transition: all 0.3s ease;
+}
+
+.main-content.full-width {
+  margin-left: 0;
+  width: 100%;
+}
+
 
 .sidebar .nav-link {
   color: #216490;
   font-weight: 500;
-  padding: 0.70rem 1rem;
+  padding: 0.5rem 1rem;
   display: flex;
   align-items: center;
   font-size: 1rem;
-  transition: background 0.2s ease-in-out;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
 .sidebar .nav-link i {
@@ -57,29 +81,46 @@ body {
   margin-right: 0.5rem;
 }
 
-/* Hover effect */
+/* Hover & Active States */
 .sidebar .nav-link:hover {
   background-color: #e9f0f5;
   color: #0d3b66;
 }
 
-/* Active state (optional) */
 .sidebar .nav-link.active {
   background-color: #216490;
-  color: white;
+  color: #fff;
   font-weight: 600;
 }
 
 .sidebar .nav-link.active i {
-  color: white;
+  color: #fff;
 }
 
-/* Content */
-.main-content {
-  margin-left: 220px;
-  padding: 2rem;
-  padding-top: 10px;
-  flex-grow: 1;
-  overflow-y: auto;
-  width: calc(100% - 250px);
+/* Logout Icon specific style */
+.logout-link i {
+  color: #fff;
+}
+.sidebar.hidden {
+  display: none;
+}
+.icon-btn {
+  background: none !important;
+  border: none;
+  color: #fff !important;
+  font-size: 1.5rem;
+  padding: 0.3rem 0.6rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.icon-btn i {
+  color: #fff !important;
+}
+
+.icon-btn:hover i {
+  color: #dcdcdc !important;
 }

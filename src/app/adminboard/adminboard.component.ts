@@ -29,10 +29,13 @@ export class AdminboardComponent {
     this.router.navigate(['catalogues'], { relativeTo: this.route });
   }
   goToHome() {
-    this.router.navigate(['cards'], { relativeTo: this.route });
+    this.router.navigate(['home'], { relativeTo: this.route });
   }
   goToClients() {
     this.router.navigate(['clients'], { relativeTo: this.route });
+  }
+   goToCarts() {
+    this.router.navigate(['carts'], { relativeTo: this.route });
   }
 
   confirmLogout() {
@@ -42,4 +45,10 @@ export class AdminboardComponent {
       this.router.navigate(['/login']);
     }
   }
+  sidebarVisible: boolean = true;
+
+toggleSidebar(): void {
+  this.sidebarVisible = !this.sidebarVisible;
+}
+
 }

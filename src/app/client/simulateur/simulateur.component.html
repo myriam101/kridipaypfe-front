@@ -40,13 +40,73 @@
       <span class="value-badge primary">{{ nbr_use }} fois</span>
     </div>
   </div>
-
-  <!-- Résultat de la simulation dans une bulle de succès -->
-  <div *ngIf="simulationResult" class="alert alert-success p-3 mt-4 text-center">
-    <h4>Résultat :</h4>
-    <div><strong>Consommation d'énergie (kWh) :</strong> {{ simulationResult.estimated_consumption.kwh }} kWh</div>
-    <div><strong>Consommation d'eau (litres) :</strong> {{ simulationResult.estimated_consumption.litres }} litres</div>
+<!-- Résultats de simulation -->
+<div *ngIf="simulationResult" class="alert alert-success p-3 mt-4">
+  <h4 class="text-center mb-3"><i class="bi bi-graph-up-arrow me-2"></i> Résultat de la simulation</h4>
+  
+  <div class="d-flex justify-content-around text-center">
+    <div>
+      <i class="bi bi-lightning-charge-fill fs-2 text-warning"></i>
+      <div class="fw-semibold mt-1">Énergie</div>
+      <div class="fs-5">{{ simulationResult.estimated_consumption.kwh }} kWh</div>
+    </div>
+    <div>
+      <i class="bi bi-droplet-fill fs-2 text-primary"></i>
+      <div class="fw-semibold mt-1">Eau</div>
+      <div class="fs-5">{{ simulationResult.estimated_consumption.litres }} litres</div>
+    </div>
   </div>
+</div>
+
+<!-- Résultat de la facture -->
+<div *ngIf="facture" class="alert alert-info p-3 mt-3">
+  <h5 class="text-center mb-3"><i class="bi bi-receipt me-2"></i> Facture estimée</h5>
+
+  <div class="d-flex justify-content-around text-center">
+    <div>
+      <i class="bi bi-lightbulb-fill fs-4 text-warning"></i>
+      <div class="fw-semibold">Électricité</div>
+      <div class="fs-6">
+        <ng-container *ngIf="facture.electricite !== 'Calcul en cours...'">
+          {{ facture.montant_electricite }} millimes
+        </ng-container>
+        <ng-container *ngIf="facture.electricite === 'Calcul en cours...'">
+          <div class="spinner-border spinner-border-sm text-warning" role="status"></div>
+          <small class="d-block mt-1">Calcul...</small>
+        </ng-container>
+      </div>
+    </div>
+
+    <div>
+      <i class="bi bi-droplet-fill fs-4 text-primary"></i>
+      <div class="fw-semibold">Eau</div>
+      <div class="fs-6">
+        <ng-container *ngIf="facture.eau !== 'Calcul en cours...'">
+          {{ facture.montant_eau }} millimes
+        </ng-container>
+        <ng-container *ngIf="facture.eau === 'Calcul en cours...'">
+          <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+          <small class="d-block mt-1">Calcul...</small>
+        </ng-container>
+      </div>
+    </div>
+
+    <div>
+      <i class="bi bi-cash-stack fs-4 text-success"></i>
+      <div class="fw-semibold">Total</div>
+      <div class="fs-6 fw-bold">
+        <ng-container *ngIf="facture.montant_total !== 'Calcul en cours...'">
+          {{ facture.montant_total }} millimes
+        </ng-container>
+        <ng-container *ngIf="facture.montant_total === 'Calcul en cours...'">
+          <div class="spinner-border spinner-border-sm text-success" role="status"></div>
+          <small class="d-block mt-1">Calcul...</small>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+
 </div>
 
 <!-- Actions -->

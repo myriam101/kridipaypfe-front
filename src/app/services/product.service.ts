@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Product } from '../models/product';
-import { BehaviorSubject, map, Observable, tap } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, of, tap, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class ProductService {
   
   private apiProducts = 'http://localhost:8000/Product';
   private apiCatelogs = 'http://localhost:8000/api/catalog/all';
-private apiCart = 'http://localhost:8000/Product/cart'
+private apiCart = 'http://localhost:8000/Cart'
   constructor(private http: HttpClient) {}
 
   getProducts(): Observable<Product[]> {
@@ -48,7 +48,7 @@ refreshCartCount(clientId: number): void {
 }
 
 getCartCount(clientId: number): Observable<number> {
-  return this.http.get<{ count: number }>(`${this.apiProducts}/cart/count/${clientId}`).pipe(
+  return this.http.get<{ count: number }>(`${this.apiCart}/count/${clientId}`).pipe(
     map(response => response.count),
     tap(count => this.cartItemCount.next(count)) // met à jour le compteur
   );
@@ -63,5 +63,26 @@ removeItemFromCart(clientId: number, productId: number): Observable<any> {
 }
 getProductDetails(productId: number): Observable<any> {
     return this.http.get<any>(`${this.apiProducts}/product/${productId}`);
+  }
+getWaitingCarts(clientId: number): Observable<any[]> {
+  return this.http.get<any[]>(`${this.apiCart}/client/non-pending-carts/${clientId}`).pipe(
+    catchError((error: HttpErrorResponse) => {
+      if (error.status === 404) {
+        // Retourne un tableau vide si aucun panier
+        return of([]);
+      }
+      // Pour les autres erreurs, relance l'erreur
+      return throwError(() => error);
+    })
+  );
+}
+getAllWaitingCarts(): Observable<any> {
+    return this.http.get<any>(`${this.apiCart}/waiting`);
+  }
+  getAllValidatedCarts(): Observable<any> {
+    return this.http.get<any>(`${this.apiCart}/validated`);
+  }
+  getAllCancelledCarts(): Observable<any> {
+    return this.http.get<any>(`${this.apiCart}/cancelled`);
   }
 }

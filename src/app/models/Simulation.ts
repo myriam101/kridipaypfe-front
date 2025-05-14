@@ -1,4 +1,5 @@
 export interface Simulation{
+simulation_id: number;
 
 id:number;
 duration_use:number;

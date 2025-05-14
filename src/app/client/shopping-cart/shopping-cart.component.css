@@ -15,3 +15,12 @@
     align-items: stretch;
   }
 }
+.btn-custom-blue {
+  background-color: #216490;
+  color: white;
+  border: none;
+}
+
+.btn-custom-blue:hover {
+  background-color: #1a5075;
+}
