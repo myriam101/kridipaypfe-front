@@ -1,5 +1,5 @@
-<!-- Navigation -->
-<!-- Navigation -->
+<div class="page-wrapper d-flex flex-column min-vh-100">
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top">
   <div class="container">
     <a class="navbar-brand" href="#">Bienvenue au fournisseur</a>
@@ -54,12 +54,11 @@
   <!-- Page Content -->
   <section class="py-5">
     <div class="container">
-      <div *ngIf="loading" class="text-center my-5">
-  <div class="spinner-border text-primary" role="status">
-    <span class="visually-hidden">Chargement...</span>
-  </div>
+      <div class="loader-container" *ngIf="loading">
+  <div class="loader"></div>
 </div>
 <router-outlet (activate)="onActivate()" (deactivate)="onDeactivate()"></router-outlet>
     </div>
   </section>
   <app-footer></app-footer>
+</div>

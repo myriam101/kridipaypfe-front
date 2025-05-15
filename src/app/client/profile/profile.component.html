@@ -16,8 +16,9 @@
       <div class="card shadow-sm border-0 h-100">
         <div class="card-body text-center">
           <img src="assets/prflpic.jpg" alt="User Avatar" class="rounded-circle mb-3" width="100" height="100">
-          <h4 class="fw-bold">{{ client?.User?.name }}</h4>
-          <p class="text-muted">{{ client?.User?.username }}</p>
+        <h4 class="fw-bold">
+  {{ client?.User?.name }} {{ client?.User?.last_name }}</h4>
+  <p class="text-muted">{{ client?.User?.username }}</p>
 
         <!-- Score carbone -->
   <div class="d-flex justify-content-center mb-3">

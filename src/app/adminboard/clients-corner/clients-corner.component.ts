@@ -8,6 +8,7 @@ import { ClientService } from 'src/app/services/client.service';
 })
 export class ClientsCornerComponent implements OnInit {
   clients: any[] = [];
+  isLoading = false; 
 
   constructor(private clientService: ClientService) {}
 
@@ -16,9 +17,16 @@ export class ClientsCornerComponent implements OnInit {
   }
 
   loadClients(): void {
+    this.isLoading = true;  // start loader
     this.clientService.getAllClients().subscribe({
-      next: (data) => this.clients = data,
-      error: (err) => console.error('Erreur lors de la récupération des clients :', err)
+      next: (data) => {
+        this.clients = data;
+        this.isLoading = false; // stop loader
+      },
+      error: (err) => {
+        console.error('Erreur lors de la récupération des clients :', err);
+        this.isLoading = false; // stop loader aussi en cas d'erreur
+      }
     });
 
   }

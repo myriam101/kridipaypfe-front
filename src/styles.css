@@ -12,3 +12,24 @@ body {
   font-size: 1.5rem; /* Augmente la taille des icônes */
   color: #216490 !important; /* Applique la couleur */
 }
+/*loader*/
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 150px; 
+}
+
+.loader {
+  border: 6px solid #f3f3f3; /* light grey */
+  border-top: 6px solid #216490; /* bleu primaire */
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

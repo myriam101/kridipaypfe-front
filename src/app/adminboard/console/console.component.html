@@ -1,0 +1,128 @@
+
+<div class="container-fluid min-vh-100 py-1">
+    <div class="text-center mb-4">
+  <h3 class="fw-bold" style="color: #216490;">
+    <i class="bi bi-gear-fill me-2"></i>Gestion des tarifs énergétiques
+  </h3>
+</div>
+
+  <div class="card shadow-sm rounded-4 p-4">
+    
+    <!-- Section Électricité -->
+    <div class="mb-5">
+      <div class="d-flex align-items-center gap-2 mb-4">
+        <h5 class="mb-0 fw-semibold">Ajouter un tarif électricité</h5>
+      </div>
+      <form [formGroup]="priceForm" (ngSubmit)="submitPrice()" novalidate>
+        <!-- Prix -->
+       <div class="mb-3">
+  <div class="input-group">
+    <span class="input-group-text"><i class="zmdi zmdi-money"></i></span>
+    <input type="number" id="price" class="form-control" formControlName="price" placeholder="Tarif"
+      [class.is-invalid]="priceForm.get('price')?.invalid && (priceForm.get('price')?.touched || priceForm.get('price')?.dirty)" />
+  </div>
+  <div *ngIf="priceForm.get('price')?.invalid && (priceForm.get('price')?.touched || priceForm.get('price')?.dirty)" class="invalid-feedback d-block">
+    <small *ngIf="priceForm.get('price')?.errors?.['required']">Le prix est requis.</small>
+    <small *ngIf="priceForm.get('price')?.errors?.['min']">Le prix doit être positif.</small>
+  </div>
+</div>
+
+        <!-- Secteur -->
+        <div class="mb-3">
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-building"></i></span>
+            <select id="sector" class="form-select" formControlName="sector"
+              [class.is-invalid]="priceForm.get('sector')?.invalid && (priceForm.get('sector')?.touched || priceForm.get('sector')?.dirty)">
+              <option value="" disabled>Choisissez un secteur</option>
+              <option value="residentiel">Résidentiel</option>
+              <option value="non residentiel">Non résidentiel</option>
+            </select>
+          </div>
+          <div *ngIf="priceForm.get('sector')?.invalid && (priceForm.get('sector')?.touched || priceForm.get('sector')?.dirty)" class="invalid-feedback d-block">
+            <small>Le secteur est requis.</small>
+          </div>
+        </div>
+
+        <!-- Tranche -->
+         <div class="mb-4">
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-sliders"></i></span>
+            <select id="tranche_elect" class="form-select" formControlName="tranche_elect"
+              [class.is-invalid]="priceForm.get('tranche_elect')?.invalid && (priceForm.get('tranche_elect')?.touched || priceForm.get('tranche_elect')?.dirty)">
+              <option value="" disabled>Choisissez une tranche</option>
+              <option value="1-50">1-50</option>
+              <option value="51-100">51-100</option>
+              <option value="101-200">101-200</option>
+              <option value="201-300">201-300</option>
+              <option value="301-500">301-500</option>
+              <option value="501+">501+</option>
+            </select>
+          </div>
+          <div *ngIf="priceForm.get('tranche_elect')?.invalid && (priceForm.get('tranche_elect')?.touched || priceForm.get('tranche_elect')?.dirty)" class="invalid-feedback d-block">
+            <small>La tranche est requise.</small>
+          </div>
+        </div>
+
+        <div class="text-end">
+  <button type="submit" class="btn btn-ajout" [disabled]="priceForm.invalid || isLoading">
+  
+ <span *ngIf="!isLoading">Ajouter tarif électricité</span>
+                  <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            </button>
+</div>
+      </form>
+    </div>
+
+    <!-- Séparation -->
+    <hr class="my-4">
+
+    <!-- Section Eau -->
+    <div>
+      <div class="d-flex align-items-center gap-2 mb-4">
+        <h5 class="mb-0 fw-semibold">Ajouter un tarif eau</h5>
+      </div>
+      <form [formGroup]="priceWaterForm" (ngSubmit)="submitWaterPrice()" novalidate>
+        <!-- Prix -->
+         <div class="mb-3">
+          <div class="input-group">
+            <span class="input-group-text"><i class="zmdi zmdi-money"></i></span>
+            <input type="number" id="priceWater" class="form-control" formControlName="price" placeholder="Tarif"
+              [class.is-invalid]="priceWaterForm.get('price')?.invalid && (priceWaterForm.get('price')?.touched || priceWaterForm.get('price')?.dirty)" />
+          </div>
+          <div *ngIf="priceWaterForm.get('price')?.invalid && (priceWaterForm.get('price')?.touched || priceWaterForm.get('price')?.dirty)" class="invalid-feedback d-block">
+            <small *ngIf="priceWaterForm.get('price')?.errors?.['required']">Le prix est requis.</small>
+            <small *ngIf="priceWaterForm.get('price')?.errors?.['min']">Le prix doit être positif.</small>
+          </div>
+        </div>
+
+        <!-- Tranche Eau -->
+         <div class="mb-4">
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-sliders"></i></span>
+            <select id="tranche_eau" class="form-select" formControlName="tranche_eau"
+              [class.is-invalid]="priceWaterForm.get('tranche_eau')?.invalid && (priceWaterForm.get('tranche_eau')?.touched || priceWaterForm.get('tranche_eau')?.dirty)">
+              <option value="" disabled>Choisissez une tranche</option>
+              <option value="0-20">0-20</option>
+              <option value="21-40">21-40</option>
+              <option value="41-70">41-70</option>
+              <option value="71-100">71-100</option>
+              <option value="101-150">101-150</option>
+              <option value="150+">151+</option>
+            </select>
+          </div>
+          <div *ngIf="priceWaterForm.get('tranche_eau')?.invalid && (priceWaterForm.get('tranche_eau')?.touched || priceWaterForm.get('tranche_eau')?.dirty)" class="invalid-feedback d-block">
+            <small>La tranche est requise.</small>
+          </div>
+        </div>
+       <div class="text-end">
+          <button type="submit" class="btn btn-ajout" [disabled]="priceWaterForm.invalid || isLoading">
+            
+ <span *ngIf="!isLoading">Ajouter tarif eau</span>
+    <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+      
+          </button>
+       </div>
+      </form>
+    </div>
+  </div>
+</div>

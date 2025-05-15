@@ -1,15 +1,8 @@
 
 <div class="container">
-  <div class="row clearfix">
-    <div *ngIf="isLoading" class="text-center my-4">
-      
-      <div class="spinner-border" role="status">
-        <span class="visually-hidden">Chargement...</span>
-
-      </div>
-
-    </div>
-    
+  <div class="row clearfix"> <div class="loader-container" *ngIf="isLoading">
+  <div class="loader"></div>
+</div>
     <ng-container *ngIf="!isLoading && products.length > 0; else noProducts">
       <!-- Affiche les produits -->
       <div class="row clearfix">

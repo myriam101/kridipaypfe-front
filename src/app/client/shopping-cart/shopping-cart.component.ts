@@ -10,17 +10,22 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class ShoppingCartComponent implements OnInit {
   cartItems: any[] = [];
-
+loading :boolean=true;
   constructor(private cartService: ProductService,private router: Router,private snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
     const clientId = Number(localStorage.getItem('clientId'));
+    this.loading=true;
     this.cartService.getCartDetails(clientId).subscribe({
       next: (data: any) => {
         this.cartItems = data;
+            this.loading=false;
+
       },
       error: (err) => {
         console.error('Erreur de récupération du panier', err);
+                    this.loading=false;
+
       }
     });
   }

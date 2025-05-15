@@ -2,3 +2,19 @@
   background-color: #216490;
   color: #fff !important;
 }
+.nav-pills .nav-link.active {
+  background-color: #216490 !important;
+  color: #fff !important;
+}
+
+.nav-pills .nav-link {
+  color: #216490;
+  border: 1px solid #216490;
+  margin: 0 4px;
+  transition: all 0.2s ease-in-out;
+}
+
+.nav-pills .nav-link:hover {
+  background-color: #216490;
+  color: #fff;
+}

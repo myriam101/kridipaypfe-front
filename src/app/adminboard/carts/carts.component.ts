@@ -7,9 +7,9 @@ import { ProductService } from 'src/app/services/product.service';
   styleUrls: ['./carts.component.css']
 })
 export class CartsComponent  implements OnInit {
- waitingCarts: any[] = [];
-  validCarts: any[] = [];
-    cancelledcarts: any[] = [];
+waitingCarts: any[] = [];
+validCarts: any[] = [];
+cancelledcarts: any[] = [];
 
   cartLoadError: boolean = false;
   isLoading: boolean = true;

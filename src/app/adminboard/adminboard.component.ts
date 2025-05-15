@@ -37,6 +37,9 @@ export class AdminboardComponent {
    goToCarts() {
     this.router.navigate(['carts'], { relativeTo: this.route });
   }
+  goToConsole() {
+    this.router.navigate(['console'], { relativeTo: this.route });
+  }
 
   confirmLogout() {
     const confirmed = window.confirm("Êtes-vous sûr de vouloir vous déconnecter ?");

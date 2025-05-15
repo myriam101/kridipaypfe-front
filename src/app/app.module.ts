@@ -32,7 +32,7 @@ import { AjoutproductComponent } from './provider/ajoutproduct/ajoutproduct.comp
 import { CatalogComponent } from './provider/catalog/catalog.component';
 import { ListproductsComponent } from './provider/listproducts/listproducts.component';
 import { ProfileComponent } from './client/profile/profile.component';
-import { HomeComponent } from './adminboard/home/home.component';
+import { CardsComponent } from './adminboard/cards/cards.component';
 import { SimulateurComponent } from './client/simulateur/simulateur.component';
 import { CatalogsCornerComponent } from './adminboard/catalogs-corner/catalogs-corner.component';
 import { HomeCornerComponent } from './adminboard/home-corner/home-corner.component';
@@ -43,6 +43,7 @@ import { ShoppingCartComponent } from './client/shopping-cart/shopping-cart.comp
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatInputModule } from '@angular/material/input';
 import { CartsComponent } from './adminboard/carts/carts.component';
+import { ConsoleComponent } from './adminboard/console/console.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -64,14 +65,15 @@ AjoutproductComponent,
 CatalogComponent,
 ListproductsComponent,
 ProfileComponent,
-HomeComponent,
+CardsComponent,
 SimulateurComponent,
 CatalogsCornerComponent,
 HomeCornerComponent,
 ClientsCornerComponent,
 CatalogDisplayComponent,
 ShoppingCartComponent,
-CartsComponent  ],
+CartsComponent,
+ConsoleComponent  ],
   imports: [
     BrowserModule,
     CommonModule,
