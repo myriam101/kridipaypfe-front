@@ -25,7 +25,6 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatOptionModule } from '@angular/material/core';
 import { MatDialogActions, MatDialogModule } from '@angular/material/dialog';
-import { SidebarComponent } from './sidebar/sidebar.component';
 import { AdminboardComponent } from './adminboard/adminboard.component';
 import { ProviderComponent } from './provider/provider.component';
 import { AjoutproductComponent } from './provider/ajoutproduct/ajoutproduct.component';
@@ -58,7 +57,6 @@ export function tokenGetter() {
     FooterComponent,
   AuthLoginComponent,
   ProductdetailsComponent,
-SidebarComponent,
 AdminboardComponent,
 ProviderComponent,
 AjoutproductComponent,

@@ -10,6 +10,8 @@ body {
 
 .navbar {
   background-color: #216490;
+  z-index: 1000; /* souvent autour de 1000 */
+
 }
 
 .navbar .navbar-brand {
@@ -38,13 +40,21 @@ body {
   height: 100vh;
   position: fixed;
   left: 0;
-  top: 0;
   border-right: 1px solid #dee2e6;
-  z-index: 1020;
+  z-index: 1000;
   transition: transform 0.3s ease;
+  top: 59px; /* décale vers le bas de 50px */
+  flex-direction: column;
+
+  
 
 }
-
+.sidebar-inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 21%; /* Nécessaire pour que le centering fonctionne */
+}
 .sidebar.hidden {
   transform: translateX(-100%);
 }

@@ -13,11 +13,9 @@
          <button class="icon-btn" (click)="toggleSidebar()">
     <i class="zmdi zmdi-menu"></i>
   </button>
-        <li class="nav-item">
-          <a class="icon-btn" (click)="confirmLogout()">
+          <button class="icon-btn" (click)="confirmLogout()">
             <i class="zmdi zmdi-sign-in"></i>
-          </a>
-        </li>
+          </button>
       </ul>
     </div>
   </div>
@@ -25,7 +23,9 @@
 
 <!-- Sidebar -->
 <nav class="sidebar shadow-sm" [class.hidden]="!sidebarVisible">
-  <ul class="nav flex-column pt-4">
+  <div class="sidebar-inner">
+
+  <ul class="nav flex-column">
     <li class="nav-item">
       <a class="nav-link" [class.active]="currentRoute.includes('home')" (click)="goToHome()">
         <i class="zmdi zmdi-home me-2"></i> Accueil
@@ -52,6 +52,7 @@
       </a>
     </li>
   </ul>
+    </div>
 </nav>
 
 <div class="main-content" [class.full-width]="!sidebarVisible">

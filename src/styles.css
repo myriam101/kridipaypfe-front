@@ -33,3 +33,7 @@ body {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+.mat-snack-bar-container {
+ z-index: 2000 !important; /* plus grand que ta navbar */
+  top: 60px
+}

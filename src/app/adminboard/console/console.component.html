@@ -1,34 +1,44 @@
-
-<div class="container-fluid min-vh-100 py-1">
-    <div class="text-center mb-4">
-  <h3 class="fw-bold" style="color: #216490;">
-    <i class="bi bi-gear-fill me-2"></i>Gestion des tarifs énergétiques
-  </h3>
-</div>
-
+<div class="container-fluid min-vh-100 py-4">
+  <div class="text-center mb-5">
+    <h3 class="fw-bold" style="color:#216490;">
+      <i class="bi bi-gear-fill me-2"></i>Gestion des tarifs énergétiques
+    </h3>
+    <p class="text-secondary fst-italic">Ajoutez et gérez vos tarifs d'électricité et d'eau facilement</p>
+  </div>
+  <!-- Toggle boutons -->
+  <div class="d-flex gap-3 justify-content-center mb-4">
+    <button class="btn btn-primary" (click)="showElectricityForm = !showElectricityForm">
+      {{ showElectricityForm ? 'Cacher' : 'Ajouter un tarif électricité' }}
+    </button>
+    <button class="btn btn-primary" (click)="showWaterForm = !showWaterForm">
+      {{ showWaterForm ? 'Cacher' : 'Ajouter un tarif eau' }}
+    </button>
+  </div>
   <div class="card shadow-sm rounded-4 p-4">
-    
+    <!-- Formulaire Électricité -->
+    <div *ngIf="showElectricityForm" class="mb-5">
     <!-- Section Électricité -->
-    <div class="mb-5">
-      <div class="d-flex align-items-center gap-2 mb-4">
-        <h5 class="mb-0 fw-semibold">Ajouter un tarif électricité</h5>
-      </div>
-      <form [formGroup]="priceForm" (ngSubmit)="submitPrice()" novalidate>
+    <section class="mb-5">
+      <h5 class="fw-semibold mb-4 border-bottom pb-2">Ajouter un tarif électricité</h5>
+      <form [formGroup]="priceForm" (ngSubmit)="submitPrice()" novalidate class="d-flex flex-column gap-4">
+
         <!-- Prix -->
-       <div class="mb-3">
-  <div class="input-group">
-    <span class="input-group-text"><i class="zmdi zmdi-money"></i></span>
-    <input type="number" id="price" class="form-control" formControlName="price" placeholder="Tarif"
-      [class.is-invalid]="priceForm.get('price')?.invalid && (priceForm.get('price')?.touched || priceForm.get('price')?.dirty)" />
-  </div>
-  <div *ngIf="priceForm.get('price')?.invalid && (priceForm.get('price')?.touched || priceForm.get('price')?.dirty)" class="invalid-feedback d-block">
-    <small *ngIf="priceForm.get('price')?.errors?.['required']">Le prix est requis.</small>
-    <small *ngIf="priceForm.get('price')?.errors?.['min']">Le prix doit être positif.</small>
-  </div>
-</div>
+        <div>
+          <label for="price" class="form-label fw-semibold">Tarif (millimes/Kwh)</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="zmdi zmdi-money"></i></span>
+            <input type="number" id="price" class="form-control" formControlName="price" placeholder="Entrez le tarif"
+              [class.is-invalid]="priceForm.get('price')?.invalid && (priceForm.get('price')?.touched || priceForm.get('price')?.dirty)" />
+          </div>
+          <div *ngIf="priceForm.get('price')?.invalid && (priceForm.get('price')?.touched || priceForm.get('price')?.dirty)" class="invalid-feedback d-block">
+            <small *ngIf="priceForm.get('price')?.errors?.['required']">Le prix est requis.</small>
+            <small *ngIf="priceForm.get('price')?.errors?.['min']">Le prix doit être positif.</small>
+          </div>
+        </div>
 
         <!-- Secteur -->
-        <div class="mb-3">
+        <div>
+          <label for="sector" class="form-label fw-semibold">Secteur</label>
           <div class="input-group">
             <span class="input-group-text"><i class="bi bi-building"></i></span>
             <select id="sector" class="form-select" formControlName="sector"
@@ -44,7 +54,8 @@
         </div>
 
         <!-- Tranche -->
-         <div class="mb-4">
+        <div>
+          <label for="tranche_elect" class="form-label fw-semibold">Tranche de consommation (kWh)</label>
           <div class="input-group">
             <span class="input-group-text"><i class="bi bi-sliders"></i></span>
             <select id="tranche_elect" class="form-select" formControlName="tranche_elect"
@@ -63,30 +74,29 @@
           </div>
         </div>
 
-        <div class="text-end">
-  <button type="submit" class="btn btn-ajout" [disabled]="priceForm.invalid || isLoading">
-  
- <span *ngIf="!isLoading">Ajouter tarif électricité</span>
-                  <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-            </button>
-</div>
+        <div class="d-flex justify-content-end">
+          <button type="submit" class="btn btn-primary px-4 fw-semibold" [disabled]="priceForm.invalid || isLoading">
+            <span *ngIf="!isLoading">Ajouter tarif électricité</span>
+            <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          </button>
+        </div>
       </form>
+    </section>
+
+    <hr>
     </div>
-
-    <!-- Séparation -->
-    <hr class="my-4">
-
     <!-- Section Eau -->
-    <div>
-      <div class="d-flex align-items-center gap-2 mb-4">
-        <h5 class="mb-0 fw-semibold">Ajouter un tarif eau</h5>
-      </div>
-      <form [formGroup]="priceWaterForm" (ngSubmit)="submitWaterPrice()" novalidate>
+      <div *ngIf="showWaterForm">
+
+      <h5 class="fw-semibold mb-4 border-bottom pb-2" >Ajouter un tarif eau</h5>
+      <form [formGroup]="priceWaterForm" (ngSubmit)="submitWaterPrice()" novalidate class="d-flex flex-column gap-4">
+
         <!-- Prix -->
-         <div class="mb-3">
+        <div>
+          <label for="priceWater" class="form-label fw-semibold">Tarif (millimes/m³)</label>
           <div class="input-group">
             <span class="input-group-text"><i class="zmdi zmdi-money"></i></span>
-            <input type="number" id="priceWater" class="form-control" formControlName="price" placeholder="Tarif"
+            <input type="number" id="priceWater" class="form-control" formControlName="price" placeholder="Entrez le tarif"
               [class.is-invalid]="priceWaterForm.get('price')?.invalid && (priceWaterForm.get('price')?.touched || priceWaterForm.get('price')?.dirty)" />
           </div>
           <div *ngIf="priceWaterForm.get('price')?.invalid && (priceWaterForm.get('price')?.touched || priceWaterForm.get('price')?.dirty)" class="invalid-feedback d-block">
@@ -96,7 +106,8 @@
         </div>
 
         <!-- Tranche Eau -->
-         <div class="mb-4">
+        <div>
+          <label for="tranche_eau" class="form-label fw-semibold" >Tranche de consommation (m³)</label>
           <div class="input-group">
             <span class="input-group-text"><i class="bi bi-sliders"></i></span>
             <select id="tranche_eau" class="form-select" formControlName="tranche_eau"
@@ -107,22 +118,140 @@
               <option value="41-70">41-70</option>
               <option value="71-100">71-100</option>
               <option value="101-150">101-150</option>
-              <option value="150+">151+</option>
+              <option value="151+">151+</option>
             </select>
           </div>
           <div *ngIf="priceWaterForm.get('tranche_eau')?.invalid && (priceWaterForm.get('tranche_eau')?.touched || priceWaterForm.get('tranche_eau')?.dirty)" class="invalid-feedback d-block">
             <small>La tranche est requise.</small>
           </div>
         </div>
-       <div class="text-end">
-          <button type="submit" class="btn btn-ajout" [disabled]="priceWaterForm.invalid || isLoading">
-            
- <span *ngIf="!isLoading">Ajouter tarif eau</span>
-    <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-      
+
+        <div class="d-flex justify-content-end">
+          <button type="submit" class="btn btn-primary px-4 fw-semibold" [disabled]="priceWaterForm.invalid || isLoading">
+            <span *ngIf="!isLoading">Ajouter tarif eau</span>
+            <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
           </button>
-       </div>
+        </div>
       </form>
+      </div>
+<!-- ⚡ Tarifs Électricité -->
+<div class="mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+  <h5 class="fw-semibold mb-0" style="color:#216490;">
+    <i class="bi bi-lightning-charge-fill me-2"></i>Tarifs Électricité enregistrés
+  </h5>
+   <button class="btn btn-primary"  (click)="checkElectricityPriceCombinations()" >
+    Vérifier les tranches electricité
+  </button>
+   
     </div>
+  <div class="loader-container" *ngIf="isLoading"><div class="loader"></div></div>
+  <div *ngIf="electricityPrices.length === 0" class="text-muted fst-italic">Aucun tarif enregistré.</div>
+
+  <div class="row g-3">
+    <div *ngFor="let e of electricityPrices" class="col-md-6 col-xl-4">
+      <div class="card shadow-sm border-primary-subtle">
+        <div class="card-body">
+          <div *ngIf="editElectricityId !== e.id; else editElectricityForm" class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="mb-1 text-capitalize">{{ e.sector }}</h6>
+              <small class="text-muted">Tranche : {{ e.tranche_elect }} kWh</small>
+            </div>
+            <div class="text-end">
+              <span class="badge bg-warning text-dark px-3 py-2 rounded-pill mb-2 d-block" style="font-size: 0.85rem;">
+                {{ e.price }} millimes/kWh
+              </span>
+              <div class="dropdown">
+                <button class="btn btn-sm btn-light border" type="button" id="dropdownElectricity{{ e.id }}" data-bs-toggle="dropdown">
+                  <i class="bi bi-three-dots-vertical"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" [attr.aria-labelledby]="'dropdownElectricity' + e.id">
+                  <li><a class="dropdown-item" (click)="onEditElectricity(e)"><i class="bi bi-pencil me-2"></i>Modifier</a></li>
+                  <li><a class="dropdown-item text-danger" (click)="onDeleteElect(e)"><i class="bi bi-trash me-2"></i>Supprimer</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Formulaire inline édition électricité -->
+          <ng-template #editElectricityForm>
+            <form (ngSubmit)="saveElectricity(e)" class="d-flex flex-column gap-2">
+              <input class="form-control" [(ngModel)]="e.sector" name="sector{{e.id}}" placeholder="Secteur" required>
+              <input class="form-control" [(ngModel)]="e.tranche_elect" name="tranche{{e.id}}" placeholder="Tranche (kWh)" required>
+              <input type="number" class="form-control" [(ngModel)]="e.price" name="price{{e.id}}" placeholder="Prix (millimes/kWh)" required>
+              <div class="d-flex justify-content-end gap-2 mt-2">
+                <button type="submit" class="btn btn-sm btn-primary" [disabled]="loadingElectricityId === e.id">
+                  <span *ngIf="loadingElectricityId === e.id" class="spinner-border spinner-border-sm me-1"></span>Enregistrer
+                </button>
+                <button type="button" class="btn btn-sm btn-secondary" (click)="editElectricityId = null">Annuler</button>
+              </div>
+            </form>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 💧 Tarifs Eau -->
+<div class="mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+  <h5 class="fw-semibold mb-0" style="color:#216490;">
+    <i class="bi bi-droplet-fill me-2"></i>Tarifs Eau enregistrés
+  </h5>
+  <button class="btn btn-primary" (click)="checkTranchesEau()">
+    Vérifier les tranches eau
+  </button>
+</div>
+
+  <div class="loader-container" *ngIf="isLoading"><div class="loader"></div></div>
+  <div *ngIf="waterPrices.length === 0" class="text-muted fst-italic">Aucun tarif enregistré.</div>
+
+  <div class="row g-3">
+    <div *ngFor="let a of waterPrices" class="col-md-6 col-xl-4">
+      <div class="card shadow-sm border-primary-subtle">
+        
+        <div class="card-body">
+          <div *ngIf="editWaterId !== a.id; else editWaterForm" class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="mb-1">Tranche : {{ a.tranche_eau }} m³</h6>
+            </div>
+            <div class="text-end">
+              <span class="badge bg-info text-dark px-3 py-2 rounded-pill mb-2 d-block" style="font-size: 0.85rem;">
+                {{ a.price }} millimes/m³
+              </span>
+              <div class="dropdown">
+                <button class="btn btn-sm btn-light border" type="button" id="dropdownWater{{ a.id }}" data-bs-toggle="dropdown">
+                  <i class="bi bi-three-dots-vertical"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" [attr.aria-labelledby]="'dropdownWater' + a.id">
+                  <li><a class="dropdown-item" (click)="onEditWater(a)"><i class="bi bi-pencil me-2"></i>Modifier</a></li>
+                  <li><a class="dropdown-item text-danger" (click)="onDeleteWater(a)"><i class="bi bi-trash me-2"></i>Supprimer</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Formulaire inline édition eau -->
+          <ng-template #editWaterForm>
+            <form (ngSubmit)="saveWater(a)" class="d-flex flex-column gap-2">
+              <input class="form-control" [(ngModel)]="a.tranche_eau" name="tranche_eau{{a.id}}" placeholder="Tranche (m³)" required>
+              <input type="number" class="form-control" [(ngModel)]="a.price" name="priceWater{{a.id}}" placeholder="Prix (millimes/m³)" required>
+              <div class="d-flex justify-content-end gap-2 mt-2">
+                <button type="submit" class="btn btn-sm btn-primary" [disabled]="loadingWaterId === a.id">
+                  <span *ngIf="loadingWaterId === a.id" class="spinner-border spinner-border-sm me-1"></span>Enregistrer
+                </button>
+                <button type="button" class="btn btn-sm btn-secondary" (click)="editWaterId = null">Annuler</button>
+              </div>
+            </form>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
   </div>
 </div>

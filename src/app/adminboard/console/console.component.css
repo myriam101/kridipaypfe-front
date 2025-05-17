@@ -1,60 +1,42 @@
-body{
-    background:#eee;
+body {
+  background: #f8f9fa;
 }
 
 .card {
-    box-shadow: 0 20px 27px 0 rgb(0 0 0 / 5%);
+  box-shadow: 0 10px 20px rgb(33 100 144 / 0.15);
+  border-radius: 1rem !important;
 }
-.card {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    word-wrap: break-word;
-    background-color: #fff;
-    background-clip: border-box;
-    border: 0 solid rgba(0,0,0,.125);
-    border-radius: 1rem;
-}
-
 .card-body {
-    -webkit-box-flex: 1;
-    -ms-flex: 1 1 auto;
-    flex: 1 1 auto;
-    padding: 1.5rem 1.5rem;
+  padding: 1rem 1.2rem;
+}
+.form-label {
+  font-weight: 600;
+  color: #216490;
 }
 
-/* Rouge + glow sur inputs/selects invalides quand touchés */
-input.ng-invalid.ng-touched,
-select.ng-invalid.ng-touched {
-  border-color: #dc3545;
-  box-shadow: 0 0 5px 1px #dc3545;
+input.form-control, select.form-select {
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
-/* Utilisation de la classe Bootstrap "is-invalid" */
+input.form-control:focus, select.form-select:focus {
+  box-shadow: 0 0 6px 2px #216490;
+  border-color: #216490;
+}
+
 .is-invalid {
   border-color: #dc3545 !important;
-  box-shadow: 0 0 5px 1px #dc3545 !important;
+  box-shadow: 0 0 6px 2px #dc3545 !important;
 }
 
-.spinner-border {
-  vertical-align: middle;
-}
-.snackbar-error {
-  background-color: #d9534f !important;
-  color: white;
-}
-
-.btn-ajout {
+.btn-primary {
   background-color: #216490;
-  color: #fff;
-  font-size: 1rem;
+  border-color: #216490;
+  font-weight: 600;
   letter-spacing: 0.05rem;
-  border-radius: 0.5rem;
-  transition: background-color 0.3s ease-in-out;
-  border: none;
+  transition: background-color 0.3s ease;
 }
 
-.btn-ajout:hover {
+.btn-primary:hover {
   background-color: #174d70;
+  border-color: #174d70;
 }
