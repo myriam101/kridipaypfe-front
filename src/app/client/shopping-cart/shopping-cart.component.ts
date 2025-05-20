@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProductService } from 'src/app/services/product.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { ModalfactureComponent } from '../modalfacture/modalfacture.component';
+import { SimulationService } from 'src/app/services/simulation.service';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -10,8 +13,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class ShoppingCartComponent implements OnInit {
   cartItems: any[] = [];
-loading :boolean=true;
-  constructor(private cartService: ProductService,private router: Router,private snackBar: MatSnackBar) {}
+  loading :boolean=true;
+  constructor(  private simulationService: SimulationService,private cartService: ProductService,private router: Router,private snackBar: MatSnackBar,private dialog: MatDialog) {}
 
   ngOnInit(): void {
     const clientId = Number(localStorage.getItem('clientId'));
@@ -33,18 +36,14 @@ loading :boolean=true;
   const clientId = Number(localStorage.getItem('clientId'));
       if (clientId) {
 
-  // Get the item to be removed by its index
   const item = this.cartItems[index];
 
-  // Remove the item locally by using the index
   this.cartItems.splice(index, 1);
 
-  // Show success message
   this.snackBar.open('Élément supprimé avec succès', 'Fermer', {
     duration: 3000
   });
 
-  // Call the backend to remove the item
   this.cartService.removeItemFromCart(clientId, item.product_id).subscribe({
     next: () => {
     this.cartService.refreshCartCount(clientId);
@@ -53,7 +52,6 @@ loading :boolean=true;
     error: (err) => {
       console.error('Erreur lors de la suppression de l\'élément', err);
 
-      // If there's an error, restore the item back to the cart
       this.cartItems.splice(index, 0, item);  // Reinsert the item at the same index
       this.snackBar.open('Erreur lors de la suppression de l\'élément', 'Fermer', {
         duration: 3000
@@ -72,5 +70,12 @@ showToast() {
     duration: 3000,
   });
 }
-
+estimateEnergyBill() {
+  this.dialog.open(ModalfactureComponent, {
+    width: '800px',
+    data: {
+      products: this.cartItems 
+    }
+  });
+}
 }

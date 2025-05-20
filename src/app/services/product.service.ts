@@ -85,4 +85,8 @@ getAllWaitingCarts(): Observable<any> {
   getAllCancelledCarts(): Observable<any> {
     return this.http.get<any>(`${this.apiCart}/cancelled`);
   }
+  validateCart(cartId: number): Observable<any> {
+  return this.http.put(`${this.apiCart}/validate/${cartId}`, {});
+}
+
 }

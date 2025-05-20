@@ -1,7 +1,7 @@
 .masthead {
   height: 100vh;
   min-height: 500px;
-  background-color: #216490; /* Bootstrap primary blue, you can change it */
+  background-color: #216490; 
   color: white;
   display: flex;
   align-items: center;

@@ -13,5 +13,13 @@ export class SimulationService {
   constructor(private http: HttpClient) {}
 
   addSimulation(data: any): Observable<Simulation> {
-    return this.http.post<Simulation>(`${this.apiUrl}/add`, data);
-  }}
+    return this.http.post<Simulation>(`${this.apiUrl}/add-or-update`, data);
+  }
+envoyerSimulations(payload: any) {
+  return this.http.post(`${this.apiUrl}/bulk`, payload);
+}
+
+
+
+
+}

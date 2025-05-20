@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { CheckoutComponent } from './checkout/checkout.component';
+import { CheckoutComponent } from './client/checkout/checkout.component';
 import { ProductsComponent } from './client/products/products.component';
 import { FooterComponent } from './footer/footer.component';
 import { MatMenuModule } from '@angular/material/menu';
@@ -43,6 +43,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatInputModule } from '@angular/material/input';
 import { CartsComponent } from './adminboard/carts/carts.component';
 import { ConsoleComponent } from './adminboard/console/console.component';
+import { ModalfactureComponent } from './client/modalfacture/modalfacture.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -71,7 +72,10 @@ ClientsCornerComponent,
 CatalogDisplayComponent,
 ShoppingCartComponent,
 CartsComponent,
-ConsoleComponent  ],
+ConsoleComponent,
+CheckoutComponent,
+ModalfactureComponent
+  ],
   imports: [
     BrowserModule,
     CommonModule,
@@ -101,7 +105,8 @@ ConsoleComponent  ],
     AppRoutingModule,
     MatDialogModule, 
     MatSnackBarModule,
-    MatInputModule     ],
+    MatInputModule
+       ],
   providers: [],
   bootstrap: [AppComponent]
 })

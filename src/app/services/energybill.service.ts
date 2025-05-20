@@ -17,4 +17,9 @@ export class EnergybillService {
 calculateEnergyBill(id: number): Observable<any> {
     return this.http.post<any>(`${this.urlenergys}/calculate-bill/${id}`, {});
   }
+ calculerFactures(simulationIds: number[]) {
+  return this.http.post<any>(`${this.urlenergys}/calculate-bills`, {
+    simulation_ids: simulationIds
+  });
+}
 }

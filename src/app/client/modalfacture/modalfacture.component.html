@@ -1,0 +1,60 @@
+<h2 mat-dialog-title>Estimation de la facture d’énergie</h2>
+<mat-dialog-content>
+  <div *ngIf="data.products.length > 0">
+    <div class="mb-4">
+    <label class="form-label fw-semibold mb-2">Sur combien de jours ?</label>
+    <div class="d-flex gap-4 flex-wrap">
+      <div class="form-check form-check-inline">
+<input class="form-check-input" type="radio" name="periode" id="mois" value="month" [(ngModel)]="selectedPeriod">
+        <label class="form-check-label" for="mois">30 Jours</label>
+      </div>
+      <div class="form-check form-check-inline">
+<input class="form-check-input" type="radio" name="periode" id="trimestre" value="three_months" [(ngModel)]="selectedPeriod">
+        <label class="form-check-label" for="trimestre">90 Jours</label>
+      </div>
+      <div class="form-check form-check-inline">
+<input class="form-check-input" type="radio" name="periode" id="annee" value="year" [(ngModel)]="selectedPeriod">
+        <label class="form-check-label" for="annee">365 Jours</label>
+      </div>
+    </div>
+  </div>
+  <div *ngFor="let product of data.products" class="product-line mb-3">
+  <p class="mb-1"><strong>{{ product.name }}</strong> — <em>{{ product.category }}</em></p>
+
+  <div class="d-flex flex-column flex-sm-row gap-3 small text-muted ms-2">
+    <div>
+      <i class="fa fa-refresh me-1"></i> Utilisations par jour : 
+<input type="number" [(ngModel)]="product.nbr_use" min="0" class="form-control form-control-sm d-inline-block w-auto ms-1">
+    </div>
+    <div>
+      <i class="fa fa-clock-o me-1"></i> Durée moyenne (min) :
+<input type="number" [(ngModel)]="product.duration_use" min="0" class="form-control form-control-sm d-inline-block w-auto ms-1">
+    </div>
+  </div>
+
+  </div>
+</div>
+<div *ngIf="successMessage" class="alert alert-success mt-3">
+  {{ successMessage }}
+  <div class="mt-2">
+    <button class="btn btn-sm btn-outline-success" (click)="allerAuProfil()">Aller à mon profil</button>
+  </div>
+</div>
+
+
+</mat-dialog-content>
+
+<ng-template #noData>
+  <p>Aucune simulation trouvée pour les produits du panier.</p>
+</ng-template>
+
+<ng-template #loadingTemplate>
+  <div class="d-flex justify-content-center">
+  </div>
+</ng-template>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="close()">Fermer</button>
+<button mat-flat-button color="primary" (click)="valider()" [disabled]="!isFormValid()">Valider</button>
+</mat-dialog-actions>
+

@@ -43,6 +43,10 @@
             </li>
           </ul>
         </div>
+        <div class="card-footer bg-light px-4 py-3 text-end">
+    <button class="btn btn-success btn-sm d-inline-flex align-items-center gap-1" (click)="onValidateCart(cart.cart_id)"> Valider
+    </button>
+  </div>
       </div>
     </div>
 
@@ -82,7 +86,7 @@
 <div>
   <i class="bi bi-x-circle text-danger me-2"></i> Panier #{{ cart.cart_id }} - {{ cart.client_name }} {{ cart.client_lastname }}
 
-</div>>          <span class="text-muted small">{{ cart.created_at | date:'dd/MM/yyyy HH:mm' }}</span>
+</div>         <span class="text-muted small">{{ cart.created_at | date:'dd/MM/yyyy HH:mm' }}</span>
         </div>
         <div class="card-body">
           <ul class="list-group list-group-flush">

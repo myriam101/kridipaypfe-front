@@ -63,9 +63,11 @@
       <i class="fa fa-arrow-left mr-1"></i> Revenir au catalogue
     </a>
     <div class="d-flex flex-column flex-md-row gap-2">
-      <button class="btn btn-custom-blue mb-2" >
-        <i class="fa fa-bolt mr-1"></i> Estimer facture énergie
-      </button>
+      <!-- NE PAS garder ce bouton focusé -->
+<button class="btn btn-custom-blue mb-2" (click)="estimateEnergyBill()" #estimationBtn>
+  <i class="fa fa-bolt mr-1"></i> Estimer facture énergie
+</button>
+
       <button class="btn btn-success mb-2">Valider la commande</button>
     </div>
   </div>

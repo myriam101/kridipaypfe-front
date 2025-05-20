@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProductService } from 'src/app/services/product.service';
 
 @Component({
@@ -15,7 +16,7 @@ cancelledcarts: any[] = [];
   isLoading: boolean = true;
   activeTab: string = 'waiting';
 
-constructor(private cartService: ProductService) {}
+constructor(private cartService: ProductService,private snackBar: MatSnackBar) {}
 
 
 ngOnInit(): void {
@@ -30,10 +31,14 @@ getWaintingCarts(): void {
         this.waitingCarts = data;
         this.isLoading = false;
       },
-      error: () => {
-        this.cartLoadError = true;
-        this.isLoading = false;
-      }
+       error: (err) => {
+    if (err.status === 404) {
+      this.waitingCarts = []; // Aucun panier
+      this.cartLoadError = false;
+    } else {
+      this.cartLoadError = true; // Erreur serveur
+    }
+  }
   });
 }
 getvalidatedCarts(): void {
@@ -42,10 +47,14 @@ getvalidatedCarts(): void {
         this.validCarts = data;
         this.isLoading = false;
       },
-      error: () => {
-        this.cartLoadError = true;
-        this.isLoading = false;
-      }
+       error: (err) => {
+    if (err.status === 404) {
+      this.validCarts = []; // Aucun panier
+      this.cartLoadError = false;
+    } else {
+      this.cartLoadError = true; // Erreur serveur
+    }
+  }
   });
 }
 getCancelledCarts(): void {
@@ -54,11 +63,39 @@ getCancelledCarts(): void {
         this.cancelledcarts = data;
         this.isLoading = false;
       },
-      error: () => {
-        this.cartLoadError = true;
-        this.isLoading = false;
-      }
+       error: (err) => {
+    if (err.status === 404) {
+      this.cancelledcarts = []; // Aucun panier
+      this.cartLoadError = false;
+    } else {
+      this.cartLoadError = true; // Erreur serveur
+    }
+  }
   });
 }
+onValidateCart(cartId: number) {
+  this.cartService.validateCart(cartId).subscribe({
+    next: (res) => {
+      this.snackBar.open('Panier validé avec succès !', 'Fermer', {
+        duration: 3000,
+        panelClass: ['snackbar-success'],
+        horizontalPosition: 'center',
+        verticalPosition: 'top'
+      });
+      this.getvalidatedCarts();
+      this.getWaintingCarts();
+      this.getCancelledCarts();
+    },
+    error: (err) => {
+      this.snackBar.open('Erreur lors de la validation.', 'Fermer', {
+        duration: 3000,
+        panelClass: ['snackbar-error'],
+        horizontalPosition: 'center',
+        verticalPosition: 'top'
+      });
+    }
+  });
+}
+
 
 }
