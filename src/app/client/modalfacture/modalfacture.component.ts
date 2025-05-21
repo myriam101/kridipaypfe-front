@@ -62,10 +62,6 @@ successMessage: string | null = null;
         next: (factures: any) => {
           console.log('Factures estimées :', factures);
 this.successMessage = "Votre estimation de facture énergétique est prête à être téléchargée depuis votre profil.";
-
-setTimeout(() => {
-  this.dialogRef.close(factures); // Tu peux ajouter un délai pour laisser le temps de lire le message
-}, 3000);
         },
         error: (error) => {
           console.error('Erreur calcul facture :', error);
@@ -92,7 +88,7 @@ isFormValid(): boolean {
   return true;
 }
 allerAuProfil() {
-    this.dialogRef.close(); 
     this.router.navigate(['/client/profile']); 
+    this.dialogRef.close();
   }
 }
