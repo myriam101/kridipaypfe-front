@@ -1,6 +1,6 @@
-<div class="container mt-3">
+<div class="container mt-5">
 <h4 class="text-center mb-4 fw-bold" style="color:#216490; font-size: 1.8rem; letter-spacing: 0.5px;">
-  Les paniers clients
+  Les commandes clients
 </h4>
 
   <ul class="nav nav-pills justify-content-center mb-3">
@@ -43,8 +43,10 @@
             </li>
           </ul>
         </div>
-        <div class="card-footer bg-light px-4 py-3 text-end">
-    <button class="btn btn-success btn-sm d-inline-flex align-items-center gap-1" (click)="onValidateCart(cart.cart_id)"> Valider
+        <div class="card-footer bg-light px-4 py-3 text-end ">
+    <button class="btn btn-success btn-sm d-inline-flex align-items-center gap-1 me-2" (click)="onValidateCart(cart.cart_id)"> Valider
+    </button>
+     <button class="btn btn-danger btn-sm d-inline-flex align-items-center gap-1" (click)="onCancelCart(cart.cart_id)"> Annuler
     </button>
   </div>
       </div>

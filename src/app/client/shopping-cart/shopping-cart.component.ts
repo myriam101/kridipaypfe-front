@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalfactureComponent } from '../modalfacture/modalfacture.component';
 import { SimulationService } from 'src/app/services/simulation.service';
+import { EnergybillService } from 'src/app/services/energybill.service';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -14,24 +15,33 @@ import { SimulationService } from 'src/app/services/simulation.service';
 export class ShoppingCartComponent implements OnInit {
   cartItems: any[] = [];
   loading :boolean=true;
-  constructor(  private simulationService: SimulationService,private cartService: ProductService,private router: Router,private snackBar: MatSnackBar,private dialog: MatDialog) {}
+  emptyCartMessage: string | null = null;
 
-  ngOnInit(): void {
-    const clientId = Number(localStorage.getItem('clientId'));
-    this.loading=true;
-    this.cartService.getCartDetails(clientId).subscribe({
-      next: (data: any) => {
+  constructor(  private simulationService: SimulationService,private cartService: ProductService,private router: Router,private snackBar: MatSnackBar,private dialog: MatDialog,private EnergyBillService: EnergybillService) {}
+ngOnInit(): void {
+  const clientId = Number(localStorage.getItem('clientId'));
+  this.loading = true;
+  this.cartService.getCartDetails(clientId).subscribe({
+    next: (data: any) => {
+      if (Array.isArray(data)) {
         this.cartItems = data;
-            this.loading=false;
-
-      },
-      error: (err) => {
-        console.error('Erreur de récupération du panier', err);
-                    this.loading=false;
-
+        this.emptyCartMessage = null;
+      } else if (data.message) {
+        this.cartItems = [];
+        this.emptyCartMessage = data.message;
       }
-    });
-  }
+      this.loading = false;
+    },
+    error: (err) => {
+      this.cartItems = [];
+      this.loading = false;
+      this.emptyCartMessage = "Erreur lors du chargement du panier.";
+      console.error('Erreur de récupération du panier', err);
+    }
+  });
+}
+
+
   removeItem(index: number): void {
   const clientId = Number(localStorage.getItem('clientId'));
       if (clientId) {
@@ -78,4 +88,26 @@ estimateEnergyBill() {
     }
   });
 }
+
+  validateAndDownload(): void {
+      const clientId = Number(localStorage.getItem('clientId'));
+    this.cartService.validateCartByclient(clientId).subscribe({
+      next: () => {
+        this.EnergyBillService.downloadEnergyEstimationPdf(clientId).subscribe({
+          next: (pdfBlob) => {
+            const blob = new Blob([pdfBlob], { type: 'application/pdf' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'estimation-facture.pdf';
+            a.click();
+            window.URL.revokeObjectURL(url);
+          },
+          error: () => alert('Erreur lors du téléchargement du PDF.')
+        });
+      },
+      error: () => alert('Erreur lors de la validation du panier.')
+    });
+  }
+
 }

@@ -114,17 +114,17 @@ body {
   }
   
   
-  .carbon-badge.low {
+  .carbon-badge.bas {
     background-color: #c8e6c9;
     color: #2e7d32;
   }
   
-  .carbon-badge.medium {
+  .carbon-badge.moyen {
     background-color: #fff9c4;
     color: #f9a825;
   }
   
-  .carbon-badge.high {
+  .carbon-badge.eleve {
     background-color: #ffcdd2;
     color: #c62828;
   }

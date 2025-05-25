@@ -83,9 +83,9 @@ export class ListproductsComponent implements OnInit, OnChanges {
               const badgeEnum = res.badge;
               this.carbonBadges[product.id] =
                 badgeEnum === 0 ? 'undefined' :
-                badgeEnum === 1 ? 'low' :
-                badgeEnum === 2 ? 'medium' :
-                badgeEnum === 3 ? 'high' : '';
+                badgeEnum === 1 ? 'bas' :
+                badgeEnum === 2 ? 'moyen' :
+                badgeEnum === 3 ? 'eleve' : '';
   
               loadedCount++;
               if (loadedCount === products.length) {

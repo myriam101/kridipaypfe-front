@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { GlobalEnergyBill } from '../models/GlobalEnergyBill';
 
 @Injectable({
   providedIn: 'root'
@@ -22,4 +23,19 @@ calculateEnergyBill(id: number): Observable<any> {
     simulation_ids: simulationIds
   });
 }
+
+ 
+  downloadEnergyEstimationPdf(clientId: number) {
+    return this.http.get(`${this.urlenergys}/${clientId}/energy-estimation-pdf`, {
+      responseType: 'blob'
+    });
+  }
+  getGlobalBillsByClientId(clientId: number): Observable<GlobalEnergyBill[]> {
+  return this.http.get<GlobalEnergyBill[]>(`http://localhost:8000/globalenergybill/client/${clientId}`);
+}
+ downloadEnergyEstimationPdfbyid(billId: number) {
+    return this.http.get(`${this.urlenergys}/energy-estimation-pdf/${billId}`, {
+      responseType: 'blob'
+    });
+  }
 }

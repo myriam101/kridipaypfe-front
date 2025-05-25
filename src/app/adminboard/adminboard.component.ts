@@ -34,9 +34,7 @@ export class AdminboardComponent {
   goToClients() {
     this.router.navigate(['clients'], { relativeTo: this.route });
   }
-   goToCarts() {
-    this.router.navigate(['carts'], { relativeTo: this.route });
-  }
+  
   goToConsole() {
     this.router.navigate(['console'], { relativeTo: this.route });
   }

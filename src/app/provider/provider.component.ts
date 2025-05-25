@@ -48,4 +48,11 @@ onActivate() {
 onDeactivate() {
   this.loading = true;
 }
+
+  goToProfile() {
+    this.router.navigate(['profile'], { relativeTo: this.route });
+  }
+   goToCarts() {
+    this.router.navigate(['commandes'], { relativeTo: this.route });
+  }
 }

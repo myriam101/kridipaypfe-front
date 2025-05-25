@@ -20,9 +20,14 @@
           <ul class="dropdown-menu" aria-labelledby="catalogueDropdown">
             <li><a class="dropdown-item" (click)="goToAddProduct()"><i class="zmdi zmdi-plus me-2"></i> Ajouter produit</a></li>
             <li><a class="dropdown-item" (click)="goToCatalog()"><i class="zmdi zmdi-view-list me-2"></i> Consulter catalogue</a></li>
+            <li><a class="dropdown-item" (click)="goToCarts()"><i class="zmdi zmdi-shopping-basket me-2"></i> Commandes</a></li>
           </ul>
         </li>
-
+        <li class="nav-item">
+          <a class="nav-link position-relative" (click)="goToProfile()">
+            <i class="zmdi zmdi-account-circle me-2"></i>
+          </a>
+        </li>
 
         <!-- Déconnexion -->
         <li class="nav-item">

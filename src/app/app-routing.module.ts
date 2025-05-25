@@ -15,8 +15,9 @@ import { HomeCornerComponent } from './adminboard/home-corner/home-corner.compon
 import { ClientsCornerComponent } from './adminboard/clients-corner/clients-corner.component';
 import { ProductsComponent } from './client/products/products.component';
 import { ShoppingCartComponent } from './client/shopping-cart/shopping-cart.component';
-import { CartsComponent } from './adminboard/carts/carts.component';
+import { CartsComponent } from './provider/carts/carts.component';
 import { ConsoleComponent } from './adminboard/console/console.component';
+import { ProfileProviderComponent } from './provider/profile-provider/profile-provider.component';
 
 const routes: Routes = [
   {path:'client',component: ClientComponent,
@@ -26,7 +27,6 @@ const routes: Routes = [
   {path:'adminboard',component: AdminboardComponent,
     children:[
       {path:'console',component:ConsoleComponent},
-      {path:'carts',component:CartsComponent},
       {path:'catalogues',component:CatalogsCornerComponent},
       {path:'home',component:HomeCornerComponent},
       {path:'clients',component:ClientsCornerComponent}],canActivate: [AuthGuard],data: { roles: ['ROLE_ADMIN']}},
@@ -42,7 +42,11 @@ const routes: Routes = [
       {
         path: 'catalog',
         component: CatalogComponent
-      }],
+      },
+      {
+        path:'profile',component:ProfileProviderComponent
+      },
+      {path:'commandes',component:CartsComponent}],
     canActivate: [AuthGuard],data: { roles: ['ROLE_PROVIDER']}},];
 
 @NgModule({

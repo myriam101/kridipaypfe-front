@@ -11,7 +11,7 @@
 
             <!-- Badge Carbone -->
             <div *ngIf="carbonBadges[product.id]" class="carbon-badge" [ngClass]="carbonBadges[product.id]">
-              {{ carbonBadges[product.id] === 'undefined' ? 'Non défini' : (carbonBadges[product.id] | titlecase) }} CO₂
+            Impact négatif  {{ carbonBadges[product.id] === 'undefined' ? 'Non défini' : (carbonBadges[product.id] | titlecase) }}
             </div>
 
             <div class="cp_img" data-bs-toggle="tooltip" data-bs-placement="top">

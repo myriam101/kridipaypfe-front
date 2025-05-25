@@ -25,8 +25,8 @@
     <div class="star-rating">
       <ng-container *ngFor="let star of [1,2,3,4,5]">
         <i class="fas fa-star fs-5"
-           [class.text-warning]="client?.score_carbone >= star"
-           [class.text-muted]="client?.score_carbone < star"></i>
+           [class.text-warning]="client?.score.valeur >= star"
+           [class.text-muted]="client?.score.valeur < star"></i>
       </ng-container>
     </div>
   </div>
@@ -114,9 +114,44 @@
 </div>
           </div>
 
-          <div class="tab-pane fade" id="tab-simulations" role="tabpanel">
-            <p>Aucune simulation enregistrée pour le moment.</p>
+        <div class="tab-pane fade" id="tab-simulations" role="tabpanel">
+  <div *ngIf="globalEnergyBills.length === 0" class="alert alert-info text-center">
+    Aucune simulation enregistrée pour le moment.
+  </div>
+
+  <div *ngIf="globalEnergyBills.length > 0">
+    <div *ngFor="let bill of globalEnergyBills" class="card shadow-sm mb-4 border-0">
+      <div class="card-header d-flex justify-content-between align-items-center" style="background-color: #f8f9fa;">
+        <div>
+          <h5 class="mb-0 fw-semibold" style="color: #216490;">Simulation du {{ bill.dateCreated | date:'dd/MM/yyyy' }}</h5>
+          <small class="text-muted">Période : {{ bill.periodeUse | titlecase }}</small>
+        </div>
+        <button class="btn btn-sm" style="background-color: #216490; color: white;" (click)="downloadPdf(bill.id)">
+          <i class="fas fa-file-pdf me-2"></i>Télécharger PDF
+        </button>
+      </div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="bg-light p-3 rounded border">
+              <h6 class="fw-bold mb-2 " style="color: #216490;">Consommation</h6>
+              <p class="mb-1">Électricité : <strong>{{ bill.totkwh }} kWh</strong></p>
+              <p class="mb-0">Eau : <strong>{{ bill.totlitre }} litres</strong></p>
+            </div>
           </div>
+          <div class="col-md-6">
+            <div class="bg-light p-3 rounded border">
+              <h6 class="fw-bold mb-2 " style="color: #216490;">Montants</h6>
+              <p class="mb-1">Électricité : <strong>{{ bill.montantElectricite }} Millimes</strong></p>
+              <p class="mb-0">Eau : <strong>{{ bill.montanteau }} Millimes</strong></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
         </div>
       </div>
     </div>

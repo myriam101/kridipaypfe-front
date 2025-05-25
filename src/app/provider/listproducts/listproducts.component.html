@@ -15,7 +15,7 @@
     <!-- Toggle switch carbone -->
     <div class="bg-light border rounded p-3 mb-4">
       <div class="d-flex align-items-center justify-content-between">
-        <label for="carbonToggle" class="form-label mb-0">Visibilité empreinte carbone :</label>
+        <label for="carbonToggle" class="form-label mb-0">Visibilité impact négatif :</label>
         <div class="form-check form-switch d-flex align-items-center">
           <input
             class="form-check-input"
@@ -38,7 +38,7 @@
 
           <!-- Floating Carbon Badge -->
           <div *ngIf="carbonVisible && carbonBadges[product.id]" class="carbon-badge" [ngClass]="carbonBadges[product.id]">
-            {{ carbonBadges[product.id] === 'undefined' ? 'Non défini' : (carbonBadges[product.id] | titlecase) }} CO₂
+           Impact négatif  {{ carbonBadges[product.id] === 'undefined' ? 'Non défini' : (carbonBadges[product.id] | titlecase) }}
           </div>
 
           <div class="body">
@@ -49,11 +49,8 @@
                 class="img-fluid"
               />
               <div class="hover">
-                <a href="javascript:void(0);" class="btn btn-primary btn-sm waves-effect">
-                  <i class="zmdi zmdi-plus"></i>
-                </a>
-                <a href="javascript:void(0);" class="btn btn-primary btn-sm waves-effect">
-                  <i class="zmdi zmdi-shopping-cart"></i>
+                <a class="btn btn-primary btn-sm waves-effect">
+                  <i class="zmdi zmdi-edit"></i>
                 </a>
               </div>
             </div>

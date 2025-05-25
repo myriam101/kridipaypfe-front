@@ -23,7 +23,7 @@
 
           <div class="star-rating mb-2">
             <ng-container *ngFor="let star of [1,2,3,4,5]">
-              <span [class.filled]="client.score_carbone >= star">&#9733;</span>
+              <span [class.filled]="client.score.valeur >= star">&#9733;</span>
             </ng-container>
           </div>
         </div>

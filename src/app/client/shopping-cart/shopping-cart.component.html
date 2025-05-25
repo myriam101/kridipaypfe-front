@@ -1,13 +1,12 @@
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 <div class="container py-5">
-  <!-- Reward Info -->
-  <div class="alert alert-info text-center">
-    <i class="zmdi zmdi-star mr-2"></i>
-    Avec cet achat, vous gagnerez <strong>290</strong> points de fidélité.
-  </div>
+  
 <!-- Loader en dehors du tableau -->
 <div class="loader-container" *ngIf="loading">
   <div class="loader"></div>
+</div>
+<div *ngIf="!loading && emptyCartMessage" class="alert alert-warning text-center">
+  <i class="fa fa-info-circle"></i> {{ emptyCartMessage }}
 </div>
   <!-- Cart Table -->
   <div class="table-responsive mb-4">
@@ -68,7 +67,8 @@
   <i class="fa fa-bolt mr-1"></i> Estimer facture énergie
 </button>
 
-      <button class="btn btn-success mb-2">Valider la commande</button>
+      <button (click)="validateAndDownload()" class="btn btn-success mb-2">Valider la commande</button>
+
     </div>
   </div>
 </div>

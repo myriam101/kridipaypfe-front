@@ -86,7 +86,14 @@ getAllWaitingCarts(): Observable<any> {
     return this.http.get<any>(`${this.apiCart}/cancelled`);
   }
   validateCart(cartId: number): Observable<any> {
-  return this.http.put(`${this.apiCart}/validate/${cartId}`, {});
+  
+    return this.http.put(`${this.apiCart}/validate/${cartId}`, {});
+}
+ cancelCart(cartId: number): Observable<any> {
+  return this.http.put(`${this.apiCart}/cancel/${cartId}`, {});
 }
 
+validateCartByclient(clientId: number) {
+    return this.http.patch(`${this.apiCart}/client/validate-all/${clientId}`, {});
+  }
 }

@@ -61,7 +61,7 @@ successMessage: string | null = null;
       this.energybillService.calculerFactures(simulationIds).subscribe({
         next: (factures: any) => {
           console.log('Factures estimées :', factures);
-this.successMessage = "Votre estimation de facture énergétique est prête à être téléchargée depuis votre profil.";
+this.successMessage = "Votre estimation de facture énergétique est prête à être téléchargée.";
         },
         error: (error) => {
           console.error('Erreur calcul facture :', error);
@@ -87,8 +87,15 @@ isFormValid(): boolean {
 
   return true;
 }
-allerAuProfil() {
-    this.router.navigate(['/client/profile']); 
-    this.dialogRef.close();
+
+    downloadPdf() {
+    this.clientId = Number(localStorage.getItem('clientId'));
+
+    this.energybillService.downloadEnergyEstimationPdf(this.clientId).subscribe(blob => {
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = 'estimation-facture.pdf';
+      link.click();
+    });
   }
 }

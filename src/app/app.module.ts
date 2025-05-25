@@ -41,9 +41,13 @@ import { CatalogDisplayComponent } from './client/catalog-display/catalog-displa
 import { ShoppingCartComponent } from './client/shopping-cart/shopping-cart.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatInputModule } from '@angular/material/input';
-import { CartsComponent } from './adminboard/carts/carts.component';
+import { CartsComponent } from './provider/carts/carts.component';
 import { ConsoleComponent } from './adminboard/console/console.component';
 import { ModalfactureComponent } from './client/modalfacture/modalfacture.component';
+import { ProfileProviderComponent } from './provider/profile-provider/profile-provider.component';
+import { DashboardComponent } from './banque/dashboard/dashboard.component';
+import { ListproduitsComponent } from './banque/listproduits/listproduits.component';
+import { ConfirmDialogComponent } from './provider/confirm-dialog/confirm-dialog.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -74,7 +78,11 @@ ShoppingCartComponent,
 CartsComponent,
 ConsoleComponent,
 CheckoutComponent,
-ModalfactureComponent
+ModalfactureComponent,
+ProfileProviderComponent,
+DashboardComponent,
+ListproduitsComponent,
+ConfirmDialogComponent
   ],
   imports: [
     BrowserModule,

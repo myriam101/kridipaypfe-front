@@ -40,8 +40,8 @@ export class ProductsComponent implements OnChanges,OnInit {
             const badgeEnum = res.badge;
             this.carbonBadges[product.id] =
               badgeEnum === 0 ? 'undefined' :
-              badgeEnum === 1 ? 'low' :
-              badgeEnum === 2 ? 'medium' : 'high';
+              badgeEnum === 1 ? 'bas' :
+              badgeEnum === 2 ? 'moyen' : 'eleve';
           });
         }
       },
