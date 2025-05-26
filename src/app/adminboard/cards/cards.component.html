@@ -1,64 +1,132 @@
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-
+<!-- Dashboard Stat Cards -->
 <div class="container py-4">
-  <div class="row g-4">
-    <div class="col-md-6 col-xl-3">
-      <div class="card stat-card border-start border-primary">
-        <div class="card-body d-flex align-items-center">
-          <div>
-            <p class="text-muted mb-1">Total Revenue</p>
-            <h4 class="text-primary fw-bold mb-1">$84,245</h4>
-            <span class="text-sm text-success">+5.4% from last week</span>
-          </div>
-          <div class="icon-box ms-auto bg-primary text-white">
-            <i class="fa fa-dollar"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-6 col-xl-3">
-      <div class="card stat-card border-start border-success">
-        <div class="card-body d-flex align-items-center">
-          <div>
-            <p class="text-muted mb-1">Bounce Rate</p>
-            <h4 class="text-success fw-bold mb-1">34.6%</h4>
-            <span class="text-sm text-danger">-4.5% from last week</span>
-          </div>
-          <div class="icon-box ms-auto bg-success text-white">
-            <i class="fa fa-bar-chart"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-6 col-xl-3">
-      <div class="card stat-card border-start border-warning">
-        <div class="card-body d-flex align-items-center">
-          <div>
-            <p class="text-muted mb-1">Total Customers</p>
-            <h4 class="text-warning fw-bold mb-1">8.4K</h4>
-            <span class="text-sm text-success">+8.4% from last week</span>
-          </div>
-          <div class="icon-box ms-auto bg-warning text-white">
-            <i class="fa fa-users"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-	 <div class="col-md-6 col-xl-3">
-      <div class="card stat-card border-start border-danger">
-        <div class="card-body d-flex align-items-center">
-          <div>
-            <p class="text-muted mb-1">Total Customers</p>
-            <h4 class="text-danger fw-bold mb-1">8.4K</h4>
-            <span class="text-sm text-success">+8.4% from last week</span>
-          </div>
-          <div class="icon-box ms-auto bg-danger text-white">
-            <i class="fa fa-users"></i>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div class="text-center mb-5">
+    <h3 class="fw-bold" style="color:#216490;">
+      <i class="bi bi-gear-fill me-2"></i>Statistiques Globales des Simulations énergétiques
+    </h3>
+    <p class="text-secondary fst-italic">Ayez une visibilité sur le simulateur de consommation énergétique</p>
   </div>
+  <div class="row g-4">
+
+    <div class="col-md-6 col-xl-3">
+      <div class="card stat-card border-start border-primary shadow-sm">
+        <div class="card-body d-flex align-items-center">
+          <div>
+            <p class="text-muted mb-1">Total d'ouvertures</p>
+            <h4 class="text-primary fw-bold mb-0">{{ total }}</h4>
+          </div>
+          <div class="icon-box ms-auto bg-primary text-white rounded-circle p-3">
+            <i class="fa fa-database fs-4"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-xl-3">
+      <div class="card stat-card border-start border-success shadow-sm">
+        <div class="card-body d-flex align-items-center">
+          <div>
+            <p class="text-muted mb-1">Âge moyen</p>
+            <h4 class="text-success fw-bold mb-0">{{ averageAge }} ans</h4>
+          </div>
+          <div class="icon-box ms-auto bg-success text-white rounded-circle p-3">
+            <i class="fa fa-check-circle fs-4"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="col-md-6 col-xl-3">
+      <div class="card stat-card border-start border-warning shadow-sm">
+        <div class="card-body d-flex align-items-center">
+          <div>
+            <p class="text-muted mb-1">Avant Achat</p>
+            <h4 class="text-warning fw-bold mb-0">{{ beforePurchase }}</h4>
+          </div>
+          <div class="icon-box ms-auto bg-warning text-white rounded-circle p-3">
+            <i class="fa fa-shopping-cart fs-4"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-xl-3">
+      <div class="card stat-card border-start border-info shadow-sm">
+        <div class="card-body d-flex align-items-center">
+          <div>
+            <p class="text-muted mb-1">Taux de Simulation</p>
+            <h4 class="text-info fw-bold mb-0">{{ simulationRate }}%</h4>
+          </div>
+          <div class="icon-box ms-auto bg-info text-white rounded-circle p-3">
+            <i class="zmdi zmdi-flash"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="container my-5">
+  <div class="row g-4">
+
+    <div class="col-lg-6">
+      <div class="card shadow-lg rounded-3">
+        <div class="card-header bg-light fw-semibold text-secondary">Répartition globale</div>
+        <div class="card-body">
+          <canvas baseChart [data]="pieChartData" [type]="'pie'" class="pie-chart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="card shadow-lg rounded-3">
+        <div class="card-header bg-light fw-semibold text-secondary">Utilisation Mensuelle</div>
+        <div class="card-body">
+          <canvas baseChart [data]="lineChartData" [type]="'line'" class="line-chart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div class="card shadow-lg rounded-3">
+        <div class="card-header bg-light fw-semibold text-secondary">Utilisation par Client</div>
+        <div class="card-body">
+          <canvas baseChart [data]="barChartData" [type]="'bar'" class="bar-chart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chart donut tranche d'âge -->
+    <div class="col-lg-6">
+      <div class="card shadow-lg rounded-3">
+        <div class="card-header bg-light fw-semibold text-secondary">Répartition par tranche d'âge</div>
+        <div class="card-body">
+          <canvas baseChart [data]="ageDonutChartData" [type]="'doughnut'" [options]="ageDonutChartOptions" class="donut-chart"></canvas>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Top 3 produits simulés -->
+  <div class="top-products mt-4 p-3 border rounded shadow-sm bg-light">
+  <h3 class="mb-3 text-center" style="color: #216490; font-weight: 700;">Top 3 Produits les plus simulés</h3>
+  <ul class="list-group">
+    <li *ngFor="let product of top3" class="list-group-item d-flex justify-content-between align-items-center flex-column flex-sm-row">
+      <div>
+        <div style="font-weight: 600; font-size: 1.1rem; color: #216490;">
+          {{ product.productName }}
+        </div>
+        <div style="font-style: italic; font-size: 0.85rem; color: #6c757d;">
+          {{ product.catalogName || 'Catalogue inconnu' }}
+        </div>
+      </div>
+      <span class="badge rounded-pill" 
+            style="background-color: #216490; font-weight: 600; font-size: 0.9rem; padding: 0.3em 0.7em; color: white; min-width: 40px; text-align: center;">
+        {{ product.simulationCount }}
+      </span>
+    </li>
+  </ul>
+</div>
+
 </div>

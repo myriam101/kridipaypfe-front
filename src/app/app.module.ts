@@ -48,6 +48,7 @@ import { ProfileProviderComponent } from './provider/profile-provider/profile-pr
 import { DashboardComponent } from './banque/dashboard/dashboard.component';
 import { ListproduitsComponent } from './banque/listproduits/listproduits.component';
 import { ConfirmDialogComponent } from './provider/confirm-dialog/confirm-dialog.component';
+import { NgChartsModule } from 'ng2-charts';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -113,7 +114,8 @@ ConfirmDialogComponent
     AppRoutingModule,
     MatDialogModule, 
     MatSnackBarModule,
-    MatInputModule
+    MatInputModule,
+    NgChartsModule
        ],
   providers: [],
   bootstrap: [AppComponent]

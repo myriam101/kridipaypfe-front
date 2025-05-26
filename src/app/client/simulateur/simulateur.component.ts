@@ -1,7 +1,8 @@
-import { AfterViewInit, Component, Inject } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Inject, Output } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SimulationService } from 'src/app/services/simulation.service';
 import { EnergybillService } from 'src/app/services/energybill.service';
+import { SimulatorUsageService } from 'src/app/services/simulator-usage.service';
 
 
 @Component({
@@ -10,6 +11,8 @@ import { EnergybillService } from 'src/app/services/energybill.service';
   styleUrls: ['./simulateur.component.css']
 })
 export class SimulateurComponent {
+    @Output() simulationCompleted = new EventEmitter<number>(); // l’id du nouvel usage
+
   nbr_use: number = 1;
   duration_use: number = 0;
   clientId: number | null = null; 
@@ -19,8 +22,10 @@ selectedPeriod: string |null=null;
   simulationId: number=0; 
   result: any;
 
-  constructor(
+  constructor(    private simulationService: SimulatorUsageService
+,
     public dialogRef: MatDialogRef<SimulateurComponent>,
+    
     @Inject(MAT_DIALOG_DATA) public data: any, private simulateurService: SimulationService,private energyBillService: EnergybillService
   ) {}
 
@@ -28,6 +33,12 @@ selectedPeriod: string |null=null;
     this.dialogRef.close();
   }
   submit() {
+     const usageId = this.data.usageId;
+
+    if (!usageId) {
+      console.error('Usage ID manquant');
+      return;
+    }
   const payload = {
     client_id: Number(localStorage.getItem('clientId')),
     product_id: this.data.product.id,
@@ -76,7 +87,13 @@ selectedPeriod: string |null=null;
       console.error('Erreur simulation:', err);
     }
   });
-}
+  this.simulationService.setWithSimulation(usageId).subscribe({
+      error: (err) => {
+        console.error('Erreur updateWithSimulation', err);
+      }
+    });
+  }
+
 
 
   // Méthode pour calculer la facture

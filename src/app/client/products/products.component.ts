@@ -6,6 +6,7 @@ import { ProductdetailsComponent } from '../productdetails/productdetails.compon
 import { SimulateurComponent } from '../simulateur/simulateur.component';
 import { ClientService } from 'src/app/services/client.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { SimulatorUsageService } from 'src/app/services/simulator-usage.service';
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
@@ -18,7 +19,8 @@ export class ProductsComponent implements OnChanges,OnInit {
   carbonBadges: { [key: number]: string } = {};  // This will hold the badge class based on score
   clientId: number | null = null;  // Variable to hold the client ID
 
-  constructor(private productService: ProductService, private carbonService: CarbonService,private dialog: MatDialog,private clientService:ClientService, private snackBar: MatSnackBar) {}
+  constructor(private simulationService: SimulatorUsageService
+,private productService: ProductService, private carbonService: CarbonService,private dialog: MatDialog,private clientService:ClientService, private snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
     this.clientId = Number(localStorage.getItem('clientId'));
@@ -68,15 +70,44 @@ export class ProductsComponent implements OnChanges,OnInit {
       console.log('Le modal a été fermé');
     });
   }
-  openSimulateur(product: any): void {
-    this.dialog.open(SimulateurComponent, {
-      width: '95vw',
-      maxWidth: '600px',
-       data: {
-      product
-    }
-    });
+ openSimulateur(product: any): void {
+  const clientId = Number(localStorage.getItem('clientId'));
+
+  if (!clientId) {
+    console.error('Client ID is missing!');
+    return;
   }
+
+  // 1) Appel trackUsage pour créer usage et récupérer son ID
+  this.simulationService.trackUsage(product.id, clientId).subscribe({
+    next: (response: any) => {
+      const usageId = response.usage_id;  // Adapt selon ta réponse backend
+      if (!usageId) {
+        console.error('trackUsage did not return an ID');
+        return;
+      }
+
+      // 2) Ouvre le modal de simulation en passant usageId
+      const dialogRef = this.dialog.open(SimulateurComponent, {
+        width: '95vw',
+        maxWidth: '600px',
+        data: {
+          product,
+          usageId
+        }
+      });
+
+      // 3) Après fermeture du modal (optionnel si tu veux gérer quelque chose)
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('Modal simulation fermé');
+      });
+    },
+    error: err => {
+      console.error('Erreur trackUsage', err);
+    }
+  });
+}
+
   
   addToCart(productId: number): void {
       const clientId = Number(localStorage.getItem('clientId'));
@@ -104,4 +135,15 @@ export class ProductsComponent implements OnChanges,OnInit {
 
   }
 
+trackUsage(productId: any): void {
+  const clientId = Number(localStorage.getItem('clientId'));
+  this.simulationService.trackUsage(productId, clientId)
+    .subscribe({
+      next: (response) => {
+        console.log('Tracked:', response);
+      },
+      error: (err) => {
+        console.error('Tracking failed:', err);
+      }
+    });}
 }
