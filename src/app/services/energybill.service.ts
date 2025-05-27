@@ -38,4 +38,8 @@ calculateEnergyBill(id: number): Observable<any> {
       responseType: 'blob'
     });
   }
+  cleanupEnergyEstimation(clientId: number): Observable<any> {
+  return this.http.delete(`${this.urlenergys}/cleanup-energy-estimation/${clientId}`);
+}
+
 }

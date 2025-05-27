@@ -51,6 +51,7 @@ selectedPeriod: string |null=null;
     next: (res) => {
       console.log('Simulation réussie :', res);
       this.simulationResult = res;
+      console.log("res brut",res);
       const simId = res.id || res.simulation_id; 
 
       // Affiche un message temporaire

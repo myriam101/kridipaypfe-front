@@ -1,35 +1,66 @@
+/* Stat cards : fond blanc + bordure gauche bleu + ombre */
 .stat-card {
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease;
+  box-shadow: 0 8px 18px rgba(33, 100, 144, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background-color: #fff; /* fond blanc propre */
+  border-left: 5px solid #216490; /* bleu */
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeSlideIn 0.5s forwards;
+  animation-delay: var(--delay, 0s);
+  color: #216490; /* texte bleu par défaut */
 }
 
 .stat-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(33, 100, 144, 0.3);
 }
 
+/* Icon box : fond bleu, texte blanc */
 .icon-box {
-  width: 48px;
-  height: 48px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
-  font-size: 20px;
+  font-size: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 4px 12px rgba(33, 100, 144, 0.2);
+  background-color: #216490; /* bleu */
+  color: white;
+  flex-shrink: 0;
 }
 
+/* Animations */
+@keyframes fadeSlideIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Textes petits */
 .text-sm {
   font-size: 0.85rem;
 }
+
+/* Classe déjà bien configurée */
 .border-primary {
   border-left: 5px solid #216490 !important;
 }
+
+/* Reprise de la classe bg-primary */
 .bg-primary {
   background-color: #216490 !important;
+  color: white !important;
 }
+
 .text-primary {
   color: #216490 !important;
 }
+
+/* Icon box taille corrigée */
 .icon-box {
   width: 50px;
   height: 50px;
@@ -37,8 +68,10 @@
   align-items: center;
   justify-content: center;
 }
+
+/* Top products */
 .top-products {
-  max-width: 500px;
+  max-width: 700px;
   margin: 0 auto;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -50,29 +83,31 @@
   text-align: center;
 }
 
-.top-products ul.list-group {
+.top-products .table-responsive {
   box-shadow: 0 0 10px rgb(33 100 144 / 0.15);
   border-radius: 8px;
   overflow: hidden;
+  background-color: white; /* fond blanc propre */
 }
 
-.top-products li.list-group-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 1.1rem;
+.top-products table.table {
+  border-collapse: separate;
+  border-spacing: 0;
+  color: #216490; /* texte bleu */
+}
+
+.top-products th, .top-products td {
   padding: 12px 20px;
-  border: none;
-  border-bottom: 1px solid #e0e0e0;
+  vertical-align: middle;
+}
+
+.top-products tbody tr {
   transition: background-color 0.3s ease;
   cursor: default;
+  color: #216490;
 }
 
-.top-products li.list-group-item:last-child {
-  border-bottom: none;
-}
-
-.top-products li.list-group-item:hover {
+.top-products tbody tr:hover {
   background-color: #f0f8ff;
 }
 
@@ -84,11 +119,29 @@
   border-radius: 20px;
   color: white;
 }
+
 /* Limite la hauteur max des canvas et adapte la largeur */
 canvas {
-  max-height: 300px;  /* Ajuste selon ce que tu souhaites */
+  max-height: 300px;
   width: 100% !important;
   height: auto !important;
-  display: block; /* évite les problèmes d'inline */
-  margin: 0 auto; /* centre horizontalement */
+  display: block;
+  margin: 0 auto;
+}
+
+/* Cards avec header en fond blanc, texte bleu */
+.card {
+  background-color: white !important;
+  color: #216490 !important;
+  border: 1px solid #216490;
+  border-radius: 12px;
+  box-shadow: 0 8px 18px rgba(33, 100, 144, 0.15);
+}
+
+.card-header {
+  background-color: white !important;
+  color: #216490 !important;
+  font-weight: 600;
+  border-bottom: 1px solid #216490;
+  border-radius: 12px 12px 0 0;
 }

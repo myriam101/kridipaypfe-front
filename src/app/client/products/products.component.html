@@ -1,6 +1,7 @@
 
 <div class="container">
-  <div class="row clearfix"> <div class="loader-container" *ngIf="isLoading">
+  <div class="row clearfix"> 
+    <div class="loader-container" *ngIf="isLoading">
   <div class="loader"></div>
 </div>
     <ng-container *ngIf="!isLoading && products.length > 0; else noProducts">

@@ -34,6 +34,11 @@
 
   </div>
 </div>
+<div class="alert alert-warning mt-3" *ngIf="successMessage">
+  <strong>Attention :</strong> Une fois la facture téléchargée, les données liées seront supprimées définitivement.<br>
+  Vous pourrez toujours consulter et télécharger vos factures depuis votre profil.
+</div>
+
 <div *ngIf="successMessage" class="alert alert-success mt-3">
   {{ successMessage }}
   <div class="mt-2">
@@ -52,6 +57,12 @@
   <div class="d-flex justify-content-center">
   </div>
 </ng-template>
+<div class="loader-container" *ngIf="isLoading">
+  <div class="loader"></div>
+    <p>Traitement en cours...</p>
+
+</div>
+
 
 <mat-dialog-actions align="end">
   <button mat-button (click)="close()">Fermer</button>
