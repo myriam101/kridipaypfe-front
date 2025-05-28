@@ -18,6 +18,7 @@ import { ShoppingCartComponent } from './client/shopping-cart/shopping-cart.comp
 import { CartsComponent } from './provider/carts/carts.component';
 import { ConsoleComponent } from './adminboard/console/console.component';
 import { ProfileProviderComponent } from './provider/profile-provider/profile-provider.component';
+import { ReglagesComponent } from './adminboard/reglages/reglages.component';
 
 const routes: Routes = [
   {path:'client',component: ClientComponent,
@@ -29,7 +30,9 @@ const routes: Routes = [
       {path:'console',component:ConsoleComponent},
       {path:'catalogues',component:CatalogsCornerComponent},
       {path:'home',component:HomeCornerComponent},
-      {path:'clients',component:ClientsCornerComponent}],canActivate: [AuthGuard],data: { roles: ['ROLE_ADMIN']}},
+      {path:'clients',component:ClientsCornerComponent},
+      {path:'reglages',component:ReglagesComponent}],
+      canActivate: [AuthGuard],data: { roles: ['ROLE_ADMIN']}},
   {path: 'simulateur', component:SimulateurComponent},
   {path:'products', component:ProductsComponent},
   {path:'login',component:AuthLoginComponent},

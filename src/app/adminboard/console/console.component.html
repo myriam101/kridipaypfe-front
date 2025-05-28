@@ -146,7 +146,11 @@
   </button>
    
     </div>
-  <div class="loader-container" *ngIf="isLoading"><div class="loader"></div></div>
+  <div class="loader-container" *ngIf="isLoading">
+    <div class="loader">
+      
+    </div>
+  </div>
   <div *ngIf="electricityPrices.length === 0" class="text-muted fst-italic">Aucun tarif enregistré.</div>
 
   <div class="row g-3">

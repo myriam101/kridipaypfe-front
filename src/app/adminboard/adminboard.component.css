@@ -4,13 +4,12 @@ body {
   display: flex;
   height: 100vh;
   overflow: hidden;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f5f7fa;
 }
 
 .navbar {
   background-color: #216490;
-  z-index: 1000; /* souvent autour de 1000 */
+  z-index: 1000; 
 
 }
 
@@ -43,7 +42,7 @@ body {
   border-right: 1px solid #dee2e6;
   z-index: 1000;
   transition: transform 0.3s ease;
-  top: 59px; /* décale vers le bas de 50px */
+  top: 80px; 
   flex-direction: column;
 
   
@@ -53,7 +52,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 15%; /* Nécessaire pour que le centering fonctionne */
+  height: 15%; 
 }
 .sidebar.hidden {
   transform: translateX(-100%);
@@ -91,7 +90,6 @@ body {
   margin-right: 0.5rem;
 }
 
-/* Hover & Active States */
 .sidebar .nav-link:hover {
   background-color: #e9f0f5;
   color: #0d3b66;
@@ -107,7 +105,6 @@ body {
   color: #fff;
 }
 
-/* Logout Icon specific style */
 .logout-link i {
   color: #fff;
 }
@@ -118,8 +115,7 @@ body {
   background: none !important;
   border: none;
   color: #fff !important;
-  font-size: 1.5rem;
-  padding: 0.3rem 0.6rem;
+  font-size: 1rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;

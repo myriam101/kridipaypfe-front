@@ -38,6 +38,9 @@ export class AdminboardComponent {
   goToConsole() {
     this.router.navigate(['console'], { relativeTo: this.route });
   }
+  goToReglages() {
+    this.router.navigate(['reglages'], { relativeTo: this.route });
+  }
 
   confirmLogout() {
     const confirmed = window.confirm("Êtes-vous sûr de vouloir vous déconnecter ?");

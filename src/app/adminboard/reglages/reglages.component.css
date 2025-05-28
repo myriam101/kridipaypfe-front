@@ -1,0 +1,27 @@
+.text-custom-blue {
+  color: #216490;
+}
+
+.btn-custom-blue {
+  background-color: #216490;
+  color: #fff;
+  border: none;
+}
+
+.btn-custom-blue:hover {
+  background-color: #1a5173;
+}
+
+.border-custom-blue-subtle {
+  border-color: #21649033;
+}
+
+.seuil-card {
+  border-radius: 12px;
+  background-color: #ffffff;
+}
+
+.seuil-card input:focus {
+  border-color: #216490;
+  box-shadow: 0 0 0 0.2rem rgba(33, 100, 144, 0.25);
+}

@@ -20,7 +20,10 @@
           </div>
           <div>
             <p class="text-muted mb-1" title="Nombre total d'ouvertures de simulations">Total d'ouvertures</p>
-            <h4 class="text-primary fw-bold mb-0">{{ total }}</h4>
+            <h4 class="text-primary fw-bold mb-0">{{ total }}
+              
+            </h4>
+
           </div>
         </div>
       </div>
@@ -72,11 +75,16 @@
 
   <!-- Tableau Top 3 Produits sous les cartes -->
   <div class="top-products">
+    
     <h3 class="mb-3 text-center" style="color: #216490; font-weight: 700;">
       Top 3 Produits les plus simulés
     </h3>
-    <div class="table-responsive">
-      <table class="table table-hover align-middle">
+   <div class="loader-container" *ngIf="isLoading">
+  <div class="loader"></div>
+</div>
+
+<div class="table-responsive" *ngIf="!isLoading">
+  <table class="table table-hover align-middle">
         <thead>
           <tr>
             <th>Produit</th>

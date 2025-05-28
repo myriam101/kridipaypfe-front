@@ -15,8 +15,10 @@ interface Top3Product {
   styleUrls: ['./cards.component.css']
 })
 export class CardsComponent implements OnInit {
-  top3: Top3Product[] = [];
 
+  isLoading = false; 
+
+  top3: Top3Product[] = [];
   total = 0;
   withSimulation = 0;
   beforePurchase = 0;
@@ -26,7 +28,7 @@ export class CardsComponent implements OnInit {
   pieChartData: any;
   lineChartData: any;
   barChartData: any;
-radarChartData: ChartData<'radar'> = {
+  radarChartData: ChartData<'radar'> = {
     labels: [],
     datasets: []
   };
@@ -73,14 +75,14 @@ radarChartData: ChartData<'radar'> = {
   constructor(private service: SimulatorUsageService) {}
 
   ngOnInit(): void {
+    this.isLoading = true; 
     this.service.getGlobalStats().subscribe(data => {
-      // Vérifications basiques
       if (!data) {
         console.error('Aucune donnée reçue');
         return;
       }
+    this.isLoading = false; 
 
-      // Affectations simples
       this.total = data.total ?? 0;
       this.withSimulation = data.with_simulation ?? 0;
       this.beforePurchase = data.before_purchase ?? 0;
@@ -104,10 +106,9 @@ radarChartData: ChartData<'radar'> = {
         ]
       };
     
-      // Pie chart : vérifier les données avant usage
       if (typeof data.with_simulation === 'number' && typeof data.before_purchase === 'number') {
         this.pieChartData = {
-          labels: ['Avec Simulation', 'Avant Achat'],
+          labels: ['Ouverture du simulateur avec simulation aboutie', 'Simulation aboutie avant achat du produit'],
           datasets: [{
             data: [data.with_simulation, data.before_purchase],
             backgroundColor: [
@@ -123,41 +124,38 @@ radarChartData: ChartData<'radar'> = {
         };
       }
 
-      // Line chart : vérifier que monthly_usage est un tableau
       if (Array.isArray(data.monthly_usage)) {
         this.lineChartData = {
           labels: data.monthly_usage.map((m: any) => m.month ?? ''),
           datasets: [{
-            label: 'Utilisation mensuelle',
+            label: 'Ouvertures mensuelle du simulateur',
             data: data.monthly_usage.map((m: any) => m.totalCount ?? 0),
             fill: true,
-            backgroundColor: 'rgba(229, 147, 0, 0.4)', // #E59300 transparent
+            backgroundColor: 'rgba(229, 147, 0, 0.4)', 
             borderColor: '#E59300',
             tension: 0.4
           }]
         };
       }
 
-      // Bar chart : vérifier que by_client est un tableau
       if (Array.isArray(data.by_client)) {
         this.barChartData = {
           labels: data.by_client.map((c: any) => `Client ${c.clientId ?? '?'}`),
           datasets: [
             {
-              label: 'Total Usages',
+              label: 'Total Ouverture du simulateur',
               data: data.by_client.map((c: any) => c.total ?? 0),
-              backgroundColor: 'rgba(33, 100, 144, 0.7)' // #216490 transparent
+              backgroundColor: 'rgba(33, 100, 144, 0.7)'
             },
             {
-              label: 'Avec Simulation',
+              label: 'Ouvertures avec simulation aboutie',
               data: data.by_client.map((c: any) => parseInt(c.withSimulation, 10) || 0),
-              backgroundColor: 'rgba(216, 14, 45, 0.7)' // #D80E2D transparent
+              backgroundColor: 'rgba(216, 14, 45, 0.7)'
             }
           ]
         };
       }
 
-      // Donut chart : vérifier que age_groups est un objet
       if (data.age_groups && typeof data.age_groups === 'object') {
         this.ageDonutChartData = {
           labels: Object.keys(data.age_groups),
@@ -177,6 +175,7 @@ radarChartData: ChartData<'radar'> = {
 
     }, error => {
       console.error('Erreur lors de la récupération des statistiques :', error);
+      this.isLoading=false;
     });
   }
 }

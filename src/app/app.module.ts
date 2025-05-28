@@ -49,6 +49,7 @@ import { DashboardComponent } from './banque/dashboard/dashboard.component';
 import { ListproduitsComponent } from './banque/listproduits/listproduits.component';
 import { ConfirmDialogComponent } from './provider/confirm-dialog/confirm-dialog.component';
 import { NgChartsModule } from 'ng2-charts';
+import { ReglagesComponent } from './adminboard/reglages/reglages.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -83,7 +84,8 @@ ModalfactureComponent,
 ProfileProviderComponent,
 DashboardComponent,
 ListproduitsComponent,
-ConfirmDialogComponent
+ConfirmDialogComponent,
+ReglagesComponent
   ],
   imports: [
     BrowserModule,
