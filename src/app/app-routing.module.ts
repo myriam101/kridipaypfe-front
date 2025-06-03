@@ -22,6 +22,7 @@ import { ReglagesComponent } from './adminboard/reglages/reglages.component';
 import { BanqueComponent } from './banque/banque.component';
 import { DashboardComponent } from './banque/dashboard/dashboard.component';
 import { DemandesComponent } from './banque/demandes/demandes.component';
+import { GestionCatalogsComponent } from './provider/gestion-catalogs/gestion-catalogs.component';
 
 const routes: Routes = [
   {path:'client',component: ClientComponent,
@@ -47,6 +48,10 @@ const routes: Routes = [
   {path:'login',component:AuthLoginComponent},
   {path:'provider',component:ProviderComponent,
     children: [
+      {
+path: 'catalogues',
+component:GestionCatalogsComponent
+      },
       {
         path: 'addproduct',
         component: AjoutproductComponent

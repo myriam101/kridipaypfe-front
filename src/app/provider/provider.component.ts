@@ -14,7 +14,6 @@ export class ProviderComponent {
   constructor(private router: Router, private route: ActivatedRoute) {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
-        // Cache le header si ce n'est pas la route racine du fournisseur
         this.isSubRoute = !event.urlAfterRedirects.endsWith('/provider');
       }
     });
@@ -28,6 +27,9 @@ export class ProviderComponent {
   }
   goToCatalog() {
     this.router.navigate(['catalog'], { relativeTo: this.route });
+  }
+  goToGestionCatalogs() {
+    this.router.navigate(['catalogues'], { relativeTo: this.route });
   }
   confirmLogout() {
     const confirmed = window.confirm("Êtes-vous sûr de vouloir vous déconnecter ?");

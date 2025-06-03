@@ -5,6 +5,7 @@ export interface Catalog {
     description: string;
     provider: string;
     public: number; // '1' pour public, '0' pour privé  
+    createdat: Date
   }
   
   

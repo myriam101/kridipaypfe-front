@@ -16,8 +16,8 @@ export class ProductsComponent implements OnChanges,OnInit {
   @Input() catalogId!: number;
   products: any[] = [];
   isLoading :boolean= false;
-  carbonBadges: { [key: number]: string } = {};  // This will hold the badge class based on score
-  clientId: number | null = null;  // Variable to hold the client ID
+  carbonBadges: { [key: number]: string } = {}; 
+  clientId: number | null = null;  
 
   constructor(private simulationService: SimulatorUsageService
 ,private productService: ProductService, private carbonService: CarbonService,private dialog: MatDialog,private clientService:ClientService, private snackBar: MatSnackBar) {}
@@ -61,8 +61,8 @@ export class ProductsComponent implements OnChanges,OnInit {
     const dialogRef = this.dialog.open(ProductdetailsComponent, {
       width: '500px',
       data: {
-        product: product, // Passer le produit complet
-            carbonScore: this.carbonBadges[product.id] || 'undefined' // Passer le score carbone ou 'undefined' s'il n'est pas défini
+        product: product, 
+            carbonScore: this.carbonBadges[product.id] || 'undefined' 
       },
     });
   
@@ -78,16 +78,14 @@ export class ProductsComponent implements OnChanges,OnInit {
     return;
   }
 
-  // 1) Appel trackUsage pour créer usage et récupérer son ID
   this.simulationService.trackUsage(product.id, clientId).subscribe({
     next: (response: any) => {
-      const usageId = response.usage_id;  // Adapt selon ta réponse backend
+      const usageId = response.usage_id; 
       if (!usageId) {
         console.error('trackUsage did not return an ID');
         return;
       }
 
-      // 2) Ouvre le modal de simulation en passant usageId
       const dialogRef = this.dialog.open(SimulateurComponent, {
         width: '95vw',
         maxWidth: '600px',
@@ -97,7 +95,6 @@ export class ProductsComponent implements OnChanges,OnInit {
         }
       });
 
-      // 3) Après fermeture du modal (optionnel si tu veux gérer quelque chose)
       dialogRef.afterClosed().subscribe(result => {
         console.log('Modal simulation fermé');
       });

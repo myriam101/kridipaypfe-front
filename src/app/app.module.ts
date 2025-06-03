@@ -53,6 +53,7 @@ import { ReglagesComponent } from './adminboard/reglages/reglages.component';
 import { BanqueComponent } from './banque/banque.component';
 import { DemandesComponent } from './banque/demandes/demandes.component';
 import { BienvenuComponent } from './banque/bienvenu/bienvenu.component';
+import { GestionCatalogsComponent } from './provider/gestion-catalogs/gestion-catalogs.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -91,7 +92,8 @@ ConfirmDialogComponent,
 ReglagesComponent,
 BanqueComponent,
 DemandesComponent,
-BienvenuComponent
+BienvenuComponent,
+GestionCatalogsComponent
   ],
   imports: [
     BrowserModule,

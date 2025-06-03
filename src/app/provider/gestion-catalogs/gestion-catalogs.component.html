@@ -1,0 +1,106 @@
+<div class="container my-4 py-4">
+  <div class="text-center mb-5">
+    <h3 class="fw-bold" style="color:#216490;">
+      <i class="bi bi-gear-fill me-2"></i>Gestion de vos catalogues
+    </h3>
+    <p class="text-secondary fst-italic">Ajoutez et gérez vos catalogues facilement</p>
+  </div>
+
+  <!-- Bouton d’ajout -->
+  <div class="mb-5">
+    <button class="btn btn-custom-blue" (click)="toggleForm()">
+      {{ showForm ? 'Annuler' : 'Nouveau catalogue' }}
+    </button>
+  </div>
+
+  <!-- Formulaire création catalogue -->
+  <div *ngIf="showForm" class="card shadow-sm mx-auto mb-5" style="max-width: 600px;">
+    <div class="card-body">
+      <h5 class="card-title text-center mb-4" style="color:#216490;">Créer un nouveau catalogue</h5>
+      <form [formGroup]="catalogForm" (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+          <label for="name" class="form-label">Nom du catalogue</label>
+          <input id="name" type="text" class="form-control" formControlName="name" required />
+        </div>
+        <div class="form-check form-switch mb-4">
+          <input class="form-check-input" type="checkbox" id="publicSwitch" formControlName="public" />
+          <label class="form-check-label" for="publicSwitch">Rendre le catalogue public</label>
+        </div>
+        <button type="submit" class="btn btn-custom-blue w-100" [disabled]="catalogForm.invalid">
+          Ajouter le catalogue
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Liste des catalogues -->
+  <div *ngIf="catalogs.length > 0; else noCatalogs" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    <div class="col" *ngFor="let catalog of catalogs">
+      <div class="card h-100 shadow-sm position-relative">
+        <div class="dropdown position-absolute top-0 end-0 m-2">
+          <button
+            class="btn btn-light btn-sm rounded-circle"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i class="bi bi-three-dots-vertical"></i>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" (click)="editCatalog(catalog)">Modifier</a></li>
+            <li><a class="dropdown-item text-danger" (click)="deleteCatalog(catalog.id)">Supprimer</a></li>
+          </ul>
+        </div>
+
+        <!-- Contenu de la carte : mode édition ou mode lecture -->
+        <div class="card-body">
+          <!-- Mode édition inline -->
+          <div *ngIf="editingCatalogId === catalog.id; else viewMode">
+            <form [formGroup]="catalogForm" (ngSubmit)="updateCatalog(catalog.id)">
+              <div class="mb-2">
+                <input type="text" class="form-control" formControlName="name" />
+              </div>
+              <div class="form-check form-switch mb-2">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  [id]="'publicEdit' + catalog.id"
+                  formControlName="public"
+                />
+                <label class="form-check-label" [for]="'publicEdit' + catalog.id">Rendre public</label>
+              </div>
+              <div class="d-flex justify-content-end gap-2">
+                <button type="button" class="btn btn-secondary btn-sm" (click)="cancelEdit()">
+                  Annuler
+                </button>
+                <button type="submit" class="btn btn-custom-blue" [disabled]="catalogForm.invalid">
+                  Enregistrer
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Mode lecture classique -->
+          <ng-template #viewMode>
+            <h5 class="card-title" style="color:#216490;">{{ catalog.name }}</h5>
+  <p>Nombre de produits : {{ productCount$[catalog.id] | async }}</p>
+
+            <p class="card-text mb-1">
+              Visibilité :
+              <span [class]="catalog.public ? 'text-success' : 'text-secondary'">
+                {{ catalog.public ? 'Public' : 'Privé' }}
+              </span>
+            </p>
+            <p class="text-muted small">Créé le {{ catalog.createdat | date: 'dd/MM/yyyy à HH:mm' }}</p>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noCatalogs>
+    <div class="text-center mt-5">
+      <p class="text-danger">Aucun catalogue trouvé.</p>
+    </div>
+  </ng-template>
+</div>
