@@ -1,0 +1,50 @@
+<!-- Top Navbar -->
+<nav class="navbar navbar-expand-lg shadow fixed-top top-navbar">
+  <div class="container-fluid">
+    
+    <a class="navbar-brand ms-3">Tableau de bord</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
+      aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-end" id="navbarResponsive">
+      <ul class="navbar-nav">
+         <button class="icon-btn" (click)="toggleSidebar()">
+    <i class="zmdi zmdi-menu"></i>
+  </button>
+          <button class="icon-btn" (click)="confirmLogout()">
+            <i class="zmdi zmdi-sign-in"></i>
+          </button>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Sidebar -->
+<nav class="sidebar shadow-sm" [class.hidden]="!sidebarVisible">
+  <div class="sidebar-inner">
+
+  <ul class="nav flex-column">
+    <li class="nav-item">
+      <a class="nav-link" [class.active]="currentRoute.includes('dashboard')" (click)="goToHome()">
+        <i class="zmdi zmdi-home me-2"></i> Accueil
+      </a>
+    </li>
+   
+     <li class="nav-item">
+      <a class="nav-link" [class.active]="currentRoute.includes('demandes')" (click)="goToDemandes()">
+        <i class="zmdi zmdi-settings me-2"></i> Demandes
+      </a>
+    </li>
+  </ul>
+    </div>
+</nav>
+
+<div class="main-content" [class.full-width]="!sidebarVisible">
+  <section class="py-5 mt-5">
+    <div class="container">
+      <router-outlet></router-outlet>
+    </div>
+  </section>
+</div>

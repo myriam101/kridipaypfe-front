@@ -50,6 +50,9 @@ import { ListproduitsComponent } from './banque/listproduits/listproduits.compon
 import { ConfirmDialogComponent } from './provider/confirm-dialog/confirm-dialog.component';
 import { NgChartsModule } from 'ng2-charts';
 import { ReglagesComponent } from './adminboard/reglages/reglages.component';
+import { BanqueComponent } from './banque/banque.component';
+import { DemandesComponent } from './banque/demandes/demandes.component';
+import { BienvenuComponent } from './banque/bienvenu/bienvenu.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -85,7 +88,10 @@ ProfileProviderComponent,
 DashboardComponent,
 ListproduitsComponent,
 ConfirmDialogComponent,
-ReglagesComponent
+ReglagesComponent,
+BanqueComponent,
+DemandesComponent,
+BienvenuComponent
   ],
   imports: [
     BrowserModule,

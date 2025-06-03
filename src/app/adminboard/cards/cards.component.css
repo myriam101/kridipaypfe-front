@@ -1,15 +1,14 @@
-/* Stat cards : fond blanc + bordure gauche bleu + ombre */
 .stat-card {
   border-radius: 12px;
   box-shadow: 0 8px 18px rgba(33, 100, 144, 0.15);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  background-color: #fff; /* fond blanc propre */
-  border-left: 5px solid #216490; /* bleu */
+  background-color: #fff; 
+  border-left: 5px solid #216490; 
   opacity: 0;
   transform: translateY(10px);
   animation: fadeSlideIn 0.5s forwards;
   animation-delay: var(--delay, 0s);
-  color: #216490; /* texte bleu par défaut */
+  color: #216490; 
 }
 
 .stat-card:hover {
@@ -17,7 +16,6 @@
   box-shadow: 0 12px 24px rgba(33, 100, 144, 0.3);
 }
 
-/* Icon box : fond bleu, texte blanc */
 .icon-box {
   width: 56px;
   height: 56px;
@@ -27,12 +25,11 @@
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 12px rgba(33, 100, 144, 0.2);
-  background-color: #216490; /* bleu */
+  background-color: #216490;
   color: white;
   flex-shrink: 0;
 }
 
-/* Animations */
 @keyframes fadeSlideIn {
   to {
     opacity: 1;
@@ -40,17 +37,14 @@
   }
 }
 
-/* Textes petits */
 .text-sm {
   font-size: 0.85rem;
 }
 
-/* Classe déjà bien configurée */
 .border-primary {
   border-left: 5px solid #216490 !important;
 }
 
-/* Reprise de la classe bg-primary */
 .bg-primary {
   background-color: #216490 !important;
   color: white !important;
@@ -60,7 +54,6 @@
   color: #216490 !important;
 }
 
-/* Icon box taille corrigée */
 .icon-box {
   width: 50px;
   height: 50px;
@@ -69,7 +62,6 @@
   justify-content: center;
 }
 
-/* Top products */
 .top-products {
   max-width: 700px;
   margin: 0 auto;
@@ -87,13 +79,13 @@
   box-shadow: 0 0 10px rgb(33 100 144 / 0.15);
   border-radius: 8px;
   overflow: hidden;
-  background-color: white; /* fond blanc propre */
+  background-color: white; 
 }
 
 .top-products table.table {
   border-collapse: separate;
   border-spacing: 0;
-  color: #216490; /* texte bleu */
+  color: #216490; 
 }
 
 .top-products th, .top-products td {
@@ -120,7 +112,6 @@
   color: white;
 }
 
-/* Limite la hauteur max des canvas et adapte la largeur */
 canvas {
   max-height: 300px;
   width: 100% !important;
@@ -129,7 +120,6 @@ canvas {
   margin: 0 auto;
 }
 
-/* Cards avec header en fond blanc, texte bleu */
 .card {
   background-color: white !important;
   color: #216490 !important;

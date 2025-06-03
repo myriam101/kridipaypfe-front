@@ -19,12 +19,21 @@ import { CartsComponent } from './provider/carts/carts.component';
 import { ConsoleComponent } from './adminboard/console/console.component';
 import { ProfileProviderComponent } from './provider/profile-provider/profile-provider.component';
 import { ReglagesComponent } from './adminboard/reglages/reglages.component';
+import { BanqueComponent } from './banque/banque.component';
+import { DashboardComponent } from './banque/dashboard/dashboard.component';
+import { DemandesComponent } from './banque/demandes/demandes.component';
 
 const routes: Routes = [
   {path:'client',component: ClientComponent,
     children :[{path:'profile',component:ProfileComponent},{path:'shopping-cart',component:ShoppingCartComponent} ,{path: 'checkout', component:CheckoutComponent,
 }],
     canActivate: [AuthGuard],data: { roles: ['ROLE_CLIENT']}},
+
+    {path:'agence',component: BanqueComponent,
+    children :[{path: 'dashboard', component:DashboardComponent,
+},{path: 'demandes', component:DemandesComponent,
+}],
+    canActivate: [AuthGuard],data: { roles: ['ROLE_AGENT']}},
   {path:'adminboard',component: AdminboardComponent,
     children:[
       {path:'console',component:ConsoleComponent},

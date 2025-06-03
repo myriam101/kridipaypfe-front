@@ -1,1 +1,62 @@
-<p>dashboard works!</p>
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" />
+ <div class="loader-container" *ngIf="isLoading">
+  <div class="loader"></div>
+</div>
+<div class="container" *ngIf="agent">
+  <!-- Carte de l'Agent -->
+  <div class="profile-card">
+    
+    <div class="profile-details">
+      <h3>{{ agent.user?.name }} {{ agent.user?.last_name }}</h3>
+      <div class="profile-info">
+        <div><i class="zmdi zmdi-account"></i> Nom d’utilisateur : {{ agent.user?.username }}</div>
+        <div><i class="fa fa-envelope"></i> Email : {{ agent.user?.email }}</div>
+        <div><i class="fa fa-briefcase"></i> Poste : Agent chez {{ agent.banque?.name }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Carte Agence -->
+  <div class="profile-card">
+    <div class="profile-details">
+      <h3> Informations Agence</h3>
+      <div class="profile-info">
+        <div><i class="fa fa-bank"></i> Nom : {{ agent.agence?.name }}</div>
+        <div><i class="fa fa-phone"></i> Téléphone : {{ agent.agence?.tel }}</div>
+        <div><i class="fa fa-location-arrow"></i> Adresse : {{ agent.agence?.adresse }}</div>
+        <div><i class="fa fa-map-marker"></i> Ville : {{ agent.agence?.ville }}</div>
+        <div><i class="fa fa-globe"></i> Gouvernorat : {{ agent.agence?.gouvernorat }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Carte Banque -->
+  <div class="profile-card">
+    <div class="profile-details">
+      <h3>Informations Banque</h3>
+      <div class="profile-info">
+        <div><i class="fa fa-university"></i> Nom : {{ agent.banque?.name }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="text-center mb-5 pt-4">
+    <h3 class="fw-bold" style="color:#216490;">
+     <i class="fa fa-leaf me-2"></i>Statistiques Globales
+    </h3>
+  </div>
+
+ <!-- Section Statistiques Environnementales -->
+    <div class="col-md-6 " style="--delay: 0s">
+      <div class="card shadow-lg rounded-3">
+        <div class="card-body text-center">
+          <h5 class="mb-4 text-secondary">Répartition selon l’impact environnemental</h5>
+          <canvas baseChart 
+            [data]="radarChartData" 
+            [type]="'radar'" 
+            [options]="radarChartOptions" 
+            class="radar-chart">
+          </canvas>
+        </div>
+      </div>
+  </div>
+</div>

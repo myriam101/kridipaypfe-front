@@ -6,6 +6,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { ProviderService } from 'src/app/services/provider.service';
 import { ClientService } from 'src/app/services/client.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { BanqueService } from 'src/app/services/banque.service';
 
 @Component({
   selector: 'app-auth-login',
@@ -24,7 +25,8 @@ export class AuthLoginComponent implements OnInit {
     private router: Router,
     private jwtHelper: JwtHelperService,
     private providerService: ProviderService,
-    private clientService: ClientService,  private snackBar: MatSnackBar
+    private clientService: ClientService,
+    private banqueService: BanqueService,  private snackBar: MatSnackBar
 
   ) {}
 
@@ -69,6 +71,7 @@ export class AuthLoginComponent implements OnInit {
         } else if (roles.includes('ROLE_ADMIN')) {
           this.isLoading = false;
           this.router.navigate(['/adminboard/home']);
+
         } else if (roles.includes('ROLE_CLIENT')) {
           this.clientService.getClientByEmail(userEmail).subscribe({
             next: (res) => {
@@ -79,6 +82,20 @@ export class AuthLoginComponent implements OnInit {
             error: (err) => {
               console.error('Erreur récupération ID client', err);
               this.errorMessage = 'Erreur lors de la récupération du compte client.';
+              this.isLoading = false;
+            }
+          });
+        }
+        else if (roles.includes('ROLE_AGENT')) {
+          this.banqueService.getAgentByEmail(userEmail).subscribe({
+            next: (res) => {
+              localStorage.setItem('agentId', res.id);
+              this.isLoading = false;
+              this.router.navigate(['/agence']);
+            },
+            error: (err) => {
+              console.error('Erreur récupération ID agent', err);
+              this.errorMessage = 'Erreur lors de la récupération du compte agent.';
               this.isLoading = false;
             }
           });
