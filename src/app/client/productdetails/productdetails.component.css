@@ -105,4 +105,13 @@ mat-dialog-actions {
 .btn-primary:hover {
   background-color: #1a5076;
   color: #fff;
+}.bonif-badge {
+  display: inline-block;
+  background-color: #d4f5e3;
+  color: #1b8c4f;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 25px;
+  font-size: 14px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }

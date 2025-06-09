@@ -45,15 +45,12 @@ transition: transform 0.3s ease;
   transform: translateX(0);
     top: 80px; 
   flex-direction: column;
-
-  
-
 }
 .sidebar-inner {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 15%; 
+  height:21%;
 }
 .sidebar.hidden {
   transform: translateX(-100%);

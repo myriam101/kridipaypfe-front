@@ -1,70 +1,70 @@
-<div class="page-wrapper d-flex flex-column min-vh-100">
-
-<nav class="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top">
-  <div class="container">
-    <a class="navbar-brand" href="#">Bienvenue au fournisseur</a>
+<!-- Top Navbar -->
+<nav class="navbar navbar-expand-lg shadow fixed-top top-navbar">
+  <div class="container-fluid">
+    
+    <a class="navbar-brand ms-3">Tableau de bord</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
       aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarResponsive">
-      <ul class="navbar-nav ms-auto">
-
-        <!-- Dropdown Actions -->
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle"  id="catalogueDropdown" role="button" data-bs-toggle="dropdown"
-            aria-expanded="false">
-            <i class="zmdi zmdi-apps"></i>
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="catalogueDropdown">
-            <li><a class="dropdown-item" (click)="goToAddProduct()"><i class="zmdi zmdi-plus me-2"></i> Ajouter produit</a></li>
-            <li><a class="dropdown-item" (click)="goToGestionCatalogs()"><i class="zmdi zmdi-view-list me-2"></i> Consulter catalogues</a></li>
-            <li><a class="dropdown-item" (click)="goToCatalog()"><i class="zmdi zmdi-view-list me-2"></i> Consulter produits</a></li>
-            <li><a class="dropdown-item" (click)="goToCarts()"><i class="zmdi zmdi-shopping-basket me-2"></i> Commandes</a></li>
-          </ul>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link position-relative" (click)="goToProfile()">
-            <i class="zmdi zmdi-account-circle me-2"></i>
-          </a>
-        </li>
-
-        <!-- Déconnexion -->
-        <li class="nav-item">
-          <a class="nav-link" (click)="confirmLogout()">
-            <i class="zmdi zmdi-sign-in me-5"></i>
-          </a>
-        </li>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarResponsive">
+      <ul class="navbar-nav">
+         <button class="icon-btn" (click)="toggleSidebar()">
+    <i class="zmdi zmdi-menu"></i>
+  </button>
+          <button class="icon-btn" (click)="confirmLogout()">
+            <i class="zmdi zmdi-sign-in"></i>
+          </button>
       </ul>
     </div>
   </div>
 </nav>
 
-  
-  <!-- Full Page Image Header with Vertically Centered Content -->
-  <header *ngIf="!isSubRoute" class="masthead" style=" background-size: cover; background-position: center; height: 70vh;">
-    <div class="container h-100">
-      <div class="row h-100 align-items-center">
-        <div class="col-12 text-center text-white">
-          <h1 class="display-4 fw-bold">Vers la sensibilisation et au-delà 🌱</h1>
-          <p class="lead mt-3">
-            Ensemble, faisons des choix plus responsables. En tant que fournisseur, vous avez le pouvoir d'agir pour un avenir plus durable.
-          </p>
-        </div>
-      </div>
+<!-- Sidebar -->
+<nav class="sidebar shadow-sm" [class.hidden]="!sidebarVisible">
+  <div class="sidebar-inner">
+
+  <ul class="nav flex-column">
+    <li class="nav-item">
+      <a class="nav-link" [class.active]="currentRoute.includes('home')" (click)="goToHome()">
+        <i class="zmdi zmdi-home me-2"></i> Accueil
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" [class.active]="currentRoute.includes('catalogues')" (click)="goToGestionCatalogs()">
+        <i class="zmdi zmdi-layers me-2"></i> Catalogues
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" [class.active]="currentRoute.includes('addproduct')" (click)="goToAddProduct()">
+        <i class="zmdi zmdi-mall me-2"></i> Produits
+      </a>
+    </li>
+  <li class="nav-item">
+  <a class="nav-link" [class.active]="currentRoute.includes('points')" (click)="handlePointsNavigation()">
+    <i class="zmdi zmdi-ticket-star me-2"></i> Gestion des points
+  </a>
+</li>
+
+    <li class="nav-item">
+      <a class="nav-link" [class.active]="currentRoute.includes('profile')" (click)="goToProfile()">
+        <i class="zmdi zmdi-account me-2"></i> Profil
+      </a>
+    </li>
+       <li class="nav-item">
+      <a class="nav-link" [class.active]="currentRoute.includes('commandes')" (click)="goToCarts()">
+        <i class="zmdi zmdi-shopping-basket me-2"></i> Commandes
+      </a>
+    </li>
+  </ul>
     </div>
-  </header>
-  
-  
-  <!-- Page Content -->
-  <section class="py-5">
+</nav>
+
+<div class="main-content" [class.full-width]="!sidebarVisible">
+  <section class="py-5 mt-5">
     <div class="container">
-      <div class="loader-container" *ngIf="loading">
-  <div class="loader"></div>
-</div>
-<router-outlet (activate)="onActivate()" (deactivate)="onDeactivate()"></router-outlet>
+      <router-outlet></router-outlet>
     </div>
   </section>
-  <app-footer></app-footer>
 </div>

@@ -13,15 +13,16 @@ import { Observable } from 'rxjs';
   styleUrls: ['./gestion-catalogs.component.css']
 })
 export class GestionCatalogsComponent implements OnInit {
+  isLoading :boolean= false;
+
     catalogs: Catalog[] = [];
     providerId!: number;
     selectedCatalogId!: number;
-   catalogForm!: FormGroup;
-    successMessage = '';
-      showForm = false;
-  editingCatalogId: number | null = null;
-productCount$: { [catalogId: number]: Observable<number> } = {};
-
+    catalogForm!: FormGroup;
+    showForm = false;
+    editingCatalogId: number | null = null;
+    productCount$: { [catalogId: number]: Observable<number> } = {};
+    catalogname: any;
     constructor(private dialog: MatDialog,private snackBar: MatSnackBar,private catalogService: CatalogService,private fb: FormBuilder) {}
   
     ngOnInit(): void {
@@ -35,8 +36,11 @@ productCount$: { [catalogId: number]: Observable<number> } = {};
     }
     catalog(): void {
   this.providerId = Number(localStorage.getItem('providerId'));
+      this.isLoading = true; 
+
   this.catalogService.getCatalogsByProvider(this.providerId).subscribe({
     next: (data) => {
+          this.isLoading = false;
       this.catalogs = data.map((c: any) => ({
         ...c,
         createdat: new Date(c.createdat.date)
@@ -47,27 +51,29 @@ productCount$: { [catalogId: number]: Observable<number> } = {};
       });
     },
     error: (err) => {
+                this.isLoading = false;
+
       console.error('Erreur de récupération des catalogues', err);
     }
   });
 }
 
+getSelectedCatalog(catalog: any): void {
+  this.selectedCatalogId = catalog.id;
+  this.catalogname = catalog.name;
+  console.log("ID du catalogue :", catalog.id);
+  console.log("Nom du catalogue :", catalog.name);
+}
 
-    getSelectedCatalogName(): string {
-      const selected = this.catalogs.find(c => c.id === +this.selectedCatalogId);
-      console.log("id du cat",selected);
-      return selected ? selected.name : '';}
     
  onSubmit(): void {
     if (this.catalogForm.valid) {
       this.catalogService.addCatalogToProvider(this.providerId, this.catalogForm.value).subscribe({
         next: (res) => {
-          this.successMessage = 'Catalogue ajouté avec succès !';
           this.snackBar.open('Catalogue ajouté avec succès', 'Fermer', {
   duration: 3000});
           this.catalog();
           this.catalogForm.reset({ public: true });
-          setTimeout(() => this.successMessage = '', 3000);
         },
         error: (err) => console.error('Erreur ajout', err)
       });
@@ -87,7 +93,10 @@ deleteCatalog(id: number) {
         this.snackBar.open('Catalogue supprimé avec succès', 'Fermer', { duration: 3000 });
         this.catalog(); 
       },
-      error: (err) => console.error('Erreur suppression', err)
+      error: (err) => {console.error('Erreur suppression', err)
+        this.snackBar.open(err.error.message, 'Fermer', { duration: 4000 });
+
+      }
     });
   }})
 }

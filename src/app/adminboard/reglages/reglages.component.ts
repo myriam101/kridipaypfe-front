@@ -8,12 +8,84 @@ import { SeuilService } from 'src/app/services/seuil.service';
   styleUrls: ['./reglages.component.css']
 })
 export class ReglagesComponent implements OnInit {
+  items = [
+    {
+      title: 'Gestion du seuil du score écologique des clients',
+      key: 'seuil',
+      expanded: false
+    },
+    {
+      title: 'Gestion de la marge des points bonifiants',
+      key: 'points',
+      expanded: false
+    }
+  ];
+
   valeur: number | null = null;
   date: string | null = null;
   newValeur: number = 0;
-isLoading: boolean = false;
+  isLoading: boolean = false;
 
-  constructor(private seuilService: SeuilService, private snackBar: MatSnackBar) {}
+  constructor(
+    private seuilService: SeuilService,
+    private snackBar: MatSnackBar
+  ) {}
+
+  ngOnInit(): void {
+    this.loadSeuil();
+  }
+
+  toggle(index: number): void {
+    this.items[index].expanded = !this.items[index].expanded;
+  }
+
+  loadSeuil() {
+    this.isLoading = true;
+    this.seuilService.getCurrentSeuil().subscribe({
+      next: data => {
+        this.valeur = data.valeur;
+        this.date = data.date;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        const errorMessage = err.error?.error || 'Erreur lors du chargement du seuil.';
+        this.showSnackBar(errorMessage, 5000, true);
+        this.isLoading = false;
+      }
+    });
+  }
+
+  updateSeuil() {
+    if (this.newValeur <= 0) {
+      this.showSnackBar('La valeur du seuil doit être supérieure à 0.', 4000, true);
+      return;
+    }
+
+    this.isLoading = true;
+
+    this.seuilService.addOrUpdateSeuil(this.newValeur).subscribe({
+      next: () => {
+        this.showSnackBar('Seuil mis à jour avec succès.');
+        this.loadSeuil();
+
+        this.seuilService.calculateAllScores().subscribe({
+          next: () => {
+            this.showSnackBar('Scores des clients recalculés avec succès !');
+            this.isLoading = false;
+          },
+          error: () => {
+            this.showSnackBar('Erreur lors du recalcul des scores.', 5000, true);
+            this.isLoading = false;
+          }
+        });
+
+      },
+      error: () => {
+        this.showSnackBar('Erreur lors de la mise à jour du seuil.', 5000, true);
+        this.isLoading = false;
+      }
+    });
+  }
 
   showSnackBar(message: string, duration = 3000, isError = false) {
     this.snackBar.open(message, 'Fermer', {
@@ -23,58 +95,4 @@ isLoading: boolean = false;
       panelClass: isError ? 'snackbar-error' : 'snackbar-success'
     });
   }
-
-  ngOnInit(): void {
-    this.loadSeuil();
-  }
-
-  loadSeuil() {
-    this.isLoading = true;
-    this.seuilService.getCurrentSeuil().subscribe({
-      next: data => {
-        this.valeur = data.valeur;
-        this.date = data.date;
-        this.isLoading = false; 
-
-      },
-      error: (err) => {
-        const errorMessage = err.error?.error || 'Erreur lors du chargement du seuil.';
-        this.showSnackBar(errorMessage, 5000, true);
-                  this.isLoading = false; 
-
-      }
-    });
-  }
-updateSeuil() {
-  if (this.newValeur <= 0) {
-    this.showSnackBar('La valeur du seuil doit être supérieure à 0.', 4000, true);
-    return;
-  }
-
-  this.isLoading = true;
-
-  this.seuilService.addOrUpdateSeuil(this.newValeur).subscribe({
-    next: () => {
-      this.showSnackBar('Seuil mis à jour avec succès.');
-      this.loadSeuil();
-
-      this.seuilService.calculateAllScores().subscribe({
-        next: (res) => {
-          this.showSnackBar('Scores des clients recalculés avec succès !');
-          this.isLoading = false; 
-        },
-        error: (err) => {
-          this.showSnackBar('Erreur lors du recalcul des scores.', 5000, true);
-          this.isLoading = false; 
-        }
-      });
-
-    },
-    error: () => {
-      this.showSnackBar('Erreur lors de la mise à jour du seuil.', 5000, true);
-      this.isLoading = false;
-    }
-  });
-}
-
 }

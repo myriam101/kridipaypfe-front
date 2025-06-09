@@ -137,7 +137,6 @@ export class AjoutproductComponent {
           console.log('Produit + Feature ajoutés', response);
           this.successMessage = 'Produit ajouté avec succès !';
           
-          // Reset formulaire mais conserver providerId et id_catalog
           this.productForm.reset({
             id_provider: this.providerId,
             id_catalog: this.selectedCatalogId,
@@ -145,10 +144,8 @@ export class AjoutproductComponent {
             bonifpoint: 0
           });
 
-          // Réinitialiser flags aussi
           this.resetFlags();
 
-          // Cacher le message après 3 secondes
           setTimeout(() => {
             this.successMessage = '';
           }, 3000);
@@ -164,7 +161,6 @@ export class AjoutproductComponent {
     return this.designationEnum[value];
   }
 
-  // Reset tous les flags à false
   private resetFlags() {
     this.isLaveLinge = false;
     this.isSecheLinge = false;
@@ -184,7 +180,6 @@ export class AjoutproductComponent {
     this.isTv = false;
   }
 
-  // Gérer le changement de la désignation
   onDesignationChange(event: Event): void {
     this.resetFlags();
 

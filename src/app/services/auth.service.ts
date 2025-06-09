@@ -10,6 +10,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 export class AuthService {
 
 
+  private apiurl = 'http://localhost:8000/User';
 
   constructor(private http: HttpClient,private jwtHelper: JwtHelperService) {}
 
@@ -41,5 +42,8 @@ export class AuthService {
     const decoded = this.jwtHelper.decodeToken(token);
     return decoded.roles || [];
   }
-  
+  registerUser(userData: any): Observable<any> {
+  return this.http.post(`${this.apiurl}/register`, userData);
+}
+
 }

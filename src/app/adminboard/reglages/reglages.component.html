@@ -1,25 +1,50 @@
-<div class="card p-4 shadow seuil-card border-0">
-  <h2 class="h5 text-custom-blue mb-4 d-flex align-items-center">
-    <i class="bi bi-bar-chart-fill me-2"></i> Gestion du seuil du score écologique des clients
-  </h2>
- <div class="loader-container" *ngIf="isLoading">
-  <div class="loader"></div>
-</div>
-  <div *ngIf="valeur !== null" class="bg-light p-3 rounded border border-custom-blue-subtle mb-3">
-   
-    <p class="mb-1 fw-semibold text-custom-blue">
+<div class="accordion-container">
+  <div *ngFor="let item of items; let i = index" class="accordion-item mb-3">
+    <div class="accordion-header d-flex justify-content-between align-items-center bg-light border rounded p-3" (click)="toggle(i)" style="cursor: pointer;">
+      <span class="fw-semibold text-custom-blue">
+        {{ item.title }}
+      </span>
+      <i class="bi" [ngClass]="{ 'bi-chevron-down': !item.expanded, 'bi-chevron-up': item.expanded }"></i>
+    </div>
+
+    <div *ngIf="item.expanded" class="accordion-body border-start border-end border-bottom p-3">
+      <ng-container [ngSwitch]="item.key">
         
-      Seuil actuel : <span class="fw-normal">{{ valeur }}</span>
-    </p>
-    <p class="mb-0 text-muted">Date d'ajout : <span class="fw-normal">{{ date }}</span></p>
-  </div>
+        <!-- Bloc SEUIL -->
+        <ng-container *ngSwitchCase="'seuil'">
+          <div class="card p-4 shadow seuil-card border-0">
+            <h2 class="h5 text-custom-blue mb-4 d-flex align-items-center">
+              <i class="bi bi-bar-chart-fill me-2"></i> Gestion du seuil du score écologique des clients
+            </h2>
 
+            <div class="loader-container" *ngIf="isLoading">
+              <div class="loader"></div>
+            </div>
 
-  <div class="mt-3">
-    <label class="form-label fw-semibold text-custom-blue">Nouvelle valeur du seuil</label>
-    <input type="number" [(ngModel)]="newValeur" class="form-control mb-3" placeholder="Entrez une nouvelle valeur">
-    <button (click)="updateSeuil()" class="btn btn-custom-blue">
-      Mettre à jour
-    </button>
+            <div *ngIf="valeur !== null" class="bg-light p-3 rounded border border-custom-blue-subtle mb-3">
+              <p class="mb-1 fw-semibold text-custom-blue">
+                Seuil actuel : <span class="fw-normal">{{ valeur }}</span>
+              </p>
+              <p class="mb-0 text-muted">Date d'ajout : <span class="fw-normal">{{ date }}</span></p>
+            </div>
+
+            <div class="mt-3">
+              <label class="form-label fw-semibold text-custom-blue">Nouvelle valeur du seuil</label>
+              <input type="number" [(ngModel)]="newValeur" class="form-control mb-3" placeholder="Entrez une nouvelle valeur">
+              <button (click)="updateSeuil()" class="btn btn-custom-blue">
+                Mettre à jour
+              </button>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- Bloc POINTS (à compléter) -->
+        <ng-container *ngSwitchCase="'points'">
+          <!-- À insérer ici : contenu gestion des points bonifiants -->
+          <p class="text-muted">Contenu à venir pour la gestion des points bonifiants...</p>
+        </ng-container>
+
+      </ng-container>
+    </div>
   </div>
 </div>

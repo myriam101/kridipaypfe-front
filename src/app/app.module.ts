@@ -28,7 +28,6 @@ import { MatDialogActions, MatDialogModule } from '@angular/material/dialog';
 import { AdminboardComponent } from './adminboard/adminboard.component';
 import { ProviderComponent } from './provider/provider.component';
 import { AjoutproductComponent } from './provider/ajoutproduct/ajoutproduct.component';
-import { CatalogComponent } from './provider/catalog/catalog.component';
 import { ListproductsComponent } from './provider/listproducts/listproducts.component';
 import { ProfileComponent } from './client/profile/profile.component';
 import { CardsComponent } from './adminboard/cards/cards.component';
@@ -54,6 +53,12 @@ import { BanqueComponent } from './banque/banque.component';
 import { DemandesComponent } from './banque/demandes/demandes.component';
 import { BienvenuComponent } from './banque/bienvenu/bienvenu.component';
 import { GestionCatalogsComponent } from './provider/gestion-catalogs/gestion-catalogs.component';
+import { GestionPointsComponent } from './provider/gestion-points/gestion-points.component';
+import { BoardComponent } from './provider/board/board.component';
+import { AuthRegisterComponent } from './pages/auth-register/auth-register.component';
+import { GestionPointsAdminComponent } from './adminboard/gestion-points-admin/gestion-points-admin.component';
+import { ConfirmDialogAdminComponent } from './adminboard/confirm-dialog-admin/confirm-dialog-admin.component';
+import { UnauthorizedComponent } from './provider/unauthorized/unauthorized.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -71,7 +76,6 @@ export function tokenGetter() {
 AdminboardComponent,
 ProviderComponent,
 AjoutproductComponent,
-CatalogComponent,
 ListproductsComponent,
 ProfileComponent,
 CardsComponent,
@@ -93,7 +97,13 @@ ReglagesComponent,
 BanqueComponent,
 DemandesComponent,
 BienvenuComponent,
-GestionCatalogsComponent
+GestionCatalogsComponent,
+GestionPointsComponent,
+BoardComponent,
+AuthRegisterComponent,
+GestionPointsAdminComponent,
+ConfirmDialogAdminComponent,
+UnauthorizedComponent
   ],
   imports: [
     BrowserModule,

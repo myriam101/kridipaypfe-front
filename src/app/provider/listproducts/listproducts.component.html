@@ -1,18 +1,14 @@
-<!-- Spinner de chargement -->
  <div class="loader-container" *ngIf="isLoading">
   <div class="loader"></div>
 </div>
 
-<!-- Cas : aucun catalogue sélectionné -->
 <div *ngIf="!isLoading && !catalogId" class="text-center mt-4">
   <p class="text-muted">Sélectionnez un catalogue pour afficher ses produits.</p>
 </div>
 
-<!-- Cas : catalogue sélectionné -->
 <div *ngIf="!isLoading && catalogId">
   <div class="container">
     
-    <!-- Toggle switch carbone -->
     <div class="bg-light border rounded p-3 mb-4">
       <div class="d-flex align-items-center justify-content-between">
         <label for="carbonToggle" class="form-label mb-0">Visibilité impact négatif :</label>
@@ -31,41 +27,67 @@
       </div>
     </div>
 
-    <!-- Liste des produits -->
+  <div class="text-end mb-4">
+    <button class="btn btn-custom-blue" >
+      <i class="bi" ></i>
+      Ajout produit
+    </button>
+  </div>
+
     <div class="row clearfix" *ngIf="products.length > 0; else noProducts">
-      <div *ngFor="let product of products" class="col-lg-3 col-md-4 col-sm-12">
-        <div class="card product_item">
-
-          <!-- Floating Carbon Badge -->
-          <div *ngIf="carbonVisible && carbonBadges[product.id]" class="carbon-badge" [ngClass]="carbonBadges[product.id]">
-           Impact négatif  {{ carbonBadges[product.id] === 'undefined' ? 'Non défini' : (carbonBadges[product.id] | titlecase) }}
-          </div>
-
-          <div class="body">
-            <div class="cp_img">
-              <img
-                [src]="product.imageUrl || 'assets/imagenotavailble.png'"
-                alt="{{ product.name }}"
-                class="img-fluid"
-              />
-              <div class="hover">
-                <a class="btn btn-primary btn-sm waves-effect">
-                  <i class="zmdi zmdi-edit"></i>
-                </a>
-              </div>
-            </div>
-
-            <div class="product_details">
-              <h5><a href="javascript:void(0);">{{ product.name }}</a></h5>
-              <p class="product-description">{{ product.short_description }}</p>
-              <p class="product-brand">{{ product.brand }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
+     <div *ngFor="let product of products" class="col-lg-3 col-md-4 col-sm-12 position-relative">
+  <div class="card product_item">
+    <div *ngIf="carbonVisible" class="carbon-badge" [ngClass]="carbonBadges[product.id] || 'undefined'">
+      Impact négatif  
+      {{
+        !carbonBadges[product.id] || carbonBadges[product.id] === 'undefined'
+          ? 'Non défini'
+          : (carbonBadges[product.id] | titlecase)
+      }}
     </div>
 
-    <!-- Message aucun produit -->
+    <div class="body">
+      <div class="cp_img">
+        <img
+          [src]="product.imageUrl || 'assets/imagenotavailble.png'"
+          alt="{{ product.name }}"
+          class="img-fluid"
+        />
+      </div>
+
+      <div class="product_details">
+        <h5><a>{{ product.name }}</a></h5>
+        <p class="product-description">{{ product.short_description }}</p>
+        <p class="product-brand">{{ product.brand }}</p>
+
+        <!-- Bonifpoint with tooltip -->
+        <p
+          class="product-brand fw-bold text-center"
+          [ngClass]="product.bonifvisible === 1 ? 'text-success' : 'text-danger'"
+          style="cursor: pointer;"
+          (click)="toggleTooltip(product.id, $event)"
+        >
+          {{ product.bonifpoint }} pts
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tooltip Floating Outside -->
+  <div
+    class="floating-tooltip"
+    *ngIf="activeTooltipId === product.id"
+  >
+    <div class="tooltip-content">
+      {{ product.bonifvisible === 1
+        ? 'Ces points sont visibles par le client.'
+        : 'Ces points ne sont pas visibles par le client.' }}
+    </div>
+  </div>
+</div>
+
+    </div>
+
     <ng-template #noProducts>
       <div class="text-center mt-4">
         <p class="text-danger">Aucun produit trouvé.</p>

@@ -17,4 +17,11 @@ export class ProviderService {
   getAllProviders(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiurl}/all`);
   }
+   getAllProviderUserNamesWithPoints(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiurl}/all2`);
+  }
+  getPackPointsVisibility(providerId: number) {
+    return this.http.get<{ id: number, visible: boolean }>(`${this.apiurl}/${providerId}/pack-points-visible`);
+  }
+
 }

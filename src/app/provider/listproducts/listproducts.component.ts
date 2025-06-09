@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnChanges, OnInit } from '@angular/core';
 import { CarbonService } from 'src/app/services/carbon.service';
 import { ProductService } from 'src/app/services/product.service';
 
@@ -12,27 +12,30 @@ export class ListproductsComponent implements OnInit, OnChanges {
   products: any[] = [];
   carbonBadges: { [key: number]: string } = {};
   carbonVisible: boolean = true;
-  catalogs: any[] = []; // Tableau pour stocker les catalogues disponibles
+  catalogs: any[] = []; 
   isLoading :boolean= false;
-
+  bootstrap: any;
+  activeTooltipId: number | null = null;
 
   constructor(
     private productService: ProductService,
     private carbonService: CarbonService
   ) {}
-
+ngAfterViewInit(): void {
+  const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+  tooltipTriggerList.map((tooltipTriggerEl) => new this.bootstrap.Tooltip(tooltipTriggerEl));
+}
   ngOnInit(): void {
-    this.loadCatalogs(); // Charger les catalogues dès l'initialisation
+    this.loadCatalogs();
   }
 
   ngOnChanges(): void {
     if (this.catalogId) {
-      this.onCatalogChange(); // Vérifier la visibilité du carbone à chaque changement de catalogue
+      this.onCatalogChange(); 
     }
   }
 
   loadCatalogs(): void {
-    // Charger la liste des catalogues depuis l'API
     this.productService.getCatalogs().subscribe({
       next: (response) => {
 
@@ -49,7 +52,6 @@ export class ListproductsComponent implements OnInit, OnChanges {
 
   onCatalogChange(): void {
     if (this.catalogId) {
-      // Vérifier la visibilité pour le catalogue sélectionné
       this.carbonService.getCarbonVisibilityStatusByCatalog(this.catalogId).subscribe({
         next: (response) => {
           this.carbonVisible = response.visible;
@@ -64,7 +66,7 @@ export class ListproductsComponent implements OnInit, OnChanges {
   loadProducts(): void {
     if (!this.catalogId) return;
   
-    this.isLoading = true; // lancement du chargement
+    this.isLoading = true; 
   
     this.productService.getProductsByCatalog(this.catalogId).subscribe({
       next: (products) => {
@@ -72,24 +74,25 @@ export class ListproductsComponent implements OnInit, OnChanges {
         this.carbonBadges = {};
   
         if (products.length === 0) {
-          this.isLoading = false; //Rien à charger
+          this.isLoading = false; 
           return;
         }
   
         let loadedCount = 0;
         for (let product of products) {
           this.carbonService.getCarbonScore(product.id).subscribe({
-            next: (res) => {
-              const badgeEnum = res.badge;
-              this.carbonBadges[product.id] =
-                badgeEnum === 0 ? 'undefined' :
-                badgeEnum === 1 ? 'bas' :
-                badgeEnum === 2 ? 'moyen' :
-                badgeEnum === 3 ? 'eleve' : '';
+           next: (res) => {
+  const badgeEnum = res?.badge;
+
+  this.carbonBadges[product.id] =
+    badgeEnum === 1 ? 'bas' :
+    badgeEnum === 2 ? 'moyen' :
+    badgeEnum === 3 ? 'eleve' : 'undefined';
+
   
               loadedCount++;
               if (loadedCount === products.length) {
-                this.isLoading = false; // Fin du chargement des scores
+                this.isLoading = false; 
               }
             },
             error: (err) => {
@@ -104,7 +107,7 @@ export class ListproductsComponent implements OnInit, OnChanges {
       },
       error: (err) => {
         console.error('Erreur de chargement des produits', err);
-        this.isLoading = false; // Fin même en cas d’erreur
+        this.isLoading = false; 
       }
     });
   }
@@ -116,11 +119,22 @@ export class ListproductsComponent implements OnInit, OnChanges {
     this.carbonService.setVisibilityByCatalog(this.catalogId, this.carbonVisible ? 1 : 0).subscribe({
       next: () => {
         console.log('Visibilité carbone mise à jour pour le catalogue', this.catalogId);
-        this.loadProducts(); // Recharger les produits après la mise à jour
+        this.loadProducts(); 
       },
       error: (err) => {
         console.error('Erreur de mise à jour de visibilité carbone', err);
       }
     });
   }
+
+toggleTooltip(productId: number, event: MouseEvent): void {
+  event.stopPropagation(); // prevent clicks from bubbling
+  this.activeTooltipId = this.activeTooltipId === productId ? null : productId;
+}
+
+@HostListener('document:click')
+closeTooltip(): void {
+  this.activeTooltipId = null;
+}
+
 }

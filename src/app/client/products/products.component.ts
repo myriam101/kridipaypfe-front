@@ -18,6 +18,8 @@ export class ProductsComponent implements OnChanges,OnInit {
   isLoading :boolean= false;
   carbonBadges: { [key: number]: string } = {}; 
   clientId: number | null = null;  
+    activeCarbonTooltipId: number | null = null;
+tooltipPosition = { top: 0, left: 0 };
 
   constructor(private simulationService: SimulatorUsageService
 ,private productService: ProductService, private carbonService: CarbonService,private dialog: MatDialog,private clientService:ClientService, private snackBar: MatSnackBar) {}
@@ -40,10 +42,11 @@ export class ProductsComponent implements OnChanges,OnInit {
         for (let product of products) {
           this.carbonService.getCarbonScore(product.id).subscribe(res => {
             const badgeEnum = res.badge;
-            this.carbonBadges[product.id] =
-              badgeEnum === 0 ? 'undefined' :
-              badgeEnum === 1 ? 'bas' :
-              badgeEnum === 2 ? 'moyen' : 'eleve';
+           this.carbonBadges[product.id] =
+  badgeEnum === 0 ? 'undefined' :
+  badgeEnum === 1 ? 'low' :
+  badgeEnum === 2 ? 'medium' : 'high';
+
           });
         }
       },
@@ -121,10 +124,11 @@ export class ProductsComponent implements OnChanges,OnInit {
       },
       error: error => {
         console.error('Failed to add to cart', error);
-        this.snackBar.open('Une erreur s^est produite lors de l^ajout au panier.', 'Fermer', {
+     this.snackBar.open("Une erreur s'est produite lors de l'ajout au panier.", 'Fermer', {
   duration: 3000,
   panelClass: ['snackbar-error']
 });
+
       }
     }); }
     else
@@ -143,4 +147,41 @@ trackUsage(productId: any): void {
         console.error('Tracking failed:', err);
       }
     });}
+
+
+toggleCarbonTooltip(productId: number, event: MouseEvent) {
+  if (this.activeCarbonTooltipId === productId) {
+    this.activeCarbonTooltipId = null;
+  } else {
+    this.activeCarbonTooltipId = productId;
+
+    const target = event.target as HTMLElement;
+    const rect = target.getBoundingClientRect();
+
+    this.tooltipPosition.top = rect.top - 45; // un peu au-dessus
+    this.tooltipPosition.left = rect.left + rect.width / 2 - 120; // centré (tooltip max-width: 240px)
+  }
+}
+
+closeCarbonTooltip() {
+  this.activeCarbonTooltipId = null;
+}
+
+getCarbonBadgeText(badge: string | undefined): string {
+ if (!badge || badge.toLowerCase() === 'undefined') {
+  return "L'impact environnemental de ce produit n'est pas défini en raison d'un manque de données.";
+}
+const val = badge.toLowerCase();
+if (val === 'low') {
+  return "Ce produit a un impact environnemental plutôt bas par rapport aux produits de sa catégorie.";
+} else if (val === 'medium') {
+  return "Ce produit a un impact environnemental moyen par rapport aux produits de sa catégorie.";
+} else if (val === 'high') {
+  return "Ce produit a un impact environnemental élevé par rapport aux produits de sa catégorie.";
+} else {
+  return "L'impact environnemental de ce produit n'est pas défini en raison d'un manque de données.";
+}
+
+}
+
 }

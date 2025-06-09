@@ -1,0 +1,50 @@
+.unauthorized-container {
+  height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f8f9fa;
+}
+
+.unauthorized-card {
+  text-align: center;
+  background: white;
+  padding: 3rem 2rem;
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  max-width: 480px;
+  width: 100%;
+}
+
+.unauthorized-card h1 {
+  font-size: 2.2rem;
+  color: #dc3545;
+  margin-bottom: 1rem;
+}
+
+.message {
+  font-size: 1.1rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.sub-message {
+  font-size: 0.95rem;
+  color: #6c757d;
+  margin-bottom: 2rem;
+}
+
+.contact-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.contact-btn:hover {
+  background-color: #0056b3;
+}

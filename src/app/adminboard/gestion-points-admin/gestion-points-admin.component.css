@@ -1,0 +1,101 @@
+.btn-outline-custom-primary {
+  color: #216490;
+  border-color: #216490;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-outline-custom-primary:hover,
+.btn-outline-custom-primary:focus {
+  background-color: #216490;
+  color: #fff;
+  border-color: #216490;
+}
+
+.pagination {
+  justify-content: center;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+
+.pagination .page-item {
+  border-radius: 0.3rem;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #84b4d4;
+  border-color: #216490;
+  color: #fff;
+  font-weight: 600;
+  
+}
+
+.pagination .page-item.disabled .page-link {
+  color: #a3a3a3;
+  cursor: not-allowed;
+  pointer-events: none;
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.pagination .page-link {
+  border: 1px solid #216490;
+  border-radius: 0.3rem;
+  color: #216490;
+  min-width: 38px;
+  height: 38px;
+  line-height: 38px;
+  padding: 0 10px;
+  font-weight: 500;
+  cursor: pointer;
+  background-color: transparent;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.pagination .page-link:hover:not(.disabled) {
+  background-color: #216490;
+  color: white;
+}
+
+@media (max-width: 575.98px) {
+  .pagination {
+    gap: 0.15rem;
+  }
+  .pagination .page-link {
+    min-width: 30px;
+    height: 30px;
+    line-height: 30px;
+    padding: 0 8px;
+  }
+}
+.status-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.8rem;
+  border-radius: 1rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.status-label.active {
+  background-color: #d1f5e0; /* fond vert pâle */
+}
+
+.status-label.active .status-dot {
+  background-color: #28a745; /* vert */
+}
+
+.status-label.inactive {
+  background-color: #f8d7da; /* fond rouge pâle */
+}
+
+.status-label.inactive .status-dot {
+  background-color: #dc3545; /* rouge */
+}

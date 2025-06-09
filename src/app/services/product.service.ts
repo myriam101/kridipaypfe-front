@@ -96,4 +96,17 @@ getAllWaitingCarts(): Observable<any> {
 validateCartByclient(clientId: number) {
     return this.http.patch(`${this.apiCart}/client/validate-all/${clientId}`, {});
   }
+   getProductsByProvider(providerId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiProducts}/${providerId}/products`);
+  }
+  toggleBonifVisible(productId: number) {
+  return this.http.patch<any>(`${this.apiProducts}/toggle-bonifvisible/${productId}`, {});
+}
+updateBonifPoints(productId: number, bonifpoint: number) {
+  return this.http.put(`${this.apiProducts}/update-bonif/${productId}`, {
+    bonifpoint: bonifpoint
+  }, { responseType: 'text' });
+}
+
+
 }

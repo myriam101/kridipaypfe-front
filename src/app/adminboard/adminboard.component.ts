@@ -8,6 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class AdminboardComponent {
   currentRoute: string = '';
+isPackVisible: boolean = true; // visible par défaut
 
   constructor(private router: Router, private route: ActivatedRoute) {
      this.router.events.subscribe(() => {
@@ -40,6 +41,9 @@ export class AdminboardComponent {
   }
   goToReglages() {
     this.router.navigate(['reglages'], { relativeTo: this.route });
+  }
+  goToPoints() {
+    this.router.navigate(['pointsbonif'], { relativeTo: this.route });
   }
 
   confirmLogout() {

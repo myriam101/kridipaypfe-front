@@ -1,0 +1,112 @@
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-sm-10 col-md-8 col-lg-6">
+      <div class="card border-0 shadow-lg rounded-4 my-5">
+        <div class="card-body p-5">
+          <h2 class="text-center mb-4" style="color: #216490;">Créer un compte</h2>
+
+<form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+  <!-- Prénom -->
+  <div class="form-floating mb-3">
+    <input type="text" id="name" class="form-control" formControlName="name" placeholder="Prénom" />
+    <label for="name">Prénom</label>
+  </div>
+
+  <!-- Nom -->
+  <div class="form-floating mb-3">
+    <input type="text" id="last_name" class="form-control" formControlName="last_name" placeholder="Nom" />
+    <label for="last_name">Nom</label>
+  </div>
+
+  <!-- Nom d'utilisateur -->
+  <div class="form-floating mb-3">
+    <input type="text" id="username" class="form-control" formControlName="username" placeholder="Nom d'utilisateur" />
+    <label for="username">Nom d'utilisateur</label>
+  </div>
+
+  <!-- Email -->
+  <div class="form-floating mb-3">
+    <input type="email" id="email" class="form-control" formControlName="email" placeholder="Email" />
+    <label for="email">Email</label>
+  </div>
+
+  <!-- Rôle -->
+  <div class="form-floating mb-3">
+    <select id="role" class="form-select" formControlName="role">
+      <option value="">Sélectionnez un rôle</option>
+      <option value="client">Client</option>
+      <option value="provider">Fournisseur</option>
+      <option value="agent">Agent</option>
+    </select>
+    <label for="role">Rôle</label>
+  </div>
+
+  <!-- Adresse (affichée si role = client ou provider) -->
+  <div class="form-floating mb-3" *ngIf="showAdressField()">
+    <input type="text" id="adress" class="form-control" formControlName="adress" placeholder="Adresse" />
+    <label for="adress">Adresse</label>
+  </div>
+
+  <!-- Date de naissance (si client) -->
+  <div class="form-floating mb-3" *ngIf="registerForm.get('role')?.value === 'client'">
+    <input type="date" id="dateNaissance" class="form-control" formControlName="dateNaissance" />
+    <label for="dateNaissance">Date de naissance</label>
+  </div>
+
+ <!-- Mot de passe -->
+<div class="form-floating mb-3">
+  <input
+    type="password"
+    id="password"
+    class="form-control"
+    formControlName="password"
+    placeholder="Mot de passe"
+    [ngClass]="{ 'is-invalid': registerForm.get('password')?.touched && registerForm.get('password')?.invalid }"
+  />
+  <label for="password">Mot de passe</label>
+  <div class="invalid-feedback" *ngIf="registerForm.get('password')?.errors?.['required']">
+    Le mot de passe est requis.
+  </div>
+  <div class="invalid-feedback" *ngIf="registerForm.get('password')?.errors?.['minlength']">
+    Le mot de passe doit contenir au moins 6 caractères.
+  </div>
+</div>
+
+<!-- Confirmation mot de passe -->
+<div class="form-floating mb-3">
+  <input
+    type="password"
+    id="confirmPassword"
+    class="form-control"
+    formControlName="confirmPassword"
+    placeholder="Confirmer le mot de passe"
+    [ngClass]="{
+      'is-invalid':
+        registerForm.get('confirmPassword')?.touched &&
+        (registerForm.get('confirmPassword')?.invalid || registerForm.hasError('passwordMismatch'))
+    }"
+  />
+  <label for="confirmPassword">Confirmer le mot de passe</label>
+  <div class="invalid-feedback" *ngIf="registerForm.hasError('passwordMismatch')">
+    Les mots de passe ne correspondent pas.
+  </div>
+</div>
+
+
+  <!-- Erreurs & Bouton -->
+  <div *ngIf="errorMessage" class="alert alert-danger mt-2">{{ errorMessage }}</div>
+
+  <div class="d-grid mb-3">
+    <button class="btn btn-login text-uppercase fw-bold"
+ type="submit" [disabled]="registerForm.invalid || isLoading">
+      <span *ngIf="!isLoading">S'inscrire</span>
+      <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status"></span>
+    </button>
+  </div>
+</form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

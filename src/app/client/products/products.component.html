@@ -1,24 +1,45 @@
-
 <div class="container">
   <div class="row clearfix"> 
     <div class="loader-container" *ngIf="isLoading">
-  <div class="loader"></div>
-</div>
+      <div class="loader"></div>
+    </div>
+
     <ng-container *ngIf="!isLoading && products.length > 0; else noProducts">
       <!-- Affiche les produits -->
       <div class="row clearfix">
         <div *ngFor="let product of products" class="col-lg-3 col-md-4 col-sm-12">
-          <div class="card product_item">
+          <div class="card product_item position-relative">
 
             <!-- Badge Carbone -->
-            <div *ngIf="carbonBadges[product.id]" class="carbon-badge" [ngClass]="carbonBadges[product.id]">
-            Impact négatif  {{ carbonBadges[product.id] === 'undefined' ? 'Non défini' : (carbonBadges[product.id] | titlecase) }}
+            <div
+              class="carbon-badge-compact"
+              [ngClass]="carbonBadges[product.id]"
+              (click)="toggleCarbonTooltip(product.id, $event)"
+              style="cursor: pointer; user-select: none; position: relative;"
+              tabindex="0"
+              role="button"
+              aria-label="Information sur l'impact carbone du produit"
+            >
+              <i class="zmdi zmdi-leaf badge-icon" aria-hidden="true"></i>
+             <div
+  class="carbon-badge-compact"
+  [ngClass]="carbonBadges[product.id]"
+  (click)="toggleCarbonTooltip(product.id, $event)"
+  [title]="getCarbonBadgeText(carbonBadges[product.id])"
+  style="cursor: pointer; user-select: none; position: relative;"
+>
+  <i class="zmdi zmdi-leaf badge-icon" aria-hidden="true"></i>
+  <span class="badge-text">
+    {{ carbonBadges[product.id] === 'undefined' ? 'Non défini' : (carbonBadges[product.id] | titlecase) }}
+  </span>
+</div>
+
             </div>
 
             <div class="cp_img" data-bs-toggle="tooltip" data-bs-placement="top">
-              <img src="assets/imagenotavailble.png" alt="Nom du produit" class="img-fluid">
+              <img [src]="product.imageUrl || 'assets/imagenotavailble.png'" alt="{{ product.name }}" class="img-fluid">
               <div class="hover">
-                <a  (click)="openSimulateur(product)" class="btn btn-primary btn-sm" title="Simulez votre consommation énergétique">
+                <a (click)="openSimulateur(product)" class="btn btn-primary btn-sm" title="Simulez votre consommation énergétique">
                   <i class="zmdi zmdi-flash"></i>
                 </a>
                 <a (click)="openProductDetailDialog(product)" class="btn btn-primary btn-sm waves-effect" title="Détails du produit">
@@ -27,7 +48,6 @@
                 <a (click)="addToCart(product.id)" class="btn btn-primary btn-sm waves-effect" title="Ajouter au panier">
                   <i class="zmdi zmdi-shopping-cart"></i>
                 </a>
-                
               </div>
             </div>
 
@@ -35,6 +55,10 @@
               <h5><a href="javascript:void(0);">{{ product.name }}</a></h5>
               <p class="product-description">{{ product.short_description }}</p>
               <p class="product-brand">{{ product.brand }}</p>
+
+              <div *ngIf="product.bonifvisible === 1" class="mt-2">
+                <span class="bonif-badge"> {{ product.bonifpoint }} pts bonus</span>
+              </div>
             </div>
 
           </div>
@@ -42,14 +66,28 @@
       </div>
     </ng-container>
 
-    <!-- Cas où il n'y a pas de produits -->
-    <ng-template #noProducts >
+    <ng-template #noProducts>
       <div class="text-center mt-4" *ngIf="!isLoading">
         <p class="text-danger" *ngIf="catalogId">Aucun produit trouvé.</p>
         <p class="text-muted" *ngIf="!catalogId">Veuillez sélectionner un catalogue.</p>
-
       </div>
     </ng-template>
 
+  </div>
+
+  <!-- Tooltip flottant hors carte produit -->
+  <div
+    *ngIf="activeCarbonTooltipId !== null"
+    class="custom-tooltip fixed-tooltip"
+    [style.top.px]="tooltipPosition.top"
+    [style.left.px]="tooltipPosition.left"
+    (click)="closeCarbonTooltip()"
+    role="tooltip"
+    aria-live="polite"
+  >
+    <div class="tooltip-arrow"></div>
+    <div class="tooltip-content p-2 small">
+      {{ getCarbonBadgeText(carbonBadges[activeCarbonTooltipId]) }}
+    </div>
   </div>
 </div>
