@@ -57,7 +57,7 @@ getCartCount(clientId: number): Observable<number> {
 getCartDetails(clientId: number) {
   return this.http.get(`${this.apiCart}/details/${clientId}`);
 }
-// Méthode pour supprimer un produit du panier (si besoin)
+// Méthode pour supprimer un produit du panier
 removeItemFromCart(clientId: number, productId: number): Observable<any> {
   return this.http.delete<any>(`${this.apiCart}/${clientId}/remove/${productId}`);
 }
@@ -68,10 +68,8 @@ getWaitingCarts(clientId: number): Observable<any[]> {
   return this.http.get<any[]>(`${this.apiCart}/client/non-pending-carts/${clientId}`).pipe(
     catchError((error: HttpErrorResponse) => {
       if (error.status === 404) {
-        // Retourne un tableau vide si aucun panier
         return of([]);
       }
-      // Pour les autres erreurs, relance l'erreur
       return throwError(() => error);
     })
   );

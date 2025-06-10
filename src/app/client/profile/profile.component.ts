@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { GlobalEnergyBill } from 'src/app/models/GlobalEnergyBill';
 import { ClientService } from 'src/app/services/client.service';
 import { EnergybillService } from 'src/app/services/energybill.service';
+import { PointsService } from 'src/app/services/points.service';
 import { ProductService } from 'src/app/services/product.service';
 
 @Component({
@@ -12,14 +13,16 @@ import { ProductService } from 'src/app/services/product.service';
 })
 export class ProfileComponent implements OnInit {
 globalEnergyBills: GlobalEnergyBill[] = [];
+bonifPoints: any[] = [];
 
 client: any; 
 clientId: number | null = null;  
 waitingCarts: any[] = [];
 cartLoadError: boolean=false;
 billId: any;
+totalPoints: number = 0;
 
-constructor(private router: Router,private clientService: ClientService,private productservice: ProductService,private energybill: EnergybillService){}
+constructor(private router: Router,private clientService: ClientService,private productservice: ProductService,private energybill: EnergybillService,  private bonifpointService: PointsService){}
 
 closeProfile() {
   this.router.navigate(['/client']);
@@ -35,15 +38,19 @@ closeProfile() {
         console.error('Erreur chargement client', err);
       }
     });
-     if (this.clientId) {
-      this.loadWaitingCarts(this.clientId);
-    }
-    if (this.clientId) {
+   if (this.clientId) {
+  this.loadWaitingCarts(this.clientId);
   this.energybill.getGlobalBillsByClientId(this.clientId).subscribe({
     next: (bills) => this.globalEnergyBills = bills,
     error: (err) => console.error('Erreur de chargement des factures :', err)
   });
+   this.bonifpointService.getClientBonifPoints(this.clientId).subscribe((res) => {
+  this.totalPoints = res.total_points;
+  this.bonifPoints = res.details;
+});
+
 }
+
 
   }
   loadWaitingCarts(clientId: number) {

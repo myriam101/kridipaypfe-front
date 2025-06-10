@@ -154,6 +154,60 @@
     </div>
   </div>
 </div>
+<div class="tab-pane fade" id="tab-points" role="tabpanel">
+  <div class="d-flex align-items-center mb-4" style="background-color: #eaf4fd; padding: 10px; border-left: 4px solid #2196f3; border-radius: 6px; font-size: 0.95rem;">
+  <i class="zmdi zmdi-info-outline me-2 fs-5 text-primary"></i>
+  Les points de bonification sont cumulés automatiquement après vos achats. Ils seront ensuite convertis en taux d’intérêt avantageux.
+</div>
+
+
+  <!-- Alerte si aucun point -->
+  <div *ngIf="bonifPoints.length === 0" class="alert alert-info text-center">
+    Aucun point de bonification enregistré pour le moment.
+  </div>
+
+  <!-- Liste des points -->
+  <div *ngIf="bonifPoints.length > 0">
+
+    <div *ngFor="let point of bonifPoints" class="card shadow-sm mb-3 border-0">
+      <div class="card-header d-flex justify-content-between align-items-center bg-light">
+        
+        <div>
+          <h6 class="mb-0 fw-semibold" style="color: #216490;">
+            {{ point.product.name }} <small class="text-muted">({{ point.product.brand }})</small>
+          </h6>
+          <small class="text-muted">Réf: {{ point.product.reference }}</small>
+        </div>
+        <span class="badge rounded-pill bg-success">
+          {{ point.nbr_pt }} pts
+        </span>
+      </div>
+      <div class="card-body">
+        <p class="mb-1">Gagnés le : <strong>{{ point.date_win | date:'dd/MM/yyyy HH:mm' }}</strong></p>
+        <p class="mb-1">Points restants : <strong>{{ point.remainingPts }}</strong></p>
+       <p class="mb-0">
+  Statut :
+  <span 
+    class="badge d-inline-flex align-items-center px-3 py-1 rounded-pill fw-medium"
+    [ngClass]="{
+      'bg-success text-white': point.type === 'actif',
+      'bg-secondary text-white': point.type === 'utilisé'
+    }">
+    <i 
+      class="zmdi me-1"
+      [ngClass]="{
+        'zmdi-check': point.type === 'actif',
+        'zmdi-check-all': point.type === 'utilisé'
+      }">
+    </i>
+    {{ point.type === 'actif' ? 'Actif' : 'Utilisé' }}
+  </span>
+</p>
+
+      </div>
+    </div>
+  </div>
+</div>
 
         </div>
       </div>

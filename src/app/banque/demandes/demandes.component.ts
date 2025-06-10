@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ConfirmDialogComponent } from 'src/app/provider/confirm-dialog/confirm-dialog.component';
 import { DossierService } from 'src/app/services/dossier.service';
 
 @Component({
@@ -7,6 +10,7 @@ import { DossierService } from 'src/app/services/dossier.service';
   styleUrls: ['./demandes.component.css']
 })
 export class DemandesComponent implements OnInit {
+
   dossiers: any[] = [];
   originalDossiers: any[] = [];
   message: string = '';
@@ -21,11 +25,15 @@ export class DemandesComponent implements OnInit {
     high: false
   };
 
-  constructor(private dossierService: DossierService) {}
+  constructor(private dossierService: DossierService,private snackBar: MatSnackBar,  private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.agentId = Number(localStorage.getItem('agentId'));
-    this.dossierService.getDossiersByAgent(this.agentId).subscribe({
+    this.loadDossiers(this.agentId);
+    
+  }
+ loadDossiers(id: any): void {
+this.dossierService.getDossiersByAgent(id).subscribe({
       next: (response) => {
         this.isLoading = false;
 
@@ -39,7 +47,6 @@ export class DemandesComponent implements OnInit {
           this.originalDossiers = formatted;
           this.message = '';
 
-          // Appeler les stats pour chaque dossier
           this.dossiers.forEach(dossier => {
             this.dossierService.getProductStatsByDossierId(dossier.dossierId).subscribe({
               next: (stats) => {
@@ -47,7 +54,6 @@ export class DemandesComponent implements OnInit {
                 dossier.nbLowBadgeProducts = stats.low_impact_count;
               },
               error: () => {
-                // En cas d'erreur, on peut mettre 0 par défaut
                 dossier.nbProducts = 0;
                 dossier.nbLowBadgeProducts = 0;
               }
@@ -67,8 +73,8 @@ export class DemandesComponent implements OnInit {
         this.dossiers = [];
       }
     });
-  }
 
+ }
   toggleFilter(type: 'low' | 'medium' | 'high') {
     this.activeFilters[type] = !this.activeFilters[type];
     this.applyFilters();
@@ -143,4 +149,45 @@ export class DemandesComponent implements OnInit {
       }, 4000);
     }
   }
+  onValidateDossier(dossierId: number) {
+  const dialogRef = this.dialog.open(ConfirmDialogComponent);
+
+  dialogRef.afterClosed().subscribe(result => {
+    if (result) {
+      this.agentId = Number(localStorage.getItem('agentId'));
+
+      this.dossierService.validateAndAddPoints(dossierId).subscribe({
+        next: () => {
+                  
+          this.snackBar.open('Dossier clôturé avec succès !', 'Fermer', {
+            duration: 3000,
+            panelClass: ['snackbar-success'],
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
+          this.loadDossiers(this.agentId);
+        },
+        error: (err) => {
+          if (err.status === 403) {
+          this.snackBar.open('Dossier clôturé avec succès !', 'Fermer', {
+              duration: 3000,
+              panelClass: ['snackbar-info'],
+              horizontalPosition: 'center',
+              verticalPosition: 'top'
+            });
+            this.loadDossiers(this.agentId);
+          } else {
+            this.snackBar.open('Erreur lors de la clôture ou de l\'ajout des points.', 'Fermer', {
+              duration: 3000,
+              panelClass: ['snackbar-error'],
+              horizontalPosition: 'center',
+              verticalPosition: 'top'
+            });
+          }
+        }
+      });
+    }
+  });
+}
+
 }
