@@ -1,41 +1,46 @@
 <!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top" style="z-index: 1000;
-">
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top" style="z-index: 1000;">
   <div class="container">
-    <a class="navbar-brand">Bienvenue cher client</a>
+    <a class="navbar-brand d-flex align-items-center" >
+      <img src="assets/logo-icone.png" alt="Logo" style="height: 40px; margin-right: 10px;">
+      Bienvenue cher client 
+    </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
       aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav ms-auto">
-       <li class="nav-item">
-  <a (click)="opencart()" class="nav-link position-relative">
-    <i class="zmdi zmdi-shopping-cart me-3"></i>
-    <span *ngIf="cartItemCount > 0" 
-          class="badge rounded-pill badge-notification bg-danger position-absolute top-2 start-90 translate-middle">
-      {{ cartItemCount }}
-    </span>
-  </a>
-</li>
-
-
-
+         <li class="nav-item">
+          <a class="nav-link position-relative" (click)="opencomparateur()" title="Comparer deux produits" >
+            <i class="zmdi zmdi-compare me-2"></i>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a (click)="opencart()" class="nav-link position-relative">
+            <i class="zmdi zmdi-shopping-cart me-3"></i>
+            <span *ngIf="cartItemCount > 0" 
+                  class="badge rounded-pill badge-notification bg-danger position-absolute top-2 start-90 translate-middle">
+              {{ cartItemCount }}
+            </span>
+          </a>
+        </li>
         <li class="nav-item">
           <a class="nav-link position-relative" (click)="goToProfile()">
             <i class="zmdi zmdi-account-circle me-2"></i>
           </a>
         </li>
-
         <li class="nav-item">
           <a class="nav-link" (click)="confirmLogout()">
             <i class="zmdi zmdi-sign-in me-5"></i>
           </a>
         </li>
+        
       </ul>
     </div>
   </div>
 </nav>
+
 
 <!-- Header affiché seulement sur la page d'accueil -->
 <header *ngIf="currentRoute === '/client'" class="masthead"
@@ -51,6 +56,7 @@
       </div>
     </div>
   </div>
+  
 </header>
 
 <!-- Contenu de la page -->
@@ -66,3 +72,4 @@
 
 <!-- Footer affiché uniquement sur la page home -->
 <app-footer *ngIf="currentRoute === '/client'"></app-footer>
+<app-chatbot></app-chatbot>

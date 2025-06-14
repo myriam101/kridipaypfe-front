@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ClientService } from 'src/app/services/client.service';
+import { PointsService } from 'src/app/services/points.service';
 
 @Component({
   selector: 'app-clients-corner',
@@ -9,8 +10,9 @@ import { ClientService } from 'src/app/services/client.service';
 export class ClientsCornerComponent implements OnInit {
   clients: any[] = [];
   isLoading = false; 
+  selectedBonifPoints: any = null;
 
-  constructor(private clientService: ClientService) {}
+  constructor(private clientService: ClientService,private bonifService: PointsService) {}
 
   ngOnInit(): void {
     this.loadClients();
@@ -30,4 +32,20 @@ export class ClientsCornerComponent implements OnInit {
     });
 
   }
+   openBonifModal(clientId: number) {
+  this.bonifService.getClientBonifPoints(clientId).subscribe({
+    next: (res) => {
+      this.selectedBonifPoints = res;
+
+      // Afficher la modale (via JS pur)
+      const modal = new (window as any).bootstrap.Modal(
+        document.getElementById('bonifPointsModal')
+      );
+      modal.show();
+    },
+    error: (err) => {
+      console.error('Erreur récupération points', err);
+    }
+  });
+}
 }

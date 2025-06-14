@@ -1,0 +1,30 @@
+<!-- Bulle flottante -->
+<div class="chatbot-bubble" *ngIf="!isOpen" (click)="toggleChat()" aria-label="Ouvrir le chat">💬</div>
+
+<!-- Fenêtre chat ouverte -->
+<div class="chatbot-panel" *ngIf="isOpen" role="dialog" aria-modal="true" aria-labelledby="chatbotTitle">
+  <div class="chatbot-header">
+    <h4 id="chatbotTitle">KridEcoBot <span style="font-size: smaller;"> votre assistant </span></h4>
+    <button class="close-btn" (click)="toggleChat()" aria-label="Fermer le chat">✖</button>
+  </div>
+
+  <div class="chatbot-body">
+    <div class="messages-container" #messagesContainer aria-live="polite" aria-atomic="false">
+      <div *ngFor="let msg of messages"
+           [ngClass]="{'user-message': msg.from === 'user', 'bot-message': msg.from === 'bot'}"
+           class="message">
+        {{ msg.text }}
+      </div>
+
+   <div *ngIf="isTyping" class="message bot-message typing-indicator" aria-live="assertive">
+  En train d'écrire<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
+</div>
+
+    </div>
+
+    <div class="input-group">
+      <input [(ngModel)]="question" placeholder="Pose ta question" (keyup.enter)="sendQuestion()" aria-label="Question" />
+      <button (click)="sendQuestion()" [disabled]="!question.trim()">Envoyer</button>
+    </div>
+  </div>
+</div>

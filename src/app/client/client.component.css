@@ -1,7 +1,7 @@
 .masthead {
   height: 100vh;
   min-height: 500px;
-  background-color: #216490; /* Bootstrap primary blue, you can change it */
+  background-color: #216490; 
   color: white;
   display: flex;
   align-items: center;
@@ -10,3 +10,15 @@
 
 }
 
+.nav-link.active,
+.nav-link:hover {
+  color: #216490 !important;
+}
+.btn-primary, .btn-outline-primary {
+  background-color: #216490;
+  border-color: #216490;
+}
+.btn-outline-light:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}

@@ -1,61 +1,151 @@
-<body>
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-sm-9 col-md-7 col-lg-5">
-        <div class="card border-0 shadow-lg rounded-4 my-5">
-          <div class="card-body p-5">
-            <h2 class="text-center mb-4" style="color: #216490;">Bienvenue</h2>
 
-            <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
-              <!-- Email -->
-              <div class="form-floating mb-3">
-                <input
-                  type="email"
-                  id="email"
-                  class="form-control"
-                  formControlName="email"
-                  placeholder="Enter your email"
-                />
-                <label for="email">Adresse email </label>
-              </div>
-              <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="text-danger mb-3">
-                <small>Veuillez entrer un email valide</small>
-              </div>
+    <div class="auth-wrapper d-flex justify-content-center align-items-center min-vh-100 bg-light">
+  <div class="auth-card shadow-lg rounded-4 p-5 bg-white" style="width: 100%; max-width: 500px;">
+ 
 
-              <!-- Password -->
-              <div class="form-floating mb-3">
-                <input
-                  type="password"
-                  id="password"
-                  class="form-control"
-                  formControlName="password"
-                  placeholder="Enter your password"
-                />
-                <label for="password">Mot de passe</label>
-              </div>
-              <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="text-danger mb-3">
-                <small>Mot de passe doit contenir au moins 6 caracteres</small>
-              </div>
-<div *ngIf="errorMessage" class="alert alert-danger text-center py-2">
-  {{ errorMessage }}
+          <!-- Titre -->
+          <h2 class="text-center mb-4" style="color: #216490;">
+            {{ showLoginForm ? 'Bienvenue' : 'Créer un compte' }}
+          </h2>
+
+          <!-- LOGIN FORM -->
+          <form *ngIf="showLoginForm" [formGroup]="loginForm" (ngSubmit)="onLogin()">
+            <!-- Email -->
+            <div class="form-floating mb-3">
+              <input type="email" id="email" class="form-control" formControlName="email" placeholder="Email" />
+              <label for="email">Adresse email</label>
+            </div>
+            <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="text-danger mb-3">
+              <small>Veuillez entrer un email valide</small>
+            </div>
+
+            <!-- Password -->
+            <div class="form-floating mb-3">
+              <input type="password" id="password" class="form-control" formControlName="password" placeholder="Mot de passe" />
+              <label for="password">Mot de passe</label>
+            </div>
+            <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="text-danger mb-3">
+              <small>Mot de passe doit contenir au moins 6 caractères</small>
+            </div>
+
+            <!-- Erreur -->
+            <div *ngIf="errorMessage" class="alert alert-danger text-center py-2">
+              {{ errorMessage }}
+            </div>
+
+            <!-- Connexion -->
+            <div class="d-grid mb-3">
+              <button class="btn btn-login text-uppercase fw-bold" type="submit" [disabled]="loginForm.invalid || isLoading">
+                <span *ngIf="!isLoading">Connexion</span>
+                <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              </button>
+            </div>
+
+            <a class="d-block text-center mt-2 small" (click)="toggleForm()">Nouveau ? Créez un compte</a>
+          </form>
+
+          <!-- REGISTER FORM -->
+          <form *ngIf="!showLoginForm" [formGroup]="registerForm" (ngSubmit)="onRegister()">
+            <!-- Prénom -->
+            <div class="form-floating mb-3">
+              <input type="text" id="name" class="form-control" formControlName="name" placeholder="Prénom" />
+              <label for="name">Prénom</label>
+            </div>
+
+            <!-- Nom -->
+            <div class="form-floating mb-3">
+              <input type="text" id="last_name" class="form-control" formControlName="last_name" placeholder="Nom" />
+              <label for="last_name">Nom</label>
+            </div>
+
+            <!-- Username -->
+            <div class="form-floating mb-3">
+              <input type="text" id="username" class="form-control" formControlName="username" placeholder="Nom d'utilisateur" />
+              <label for="username">Nom d'utilisateur</label>
+            </div>
+
+            <!-- Email -->
+            <div class="form-floating mb-3">
+              <input type="email" id="email" class="form-control" formControlName="email" placeholder="Email" />
+              <label for="email">Email</label>
+            </div>
+
+            <!-- Role -->
+            <div class="form-floating mb-3">
+              <select id="role" class="form-select" formControlName="role">
+                <option value="">Sélectionnez un rôle</option>
+                <option value="client">Client</option>
+                <option value="provider">Fournisseur</option>
+                <option value="agent">Agent</option>
+              </select>
+              <label for="role">Rôle</label>
+            </div>
+<!-- Banque (visible uniquement si role = agent) -->
+<div *ngIf="registerForm.get('role')?.value === 'agent'">
+ <div  class="form-floating mb-3">
+  <select id="banque"  formControlName="banque"  class="form-select">
+    <option value="">Choisir une banque</option>
+    <option *ngFor="let banque of banques" [value]="banque.id">{{ banque.name }}</option>
+  </select>
+    <label for="banque">Banque</label>
+
 </div>
+ <div  class="form-floating mb-3">
+  <select id="agence"  formControlName="agence"  class="form-select">
+    <option value="">Choisir une agence</option>
+    <option *ngFor="let agence of agences" [value]="agence.id">{{ agence.name }}</option>
+  </select>
+      <label for="agence">Agence</label>
 
-              <!-- Sign In Button with loader -->
-              <div class="d-grid mb-3">
-                <button
-                  class="btn btn-login text-uppercase fw-bold"
-                  type="submit"
-                  [disabled]="loginForm.invalid || isLoading"
-                >
-                  <span *ngIf="!isLoading">Connexion</span>
-                  <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                </button>
-              </div>
-            </form>
+  </div>
+</div>
+            <!-- Adresse -->
+            <div class="form-floating mb-3" *ngIf="showAdressField()">
+              <input type="text" id="adress" class="form-control" formControlName="adress" placeholder="Adresse" />
+              <label for="adress">Adresse</label>
+            </div>
 
-          </div>
+            <!-- Date de naissance -->
+            <div class="form-floating mb-3" *ngIf="registerForm.get('role')?.value === 'client'">
+              <input type="date" id="dateNaissance" class="form-control" formControlName="dateNaissance" />
+              <label for="dateNaissance">Date de naissance</label>
+            </div>
+
+            <!-- Password -->
+            <div class="form-floating mb-3">
+              <input type="password" id="password" class="form-control" formControlName="password" placeholder="Mot de passe"
+                [ngClass]="{ 'is-invalid': registerForm.get('password')?.touched && registerForm.get('password')?.invalid }" />
+              <label for="password">Mot de passe</label>
+              <div class="invalid-feedback" *ngIf="registerForm.get('password')?.errors?.['required']">Le mot de passe est requis.</div>
+              <div class="invalid-feedback" *ngIf="registerForm.get('password')?.errors?.['minlength']">Le mot de passe doit contenir au moins 6 caractères.</div>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="form-floating mb-3">
+              <input type="password" id="confirmPassword" class="form-control" formControlName="confirmPassword" placeholder="Confirmer le mot de passe"
+                [ngClass]="{
+                  'is-invalid':
+                    registerForm.get('confirmPassword')?.touched &&
+                    (registerForm.get('confirmPassword')?.invalid || registerForm.hasError('passwordMismatch'))
+                }" />
+              <label for="confirmPassword">Confirmer le mot de passe</label>
+              <div class="invalid-feedback" *ngIf="registerForm.hasError('passwordMismatch')">Les mots de passe ne correspondent pas.</div>
+            </div>
+
+            <!-- Erreurs -->
+            <div *ngIf="errorMessage" class="alert alert-danger mt-2">{{ errorMessage }}</div>
+
+            <!-- Inscription -->
+            <div class="d-grid mb-3">
+              <button class="btn btn-login text-uppercase fw-bold" type="submit" [disabled]="registerForm.invalid || isLoading">
+                <span *ngIf="!isLoading">S'inscrire</span>
+                <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status"></span>
+              </button>
+            </div>
+
+            <a class="d-block text-center mt-2 small" (click)="toggleForm()">Vous avez un compte ? Connectez-vous</a>
+          </form>
+
         </div>
       </div>
-    </div>
-  </div>
-</body>
+   

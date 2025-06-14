@@ -99,3 +99,23 @@
 .star-rating .filled {
   color: #f4c150;
 }
+.btn-group-sm .btn {
+  font-size: 0.85rem;
+  transition: all 0.2s ease-in-out;
+  box-shadow: none;
+}
+
+.btn-outline-primary.text-muted {
+  border-color: #d0e4f7;
+  background-color: #f8fcff;
+}
+
+.btn-outline-primary.text-muted:hover {
+  background-color: #e9f4fc;
+  color: #216490;
+}
+
+.btn-primary.text-white {
+  background-color: #216490;
+  border-color: #216490;
+}

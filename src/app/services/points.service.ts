@@ -18,4 +18,7 @@ private apiBonif = 'http://localhost:8000/BonifPoint'
  getClientBonifPoints(clientId: number): Observable<any> {
     return this.http.get(`${this.apiBonif}/details/${clientId}`);
   }
+   getBonifPointsByType(clientId: number, type: 'actif' | 'utilise'): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiBonif}/client/${clientId}/bonif-points/${type}`);
+  }
 }

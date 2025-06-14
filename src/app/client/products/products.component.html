@@ -5,55 +5,38 @@
     </div>
 
     <ng-container *ngIf="!isLoading && products.length > 0; else noProducts">
-      <!-- Affiche les produits -->
+
       <div class="row clearfix">
         <div *ngFor="let product of products" class="col-lg-3 col-md-4 col-sm-12">
           <div class="card product_item position-relative">
 
             <!-- Badge Carbone -->
-            <div
-              class="carbon-badge-compact"
-              [ngClass]="carbonBadges[product.id]"
-              (click)="toggleCarbonTooltip(product.id, $event)"
-              style="cursor: pointer; user-select: none; position: relative;"
-              tabindex="0"
-              role="button"
-              aria-label="Information sur l'impact carbone du produit"
-            >
-              <i class="zmdi zmdi-leaf badge-icon" aria-hidden="true"></i>
-             <div
-  class="carbon-badge-compact"
+          <div
+  class="carbon-icon"
   [ngClass]="carbonBadges[product.id]"
   (click)="toggleCarbonTooltip(product.id, $event)"
   [title]="getCarbonBadgeText(carbonBadges[product.id])"
-  style="cursor: pointer; user-select: none; position: relative;"
->
-  <i class="zmdi zmdi-leaf badge-icon" aria-hidden="true"></i>
-  <span class="badge-text">
-    {{ carbonBadges[product.id] === 'undefined' ? 'Non défini' : (carbonBadges[product.id] | titlecase) }}
-  </span>
+  tabindex="0"
+  role="button">
+  <i class="zmdi zmdi-nature-people"></i>
 </div>
 
-            </div>
 
             <div class="cp_img" data-bs-toggle="tooltip" data-bs-placement="top">
               <img [src]="product.imageUrl || 'assets/imagenotavailble.png'" alt="{{ product.name }}" class="img-fluid">
               <div class="hover">
-                <a (click)="openSimulateur(product)" class="btn btn-primary btn-sm" title="Simulez votre consommation énergétique">
+                <a (click)="openSimulateur(product)" class="btn btn-custom-blue mb-2" title="Simulez votre consommation énergétique">
                   <i class="zmdi zmdi-flash"></i>
                 </a>
-                <a (click)="openProductDetailDialog(product)" class="btn btn-primary btn-sm waves-effect" title="Détails du produit">
-                  <i class="zmdi zmdi-info"></i>
-                </a>
-                <a (click)="addToCart(product.id)" class="btn btn-primary btn-sm waves-effect" title="Ajouter au panier">
+                <a (click)="addToCart(product.id)" class="btn btn-custom-blue mb-2" title="Ajouter au panier">
                   <i class="zmdi zmdi-shopping-cart"></i>
                 </a>
               </div>
             </div>
 
             <div class="product_details">
-              <h5><a href="javascript:void(0);">{{ product.name }}</a></h5>
-              <p class="product-description">{{ product.short_description }}</p>
+              <h5><a (click)="openProductDetailDialog(product)" style="color:#216490 ; font-weight: 700;">{{ product.name }}</a></h5>
+             <em style="font-size: smaller;">{{ product.category }}</em>
               <p class="product-brand">{{ product.brand }}</p>
 
               <div *ngIf="product.bonifvisible === 1" class="mt-2">

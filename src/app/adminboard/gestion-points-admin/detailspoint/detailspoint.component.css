@@ -85,17 +85,40 @@
 }
 
 .status-label.active {
-  background-color: #d1f5e0; 
+  background-color: #d1f5e0; /* fond vert pâle */
 }
 
 .status-label.active .status-dot {
-  background-color: #28a745; 
+  background-color: #28a745; /* vert */
 }
 
 .status-label.inactive {
-  background-color: #f8d7da; 
+  background-color: #f8d7da; /* fond rouge pâle */
 }
 
 .status-label.inactive .status-dot {
-  background-color: #dc3545; 
+  background-color: #dc3545; /* rouge */
+}
+.text-primary {
+  color: #216490 !important;
+}
+
+img.img-thumbnail {
+  border-radius: 0.75rem;
+}
+
+@media (max-width: 576px) {
+  .table th,
+  .table td {
+    font-size: 0.85rem;
+  }
+
+  .img-thumbnail {
+    width: 50px !important;
+    height: 50px !important;
+  }
+
+  .form-control-sm {
+    font-size: 0.75rem;
+  }
 }

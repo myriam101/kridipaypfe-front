@@ -29,9 +29,11 @@
         </div>
 
         <div class="card-footer d-flex justify-content-between bg-white border-0">
-          <button class="btn btn-action btn-sm w-100" type="button">Action</button>
+          <button (click)="openBonifModal(client.id)" class="btn btn-action btn-sm w-100" type="button">Action</button>
         </div>
       </div>
     </div>
+    <app-detail-pointbonif [bonifPoints]="selectedBonifPoints"></app-detail-pointbonif>
+
   </div>
 </div>

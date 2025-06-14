@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { PointsService } from 'src/app/services/points.service';
 import { ProviderService } from 'src/app/services/provider.service';
 import { ConfirmDialogAdminComponent } from '../confirm-dialog-admin/confirm-dialog-admin.component';
+import { DetailspointComponent } from './detailspoint/detailspoint.component';
 
 @Component({
   selector: 'app-gestion-points-admin',
@@ -76,5 +77,16 @@ export class GestionPointsAdminComponent implements OnInit {
 })
 
   }
-  
+  voirProvider(providerId: number): void {
+  const dialogRef = this.dialog.open(DetailspointComponent, {
+    width: '80%',
+    data: { providerId },
+    autoFocus: false
+  });
+
+  dialogRef.afterClosed().subscribe(result => {
+    console.log('Le modal a été fermé');
+  });
+}
+
 }

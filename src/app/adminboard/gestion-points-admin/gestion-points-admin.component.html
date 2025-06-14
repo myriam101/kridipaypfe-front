@@ -35,15 +35,24 @@
               </span>
             </td>
             <td class="text-end">
-              <div class="btn-group" role="group">
-                <button
-                  class="btn btn-sm btn-outline-secondary"
-                  title="Afficher/Masquer"
-                  (click)="toggleVisibility(provider)">
-                  <i class="fa" [ngClass]="provider.points_visible ? 'fa-eye' : 'fa-eye-slash'"></i>
-                </button>
-              </div>
-            </td>
+  <div class="btn-group" role="group">
+    <button
+      class="btn btn-sm btn-outline-secondary"
+      title="Afficher/Masquer"
+      (click)="toggleVisibility(provider)">
+      <i class="fa" [ngClass]="provider.points_visible ? 'fa-eye' : 'fa-eye-slash'"></i>
+    </button>
+    
+    <button
+          class="btn btn-sm btn-outline-secondary"
+
+      title="Voir"
+      (click)="voirProvider(provider.id)">
+<i class="zmdi zmdi-zoom-in"></i>
+    </button>
+  </div>
+</td>
+
           </tr>
         </tbody>
       </table>

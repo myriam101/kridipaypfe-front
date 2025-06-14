@@ -155,11 +155,28 @@
   </div>
 </div>
 <div class="tab-pane fade" id="tab-points" role="tabpanel">
+  
   <div class="d-flex align-items-center mb-4" style="background-color: #eaf4fd; padding: 10px; border-left: 4px solid #2196f3; border-radius: 6px; font-size: 0.95rem;">
   <i class="zmdi zmdi-info-outline me-2 fs-5 text-primary"></i>
   Les points de bonification sont cumulés automatiquement après vos achats. Ils seront ensuite convertis en taux d’intérêt avantageux.
 </div>
 
+<div class="mb-3 text-center">
+  <div class="btn-group btn-group-sm" role="group" aria-label="Filtrage points">
+    <button 
+      class="btn px-3 py-1 rounded-pill fw-medium"
+      [ngClass]="currentFilter === 'actif' ? 'btn-primary text-white' : 'btn-outline-primary text-muted'"
+      (click)="changePointFilter('actif')">
+      Actifs
+    </button>
+    <button 
+      class="btn px-3 py-1 rounded-pill fw-medium"
+      [ngClass]="currentFilter === 'utilise' ? 'btn-primary text-white' : 'btn-outline-primary text-muted'"
+      (click)="changePointFilter('utilise')">
+      Utilisés
+    </button>
+  </div>
+</div>
 
   <!-- Alerte si aucun point -->
   <div *ngIf="bonifPoints.length === 0" class="alert alert-info text-center">

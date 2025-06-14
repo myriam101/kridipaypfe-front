@@ -1,0 +1,97 @@
+<div class="modal fade" id="bonifPointsModal" tabindex="-1" aria-labelledby="bonifPointsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content border-0 shadow rounded-4" style="background-color: rgba(255, 255, 255, 0.96);">
+
+      <!-- Header -->
+      <div class="modal-header rounded-top-4" style="background-color: #216490; color: white;">
+        <h5 class="modal-title fw-semibold" id="bonifPointsModalLabel">
+          Détails des points de bonification
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fermer"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body px-4 py-3">
+        <ng-container *ngIf="bonifPoints">
+          <div *ngIf="bonifPoints.details && bonifPoints.details.length > 0; else noPoints">
+            
+            <p class="mb-4 fs-5">
+              <strong>Total Points :</strong>
+              <span class="badge rounded-pill px-3 py-2" style="background-color: #216490; font-size: 1rem;">
+                {{ bonifPoints.total_points }}
+              </span>
+            </p>
+
+            <div class="table-responsive">
+              <table class="table table-hover align-middle" style="font-size: 0.95rem;">
+                <thead class="table-light" style="border-top: 2px solid #216490;">
+                  <tr>
+                    <th>Produit</th>
+                    <th>Référence</th>
+                    <th>Marque</th>
+                    <th>Points Gagnés</th>
+                    <th>Restants</th>
+                    <th>Statut</th>
+                    <th>Date Gain</th>
+                    <th>Date Utilisation</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let detail of bonifPoints.details">
+                    <td>{{ detail.product.name }}</td>
+                    <td>{{ detail.product.reference }}</td>
+                    <td>{{ detail.product.brand }}</td>
+                    <td>
+                      <span class="badge bg-primary-subtle text-primary rounded-pill px-2">
+                        {{ detail.nbr_pt }}
+                      </span>
+                    </td>
+                    <td>
+                      <span class="badge bg-warning-subtle text-dark rounded-pill px-2">
+                        {{ detail.remainingPts }}
+                      </span>
+                    </td>
+                    <td>
+                      <span
+                        class="badge rounded-pill px-2"
+                        [ngStyle]="{
+                          'background-color': detail.type === 'actif' ? '#d4edda' : '#dee2e6',
+                          'color': detail.type === 'actif' ? '#155724' : '#6c757d'
+                        }">
+                        {{ detail.type }}
+                      </span>
+                    </td>
+                    <td>{{ detail.date_win | date: 'short' }}</td>
+                    <td>{{ detail.date_use ? (detail.date_use | date: 'short') : '-' }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Aucun point -->
+          <ng-template #noPoints>
+            <div class="alert alert-info text-center rounded-3">
+              <i class="bi bi-info-circle me-2"></i>
+              Aucun point de bonification pour ce client.
+            </div>
+          </ng-template>
+        </ng-container>
+
+        <!-- Erreur de chargement -->
+        <div *ngIf="!bonifPoints" class="alert alert-danger text-center rounded-3 mt-3">
+          <i class="bi bi-x-circle me-2"></i>
+          Impossible de charger les données de points pour ce client.
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer rounded-bottom-4" style="background-color: #f8fafc;">
+        <button type="button" class="btn btn-sm text-white px-4 py-2" style="background-color: #216490;" data-bs-dismiss="modal">
+          Fermer
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>

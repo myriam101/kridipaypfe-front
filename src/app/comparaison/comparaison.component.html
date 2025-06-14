@@ -1,0 +1,92 @@
+<div class="container py-4">
+  <div class="row mb-4">
+    <div class="col-12">
+      <nav aria-label="breadcrumb" class="bg-light rounded p-2">
+        <ol class="breadcrumb mb-0">
+          <li class="breadcrumb-item" style="cursor: pointer;">
+            <a (click)="closeProfile()">Accueil</a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">Votre profil</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+  <h2 class="text-center mb-4" style="color: #216490;">Comparateur Écologique</h2>
+
+  <div class="input-group mb-4 shadow-sm">
+    <input type="text" [(ngModel)]="question" class="form-control form-control-lg" placeholder="Pose ta question écologique ici...">
+    <button (click)="submitQuestion()" class="btn btn-lg text-white" style="background-color: #216490;">Comparer</button>
+  </div>
+  <div *ngIf="isTyping" class="mt-3">
+  <span class="typing-indicator">
+ Traitement en cours   <span>.</span><span>.</span><span>.</span> 
+  </span>
+</div>
+
+
+  <div *ngIf="errorMsg" class="alert alert-danger mt-3">
+    {{ errorMsg }}
+  </div>
+  
+
+  <div *ngIf="response" class="mt-4">
+
+    <div *ngIf="response.type === 'comparaison'" class="card shadow-sm p-4 border-start" style="border-left: 5px solid #216490;">
+      <h4 class="mb-3" style="color: #216490;">Comparaison entre produits</h4>
+
+      <div class="table-responsive">
+        <table class="table table-bordered align-middle text-center">
+          <thead class="table-light">
+            <tr>
+              <th>Produit</th>
+              <th>Empreinte carbone<br><small>(kg CO₂)</small></th>
+              <th>Consommation eau<br><small>(L)</small></th>
+              <th>Consommation électricité<br><small>(W)</small></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let p of response.products">
+              <td><strong>{{ p.name }}</strong><br><span class="text-muted">{{ p.brand }}</span></td>
+              <td> {{ p.carbon }}</td>
+              <td> {{ p.water }}</td>
+              <td> {{ p.electricity }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="mt-3 fst-italic text-muted">{{ response.comparison }}</p>
+    </div>
+<div *ngIf="response.type === 'categorie_mismatch'" class="card shadow-sm p-4 border-start" style="border-left: 5px solid #216490;">
+      <p>{{ response.message }}</p>
+      </div>
+    <!-- Optimisation  -->
+    <div *ngIf="response.type === 'optimisation'" class="card shadow-sm p-4 border-start" style="border-left: 5px solid #216490;">
+      <h4 class="mb-3" style="color: #216490;">Optimisation écologique</h4>
+      <p>{{ response.message }}</p>
+
+      <div class="table-responsive">
+        <table class="table table-bordered text-center align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Produit recommandé</th>
+              <th>Empreinte carbone<br><small>(kg CO₂)</small></th>
+              <th>Eau<br><small>(L)</small></th>
+              <th>Électricité<br><small>(W)</small></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>{{ response.best_product?.name }}</strong><br><span class="text-muted">{{ response.best_product?.brand }}</span></td>
+              <td> {{ response.best_product?.carbon }}</td>
+              <td> {{ response.best_product?.water }}</td>
+              <td> {{ response.best_product?.electricity }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>

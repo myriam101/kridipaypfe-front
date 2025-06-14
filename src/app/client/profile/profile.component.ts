@@ -21,6 +21,7 @@ waitingCarts: any[] = [];
 cartLoadError: boolean=false;
 billId: any;
 totalPoints: number = 0;
+currentFilter: 'actif' | 'utilise' = 'actif';
 
 constructor(private router: Router,private clientService: ClientService,private productservice: ProductService,private energybill: EnergybillService,  private bonifpointService: PointsService){}
 
@@ -74,4 +75,19 @@ closeProfile() {
       link.click();
     });
   }
+  changePointFilter(type: 'actif' | 'utilise') {
+  this.currentFilter = type;
+  if (this.clientId) {
+    this.bonifpointService.getBonifPointsByType(this.clientId, type).subscribe({
+      next: (points) => {
+        this.bonifPoints = points;
+      },
+      error: (err) => {
+        console.error('Erreur chargement des points', err);
+        this.bonifPoints = [];
+      }
+    });
+  }
+}
+
 }

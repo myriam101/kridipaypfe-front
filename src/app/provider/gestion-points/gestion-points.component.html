@@ -3,73 +3,79 @@
     <h3 class="fw-bold" style="color: #216490;">
       <i class="bi bi-gear-fill me-2"></i>Gestion des points
     </h3>
-        <p class="text-muted fst-italic">Gérez votre section points bonus en toute simplicité</p>
+    <p class="text-muted fst-italic">Gérez votre section points bonus en toute simplicité</p>
+  </div>
 
+  <div class="d-flex justify-content-end mb-3">
+    <button class="btn btn-primary btn-sm" style="background-color: #216490; border-color: #216490;" (click)="assignRandomPoints()">
+      <i class="fa fa-random me-2"></i>Attribuer des points aléatoires
+    </button>
   </div>
 
   <div class="card shadow-sm">
     <div class="card-body p-2 p-md-4">
       <div class="table-responsive">
-        <table class="table table-hover align-middle">
-          <thead class="table-light">
-            <tr>
-              <th>Produit</th>
-              <th>Référence</th>
-              <th class="text-center">Statut</th>
-              <th>Valeur</th>
-              <th class="text-end">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-                       
- 
-            <tr *ngFor="let product of pagedProducts">
-   
-              <td>
-                <div class="d-flex align-items-center">
-                  <img src="assets/imagenotavailble.png" alt="Produit" class="img-thumbnail me-3" style="width: 60px; height: 60px; object-fit: cover;">
-                  <div class="d-flex flex-column">
-                    <span class="fw-semibold">{{ product.name }}</span>
-                    <small class="text-muted fst-italic">{{ product.category?.designation || 'Catégorie inconnue' }}</small>
-                  </div>
-                </div>
-              </td>
-              <td>{{ product.reference }}</td>
-            <td class="text-center position-relative">
-  <span class="status-label" [ngClass]="{ 'active': product.bonifvisible, 'inactive': !product.bonifvisible }">
-  <span class="status-dot"></span>
-  {{ product.bonifvisible ? 'Actif' : 'Inactif' }}
-</span>
+       <table class="table table-hover align-middle">
+  <thead class="table-light">
+    <tr>
+      <th style="width: 40px; text-align: center;">
+        <!-- Checkbox "select all" supprimée -->
+      </th>
+      <th>Produit</th>
+      <th>Référence</th>
+      <th class="text-center">Statut</th>
+      <th>Valeur</th>
+      <th class="text-end">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let product of pagedProducts">
+      <td class="text-center">
+        <input type="checkbox" [(ngModel)]="product.selected" (change)="onSelectionChange(product)" />
+      </td>
+      <td>
+        <div class="d-flex align-items-center">
+          <img src="assets/imagenotavailble.png" alt="Produit" class="img-thumbnail me-3" style="width: 60px; height: 60px; object-fit: cover;">
+          <div class="d-flex flex-column">
+            <span class="fw-semibold">{{ product.name }}</span>
+            <small class="text-muted fst-italic">{{ product.category?.designation || 'Catégorie inconnue' }}</small>
+          </div>
+        </div>
+      </td>
+      <td>{{ product.reference }}</td>
+      <td class="text-center position-relative">
+        <span class="status-label" [ngClass]="{ 'active': product.bonifvisible, 'inactive': !product.bonifvisible }">
+          <span class="status-dot"></span>
+          {{ product.bonifvisible ? 'Actif' : 'Inactif' }}
+        </span>
+      </td>
+      <td>
+        <input type="number"
+          [(ngModel)]="product.bonifpoint"
+          (change)="updatePoints(product)"
+          class="form-control form-control-sm"
+          style="width: 80px;" />
+      </td>
+      <td class="text-end">
+        <div class="btn-group" role="group">
+          <button
+            class="btn btn-sm btn-outline-secondary"
+            title="Afficher/Masquer"
+            (click)="toggleVisibility(product)"
+          >
+            <i class="fa" [ngClass]="product.bonifvisible ? 'fa-eye' : 'fa-eye-slash'"></i>
+          </button>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
-</td>
 
+        <div class="loader-container" *ngIf="isLoading">
+          <div class="loader"></div>
+        </div>
 
-<td>
-  <input type="number"
-         [(ngModel)]="product.bonifpoint"
-         (change)="updatePoints(product)"
-         class="form-control form-control-sm"
-         style="width: 80px;" />
-</td>
-              <td class="text-end">
-                <div class="btn-group" role="group">
-                <button
-  class="btn btn-sm btn-outline-secondary"
-  title="Afficher/Masquer"
-  (click)="toggleVisibility(product)"
->
-  <i class="fa" [ngClass]="product.bonifvisible ? 'fa-eye' : 'fa-eye-slash'"></i>
-</button>
-
-
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-<div class="loader-container " *ngIf="isLoading">
-  <div class="loader"></div>
-</div>
         <div *ngIf="pagedProducts.length === 0" class="alert alert-info text-center mt-3">
           Aucun produit disponible pour ce fournisseur.
         </div>

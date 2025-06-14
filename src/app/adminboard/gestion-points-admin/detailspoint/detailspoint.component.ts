@@ -1,37 +1,39 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProductService } from 'src/app/services/product.service';
 
 @Component({
-  selector: 'app-gestion-points',
-  templateUrl: './gestion-points.component.html',
-  styleUrls: ['./gestion-points.component.css']
+  selector: 'app-detailspoint',
+  templateUrl: './detailspoint.component.html',
+  styleUrls: ['./detailspoint.component.css']
 })
-export class GestionPointsComponent implements OnInit {
-  products: any[] = [];
+export class DetailspointComponent {
+products: any[] = [];
   pagedProducts: any[] = [];
   isLoading = true;
   currentPage: number = 1;
   pageSize: number = 5;
   pageSizes: number[] = [5, 10, 20];
   isVisible: boolean = true;
+prov:any;
 
-  providerId!: number;
+constructor(@Inject(MAT_DIALOG_DATA) public data: any,private productService: ProductService, private snackBar: MatSnackBar) {}
 
-  constructor(private productService: ProductService, private snackBar: MatSnackBar) {}
+ngOnInit(): void {
+  console.log('Provider ID reçu dans le modal :', this.data.providerId);
+  this.prov = this.data.providerId;
 
-  ngOnInit(): void {
-    this.providerId = Number(localStorage.getItem('providerId'));
-    this.loadProducts();
-  }
+  this.loadProducts();
+}
+
 
   loadProducts(): void {
     this.isLoading = true;
-    this.productService.getProductsByProvider(this.providerId).subscribe({
+    this.productService.getProductsByProvider(this.prov).subscribe({
       next: (data) => {
         this.isLoading = false;
 
-        // Initialise la propriété 'selected' à false pour chaque produit
         this.products = data.map((p: any) => ({ ...p, selected: false }));
         this.updatePagedProducts();
       },
@@ -97,62 +99,4 @@ export class GestionPointsComponent implements OnInit {
       }
     });
   }
-  assignRandomPoints(): void {
-  const selectedIds = this.products
-    .filter(product => product.selected)
-    .map(product => product.id);
-
-  if (selectedIds.length === 0) {
-    this.snackBar.open("Veuillez sélectionner au moins un produit.", "Fermer", {
-      duration: 3000
-    });
-    return;
-  }
-
-  this.productService.assignRandomPointsToProvider(selectedIds).subscribe({
-    next: (res) => {
-      this.snackBar.open(res.message, "Fermer", { duration: 3000 });
-
-      this.productService.getProductsByProvider(this.providerId).subscribe({
-        next: (data) => {
-          const updated = data.map((p: any) => ({
-            ...p,
-            selected: false
-          }));
-          this.products = updated;
-          this.updatePagedProducts();
-        },
-        error: (err) => {
-          console.error("Erreur lors du rafraîchissement des produits", err);
-        }
-      });
-    },
-    error: (err) => {
-      console.error("Erreur lors de l'attribution des points", err);
-      this.snackBar.open("Erreur lors de l'attribution des points", "Fermer", {
-        duration: 3000
-      });
-    }
-  });
-}
-
-
- onSelectionChange(product: any): void {
-  console.log('Produit sélectionné :', product.id, 'Sélectionné:', product.selected);
-
-}
-
-
-  getSelectedProductIds(): number[] {
-  return this.products
-    .filter(product => product.selected)
-    .map(product => product.id);
-}
-
-logSelectedIds(): void {
-  const selectedIds = this.getSelectedProductIds();
-  console.log('IDs produits sélectionnés:', selectedIds);
-}
-
-
 }

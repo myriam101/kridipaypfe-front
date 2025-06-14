@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ModalfactureComponent } from '../modalfacture/modalfacture.component';
 import { SimulationService } from 'src/app/services/simulation.service';
 import { EnergybillService } from 'src/app/services/energybill.service';
+import { ConfirmDialogComponent } from 'src/app/provider/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -68,7 +69,6 @@ export class ShoppingCartComponent implements OnInit {
   const item = this.cartItems[index];
   this.cartItems.splice(index, 1);
 
-  // Si plus aucun article, afficher message panier vide
   if (this.cartItems.length === 0) {
     this.emptyCartMessage = "Le panier est vide.";
   }
@@ -81,8 +81,8 @@ export class ShoppingCartComponent implements OnInit {
     },
     error: (err) => {
       console.error('Erreur lors de la suppression de l\'élément', err);
-      this.cartItems.splice(index, 0, item); // Réinsertion de l'élément en cas d'erreur
-      this.emptyCartMessage = null; // Enlever message panier vide car échec suppression
+      this.cartItems.splice(index, 0, item); 
+      this.emptyCartMessage = null; 
       this.snackBar.open('Erreur lors de la suppression de l\'élément', 'Fermer', { duration: 3000 });
     }
   });
@@ -106,26 +106,23 @@ export class ShoppingCartComponent implements OnInit {
 
   validate(): void {
     const clientId = Number(localStorage.getItem('clientId'));
-    if (!clientId) {
-      this.snackBar.open('Client non identifié', 'Fermer', { duration: 3000 });
-      return;
-    }
-
     this.disableValidateBtn = true;
+ const dialogRef = this.dialog.open(ConfirmDialogComponent);
 
+  dialogRef.afterClosed().subscribe(result => {
+    if (result) {
     this.cartService.validateCartByclient(clientId).subscribe({
       next: () => {
         this.snackBar.open('Commande validée avec succès.', 'Fermer', { duration: 4000 });
         this.disableValidateBtn = false;
-
-        // Après validation, on recharge le panier (potentiellement vide ou mis à jour)
         this.loadCart();
       },
       error: (err) => {
         this.snackBar.open('Erreur lors de la validation.', 'Fermer', { duration: 4000 });
         this.disableValidateBtn = false;
       }
-    });
+    });  }});
+
   }
 
   downloadPdf(pdfBlob: Blob, fileName: string) {
@@ -137,4 +134,10 @@ export class ShoppingCartComponent implements OnInit {
     a.click();
     window.URL.revokeObjectURL(url);
   }
+  getTotalBonifPoints(): number {
+  return this.cartItems
+    .filter(item => item.visible === 1)
+    .reduce((total, item) => total + (item.points * item.quantity), 0);
+}
+
 }

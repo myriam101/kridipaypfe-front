@@ -59,6 +59,10 @@ import { AuthRegisterComponent } from './pages/auth-register/auth-register.compo
 import { GestionPointsAdminComponent } from './adminboard/gestion-points-admin/gestion-points-admin.component';
 import { ConfirmDialogAdminComponent } from './adminboard/confirm-dialog-admin/confirm-dialog-admin.component';
 import { UnauthorizedComponent } from './provider/unauthorized/unauthorized.component';
+import { DetailPointbonifComponent } from './adminboard/detail-pointbonif/detail-pointbonif.component';
+import { ChatbotComponent } from './chatbot/chatbot.component';
+import { ComparaisonComponent } from './comparaison/comparaison.component';
+import { DetailspointComponent } from './adminboard/gestion-points-admin/detailspoint/detailspoint.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -103,7 +107,11 @@ BoardComponent,
 AuthRegisterComponent,
 GestionPointsAdminComponent,
 ConfirmDialogAdminComponent,
-UnauthorizedComponent
+UnauthorizedComponent,
+DetailPointbonifComponent,
+ChatbotComponent,
+ComparaisonComponent,
+DetailspointComponent
   ],
   imports: [
     BrowserModule,

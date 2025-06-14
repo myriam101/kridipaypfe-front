@@ -27,10 +27,14 @@ import { BoardComponent } from './provider/board/board.component';
 import { AuthRegisterComponent } from './pages/auth-register/auth-register.component';
 import { GestionPointsAdminComponent } from './adminboard/gestion-points-admin/gestion-points-admin.component';
 import { UnauthorizedComponent } from './provider/unauthorized/unauthorized.component';
+import { ChatbotComponent } from './chatbot/chatbot.component';
+import { ComparaisonComponent } from './comparaison/comparaison.component';
 
 const routes: Routes = [
+  {path:'chatbot',component:ChatbotComponent},
   {path:'client',component: ClientComponent,
-    children :[{path:'profile',component:ProfileComponent},{path:'shopping-cart',component:ShoppingCartComponent} ,{path: 'checkout', component:CheckoutComponent,
+    children :[  {path:'comparateur',component:ComparaisonComponent},
+{path:'profile',component:ProfileComponent},{path:'shopping-cart',component:ShoppingCartComponent} ,{path: 'checkout', component:CheckoutComponent,
 }],
     canActivate: [AuthGuard],data: { roles: ['ROLE_CLIENT']}},
 

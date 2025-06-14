@@ -37,7 +37,7 @@ export class ClientComponent {
       this.catalogs = data;
     });
   if (clientId) {
-    this.productService.refreshCartCount(+clientId); // charge au démarrage
+    this.productService.refreshCartCount(+clientId); 
     this.productService.cartItemCount$.subscribe(count => {
       this.cartItemCount = count;
     });
@@ -60,6 +60,9 @@ export class ClientComponent {
   }
   opencart() {
     this.router.navigate(['shopping-cart'], { relativeTo: this.route });
+  }
+  opencomparateur() {
+    this.router.navigate(['comparateur'], { relativeTo: this.route });
   }
   confirmLogout() {
     const confirmed = window.confirm("Êtes-vous sûr de vouloir vous déconnecter ?");

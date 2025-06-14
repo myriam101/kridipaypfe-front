@@ -105,6 +105,9 @@ updateBonifPoints(productId: number, bonifpoint: number) {
     bonifpoint: bonifpoint
   }, { responseType: 'text' });
 }
+assignRandomPointsToProvider( selectedProductIds: number[]): Observable<any> {
+  return this.http.post(`${this.apiProducts}/assign`, { productIds: selectedProductIds });
+}
 
 
 }
