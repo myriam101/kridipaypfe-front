@@ -9,18 +9,24 @@ import { ConsoleService } from 'src/app/services/console.service';
   styleUrls: ['./console.component.css']
 })
 export class ConsoleComponent implements OnInit {
+
   priceForm!: FormGroup;
   priceWaterForm!: FormGroup;
   isLoading: boolean = false;
+  isLoadingElect: boolean = false;
+  message = '';
+
   electricityPrices: any[] = [];
   waterPrices: any[] = [];
-editElectricityId: number | null = null;
-editWaterId: number | null = null;
-loadingElectricityId: number | null = null;
-loadingWaterId: number | null = null;
-
-showElectricityForm = false;
-showWaterForm = false;
+  editElectricityId: number | null = null;
+  editWaterId: number | null = null;
+  loadingElectricityId: number | null = null;
+  loadingWaterId: number | null = null;
+  showElectricityForm = false;
+  showWaterForm = false;
+  isScrapingElectricity = false;
+  isScrapingWater = false;
+  selectedSector: any;
 
   constructor(
     private fb: FormBuilder,
@@ -34,7 +40,6 @@ showWaterForm = false;
       sector: ['', Validators.required],
       tranche_elect: ['', Validators.required]
     });
-    // Formulaire eau
     this.priceWaterForm = this.fb.group({
       price: ['', [Validators.required, Validators.min(0)]],
       tranche_eau: ['', Validators.required]
@@ -55,7 +60,7 @@ showSnackBar(message: string, duration = 3000, isError = false) {
 
   submitPrice() {
     if (this.priceForm.invalid) {
-      this.priceForm.markAllAsTouched(); // Pour afficher les erreurs
+      this.priceForm.markAllAsTouched(); 
       return;
     }
 
@@ -99,12 +104,18 @@ this.showSnackBar(errorMessage, 5000, true);
     });
   }
      getListElectri() {
-      this.isLoading = true;
-      this.priceService.getAllElectricityPrices().subscribe(data => {
-      this.electricityPrices = data;
-      this.isLoading = false;
-    });
-     }
+  this.isLoadingElect = true;
+  this.priceService.getAllElectricityPrices(this.selectedSector).subscribe(data => {
+    this.electricityPrices = data;
+    this.isLoadingElect = false;
+  });
+}
+
+filterBySector(sector: string | null) {
+  this.electricityPrices=[]
+  this.selectedSector = sector;
+  this.getListElectri();
+}
      getListWater() {
       this.isLoading = true;
       this.priceService.getAllWaterPrices().subscribe(data => {
@@ -113,35 +124,30 @@ this.showSnackBar(errorMessage, 5000, true);
     });
      }
      onEdit(price: any) {
-  // Ouvre un formulaire pré-rempli ou toggle l'édition
   console.log('Modifier', price);
 }
 
 onDeleteElect(price: any) {
   if (confirm('Voulez-vous vraiment supprimer ce tarif ?')) {
     this.priceService.deleteElectricityPrice(price.id).subscribe(() => {
-    this.getListElectri(); // pour recharger la liste
+    this.getListElectri(); 
   });
-    // Appelle ta méthode de suppression ici
     console.log('Supprimer', price);
-    // Exemple :
-    // this.priceService.deleteElectricityPrice(price.id).subscribe(...);
+   
   }}
   
 onDeleteWater(price: any) {
   if (confirm('Voulez-vous vraiment supprimer ce tarif ?')) {
     this.priceService.deleteWaterPrice(price.id).subscribe(() => {
-    this.getListWater(); // pour recharger la liste
+    this.getListWater();
   });
-    // Appelle ta méthode de suppression ici
     console.log('Supprimer', price);
-    // Exemple :
-    // this.priceService.deleteElectricityPrice(price.id).subscribe(...);
+
   }
 }
 saveElectricity(e: any): void {
   const updatedData = {
-    sector: e.sector, // récupère les valeurs modifiées
+    sector: e.sector, 
     tranche_elect: e.tranche_elect,
     price: e.price
   };
@@ -197,14 +203,14 @@ checkTranchesEau(): void {
       const { missing, duplicates, is_complete } = res;
 
       if (is_complete) {
-        this.showSnackBar('✅ Toutes les tranches sont présentes et uniques.');
+        this.showSnackBar(' Toutes les tranches sont présentes et uniques.');
       } else {
         let message = '';
         if (missing.length > 0) {
-          message += `❌ Tranches manquantes : ${missing.join(', ')}.\n`;
+          message += ` Tranches manquantes : ${missing.join(', ')}.\n`;
         }
         if (duplicates.length > 0) {
-          message += `⚠️ Doublons : ${duplicates.join(', ')}.`;
+          message += ` Doublons : ${duplicates.join(', ')}.`;
         }
         this.showSnackBar(message, 7000);
       }
@@ -227,14 +233,14 @@ checkElectricityPriceCombinations() {
         let message = '';
 
         if (res.missing_combinations.length > 0) {
-          message += `🔴 Tranches manquantes :\n`;
+          message += ` Tranches manquantes :\n`;
           res.missing_combinations.forEach((item: any) => {
             message += `- ${item.sector} / ${item.tranche}\n`;
           });
         }
 
         if (res.duplicates.length > 0) {
-          message += `\n🟠 Doublons détectés :\n`;
+          message += `\n Doublons détectés :\n`;
           res.duplicates.forEach((item: any) => {
             message += `- ${item.sector} / ${item.tranche} (id: ${item.id})\n`;
           });
@@ -255,5 +261,17 @@ checkElectricityPriceCombinations() {
     }
   });
 }
-
+ onUpdateTarifs(): void {
+    this.priceService.processTarifs().subscribe({
+      next: (res) => {
+      this.snackBar.open('Mise à jour réussie depuis STEG.com.tn !', 'Fermer', { duration: 4000 });
+      this.getListElectri();
+      console.log(res);
+      },
+      error: (err) => {
+        this.snackBar.open(' Erreur lors de la mise à jour : ' + err.message, 'Fermer', { duration: 3000 });
+        console.error(err);
+      }
+    });
+  }
 }

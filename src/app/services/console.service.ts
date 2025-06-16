@@ -2,6 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
+interface DeleteResponse {
+  message: string;
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -9,6 +12,7 @@ export class ConsoleService {
 
  private apiUrlElect = 'http://localhost:8000/PriceElectricity';
  private apiUrlWater = 'http://localhost:8000/PriceWater';
+ private apiScrapper = 'http://localhost:8000/scrapper'
 
   constructor(private http: HttpClient) {}
 
@@ -21,9 +25,11 @@ export class ConsoleService {
   }) {
     return this.http.post<any>(`${this.apiUrlWater}/add`, data);
   }
-   getAllElectricityPrices(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrlElect}/all`);
-  }
+   getAllElectricityPrices(sector?: string): Observable<any[]> {
+  const url = sector ? `${this.apiUrlElect}/all?sector=${sector}` : `${this.apiUrlElect}/all`;
+  return this.http.get<any[]>(url);
+}
+
    getAllWaterPrices(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrlWater}/all`);
   }
@@ -45,9 +51,10 @@ checkWaterTranches() {
   return this.http.get<any>(`${this.apiUrlWater}/check`);
 }
 
-// console.service.ts
 checkElectricityPrices() {
   return this.http.get<any>(`${this.apiUrlElect}/check`);
 }
-
+processTarifs(): Observable<any> {
+    return this.http.post(`${this.apiScrapper}/tarif`, {}); 
+  }
 }

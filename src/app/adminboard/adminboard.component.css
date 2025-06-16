@@ -50,7 +50,7 @@ transition: transform 0.3s ease;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height:21%;
+  height:23.5%;
 }
 .sidebar.hidden {
   transform: translateX(-100%);
@@ -76,7 +76,7 @@ transition: transform 0.3s ease;
 
 .sidebar .nav-link {
   color: #216490;
-  font-weight: 500;
+  font-weight: 400;
   padding: 0.5rem 1rem;
   display: flex;
   align-items: center;

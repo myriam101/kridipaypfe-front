@@ -5,15 +5,32 @@
     </h3>
     <p class="text-secondary fst-italic">Ajoutez et gérez vos tarifs d'électricité et d'eau facilement</p>
   </div>
-  <!-- Toggle boutons -->
-  <div class="d-flex gap-3 justify-content-center mb-4">
-    <button class="btn btn-primary" (click)="showElectricityForm = !showElectricityForm">
-      {{ showElectricityForm ? 'Cacher' : 'Ajouter un tarif électricité' }}
+
+  <div class="d-flex justify-content-center mb-4">
+  <div class="btn-group">
+    <button 
+      type="button" 
+      class="btn btn-primary dropdown-toggle" 
+      data-bs-toggle="dropdown" 
+      aria-expanded="false"
+    >
+      Ajouter un tarif
     </button>
-    <button class="btn btn-primary" (click)="showWaterForm = !showWaterForm">
-      {{ showWaterForm ? 'Cacher' : 'Ajouter un tarif eau' }}
-    </button>
+    <ul class="dropdown-menu">
+      <li>
+        <button class="dropdown-item" (click)="showElectricityForm = true; showWaterForm = false;">
+          Tarif électricité
+        </button>
+      </li>
+      <li>
+        <button class="dropdown-item" (click)="showWaterForm = true; showElectricityForm = false;">
+          Tarif eau
+        </button>
+      </li>
+    </ul>
   </div>
+</div>
+
   <div class="card shadow-sm rounded-4 p-4">
     <!-- Formulaire Électricité -->
     <div *ngIf="showElectricityForm" class="mb-5">
@@ -136,21 +153,73 @@
       </div>
 <!--  Tarifs Électricité -->
 <div class="mt-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-
+   <div class="d-flex justify-content-between align-items-center mb-4">
   <h5 class="fw-semibold mb-0" style="color:#216490;">
     <i class="bi bi-lightning-charge-fill me-2"></i>Tarifs Électricité enregistrés
   </h5>
-   <button class="btn btn-primary"  (click)="checkElectricityPriceCombinations()" >
-    Vérifier les tranches electricité
-  </button>
-   
+  <div class="btn-group dropstart">
+    <button 
+      type="button" 
+      class="btn btn-primary dropdown-toggle" 
+      data-bs-toggle="dropdown" 
+      aria-expanded="false"
+    >
+      Actions
+    </button>
+    <ul class="dropdown-menu">
+      <li>
+        <button class="dropdown-item" (click)="checkElectricityPriceCombinations()">
+          Vérifier
+        </button>
+      </li>
+      <li>
+        <button (click)="onUpdateTarifs()" class="dropdown-item btn-success">
+          Ajout STEG
+        </button>
+      </li>
+    </ul>
+  </div>
+</div>
+
+
+    <!-- Filtres toujours visibles -->
+<div class="row mb-3">
+  <div class="col-12 text-center d-flex justify-content-center align-items-center flex-wrap gap-2">
+        <i class="zmdi zmdi-filter-list"></i>
+    <strong>Filtres :</strong>
+
+    <div class="btn-group" role="group">
+      <button
+        type="button"
+        class="btn filter-btn me-2"
+        [ngClass]="{ 'btn-primary': selectedSector === null }" (click)="filterBySector(null)"
+        
+      >
+         Tous
+      </button>
+      <button
+        type="button"
+        class="btn filter-btn me-2"
+      [ngClass]="{ 'btn-primary': selectedSector === 'RESIDENTIEL' }" (click)="filterBySector('RESIDENTIEL')"
+      >
+         Résidentiel
+      </button>
+      <button
+        type="button"
+        class="btn filter-btn"
+       [ngClass]="{ 'btn-primary': selectedSector === 'NON RESIDENTIEL' }" (click)="filterBySector('NON RESIDENTIEL')"
+      >
+        Non Résidentiel
+      </button>
     </div>
-  <div class="loader-container" *ngIf="isLoading">
+  </div>
+</div>
+  <div class="loader-container" *ngIf="isLoadingElect">
     <div class="loader">
       
     </div>
   </div>
+  
   <div *ngIf="electricityPrices.length === 0" class="text-muted fst-italic">Aucun tarif enregistré.</div>
 
   <div class="row g-3">
@@ -205,7 +274,7 @@
     <i class="bi bi-droplet-fill me-2"></i>Tarifs Eau enregistrés
   </h5>
   <button class="btn btn-primary" (click)="checkTranchesEau()">
-    Vérifier les tranches eau
+    Vérifier
   </button>
 </div>
 
