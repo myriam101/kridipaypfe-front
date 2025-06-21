@@ -1,22 +1,16 @@
-<div class="container mt-5 d-flex justify-content-center">
-    <div class="card shadow-sm border-0 rounded-4 form-card">
-      <div class="card-header bg-white border-0">
-        <h4 class="mb-0 text-primary">Ajouter un produit</h4>
-      </div>
-      <div class="card-body">
-        <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
-            <div class="mb-3">
-            <mat-form-field appearance="fill" class="w-100">
-              <mat-label>Choisir un catalogue</mat-label>
+   <div class="card shadow-sm border-0 rounded-4 form-card h-100 d-flex flex-column">
 
-              <mat-select formControlName="id_catalog" (selectionChange)="onSelectCatalog($event.value)">
-                <mat-option *ngFor="let catalog of catalogs" [value]="catalog.id">
-                  {{ catalog.name }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-  
+  <!-- HEADER FIXE -->
+  <div class="card-header bg-white border-0">
+    <h4 class="mb-0 text-primary">
+      Ajout d’un produit dans 
+      <span class="text-muted small fst-italic ms-1">{{ data.Catalogname }}</span>
+    </h4>
+  </div>
+
+  <!-- CORPS SCROLLABLE -->
+  <div class="scrollable-body card-body">
+        <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
           <div class="row">
             <div class="col-md-6 mb-3">
               <input formControlName="name" class="form-control" placeholder="Nom du produit">
@@ -474,6 +468,6 @@
         </div>
         </form>
       </div>
+      
     </div>
-  </div>
   

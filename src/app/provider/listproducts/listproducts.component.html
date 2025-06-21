@@ -27,13 +27,6 @@
       </div>
     </div>
 
-  <div class="text-end mb-4">
-    <button class="btn btn-custom-blue" >
-      <i class="bi" ></i>
-      Ajout produit
-    </button>
-  </div>
-
     <div class="row clearfix" *ngIf="products.length > 0; else noProducts">
      <div *ngFor="let product of products" class="col-lg-3 col-md-4 col-sm-12 position-relative">
   <div class="card product_item">

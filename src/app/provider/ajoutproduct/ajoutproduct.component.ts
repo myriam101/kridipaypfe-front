@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Category } from 'src/app/models/category';
 import { Designation } from 'src/app/models/enum/designation';
@@ -45,9 +46,8 @@ export class AjoutproductComponent {
   energyClasses = Object.values(EnergyClass);
   typefeatures = Object.values(Typefeature);
 
-  @Output() catalogSelected = new EventEmitter<number>();
-
-  constructor(
+  constructor(  public dialogRef: MatDialogRef<AjoutproductComponent>,
+      @Inject(MAT_DIALOG_DATA) public data: { CatalogId: any,Catalogname:any },
     private fb: FormBuilder,
     private productService: ProductService,
     private route: ActivatedRoute,
@@ -57,16 +57,6 @@ export class AjoutproductComponent {
 
   ngOnInit(): void {
     this.providerId = Number(localStorage.getItem('providerId'));
-
-    this.catalogService.getCatalogsByProvider(this.providerId).subscribe({
-      next: (data) => {
-        this.catalogs = data;
-      },
-      error: (err) => {
-        console.error('Erreur de récupération des catalogues', err);
-      }
-    });
-
     this.categoryservice.getDesignations().subscribe({
       next: (data) => {
         this.categories = data;
@@ -75,8 +65,10 @@ export class AjoutproductComponent {
         console.error('Erreur chargement des catégories', err);
       }
     });
-
+  
+       
     this.initForm();
+    
   }
 
   private initForm() {
@@ -89,7 +81,7 @@ export class AjoutproductComponent {
       id_provider: [this.providerId],
       bonifvisible: [true],
       bonifpoint: [0],
-      id_catalog: [this.selectedCatalogId],
+      id_catalog: [this.data.CatalogId],
       features: this.fb.group({
         noise: [],
         weight: [],
@@ -123,9 +115,8 @@ export class AjoutproductComponent {
   }
 
   onSelectCatalog(id: number) {
-    this.selectedCatalogId = id;
+    this.data.CatalogId = id;
     this.productForm.patchValue({ id_catalog: id });
-    this.catalogSelected.emit(id);
     console.log("selected catalog", id);
   }
 
@@ -239,7 +230,6 @@ export class AjoutproductComponent {
           this.isTv = true;
           break;
         default:
-          // aucun flag à true
           break;
       }
     }

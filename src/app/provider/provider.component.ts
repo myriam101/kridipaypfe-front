@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ProviderService } from 'src/app/services/provider.service';
+import { AjoutproductComponent } from './ajoutproduct/ajoutproduct.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-provider',
@@ -13,11 +15,13 @@ export class ProviderComponent implements OnInit {
   loading = false;
   currentRoute: string = '';
   sidebarVisible: boolean = true;
+  currentUser = { name: 'Admin' }; 
+provider:any;
+  isVisiblePoints: boolean = true; 
+  providerId: any; 
+  error: string | null = null;
 
-  isVisiblePoints: boolean = true; // valeur par défaut
-  providerId: number = 1; // ⚠️ À adapter selon l'utilisateur connecté
-
-  constructor(
+  constructor(private dialog: MatDialog,
     private router: Router,
     private route: ActivatedRoute,
     private providerService: ProviderService
@@ -28,7 +32,6 @@ export class ProviderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // toggle sidebar bouton
     const toggleButton = document.getElementById("menu-toggle");
     const wrapper = document.getElementById("wrapper");
     if (toggleButton && wrapper) {
@@ -45,14 +48,11 @@ export class ProviderComponent implements OnInit {
         this.isVisiblePoints = false;
       }
     });
+    this.loadProviderDetails();
   }
 
   showAddProductForm() {
     this.showForm = true;
-  }
-
-  goToAddProduct() {
-    this.router.navigate(['addproduct'], { relativeTo: this.route });
   }
 
   goToPoints() {
@@ -104,5 +104,16 @@ export class ProviderComponent implements OnInit {
     this.router.navigate(['unauthorized'], { relativeTo: this.route });
   }
 }
-
+private loadProviderDetails(): void {
+    this.providerId = Number(localStorage.getItem('providerId'));
+    this.providerService.getProviderDetails(this.providerId).subscribe({
+      next: (data) => {
+        this.provider = data;
+      },
+      error: (err) => {
+        console.error(err);
+        this.error = 'Erreur lors du chargement du provider.';
+      }
+    });
+  }
 }

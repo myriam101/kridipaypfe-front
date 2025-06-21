@@ -1,18 +1,23 @@
 <!-- Top Navbar -->
 <nav class="navbar navbar-expand-lg shadow fixed-top top-navbar">
   <div class="container-fluid">
-    
-    <a class="navbar-brand ms-3">Tableau de bord</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
+    <div class="me-4">
+ <a class="navbar-brand d-flex align-items-center " >
+  <img src="assets/logo-icone.png" alt="Logo" style="height: 20px; margin-right: 15px;">
+  Tableau de bord
+</a>
+</div>
+  <button class="icon-btn me-3" (click)="toggleSidebar()" style="padding: 0; border: none; background: transparent;">
+    <i class="zmdi zmdi-menu" style="font-size: 1.5rem; color: white;"></i>
+  </button>
+
+   <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
       aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse justify-content-end" id="navbarResponsive">
       <ul class="navbar-nav">
-         <button class="icon-btn" (click)="toggleSidebar()">
-    <i class="zmdi zmdi-menu"></i>
-  </button>
           <button class="icon-btn" (click)="confirmLogout()">
             <i class="zmdi zmdi-sign-in"></i>
           </button>
@@ -23,42 +28,43 @@
 
 <!-- Sidebar -->
 <nav class="sidebar shadow-sm" [class.hidden]="!sidebarVisible">
-  <div class="sidebar-inner">
+  <div class="sidebar-inner d-flex flex-column" style="height: 100%;">
+    <ul class="nav flex-column flex-grow-1 overflow-auto">
+      <li class="nav-item">
+        <a class="nav-link" [class.active]="currentRoute.includes('home')" (click)="goToHome()">
+          <i class="zmdi zmdi-home me-2"></i> Accueil
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [class.active]="currentRoute.includes('catalogues')" (click)="goToGestionCatalogs()">
+          <i class="zmdi zmdi-layers me-2"></i> Catalogues
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [class.active]="currentRoute.includes('points')" (click)="handlePointsNavigation()">
+          <i class="zmdi zmdi-ticket-star me-2"></i> Gestion des points
+        </a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" [class.active]="currentRoute.includes('commandes')" (click)="goToCarts()">
+          <i class="zmdi zmdi-shopping-basket me-2"></i> Commandes
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [class.active]="currentRoute.includes('profile')" (click)="goToProfile()">
+          <i class="zmdi zmdi-account me-2"></i> Profil
+        </a>
+      </li>
+    </ul>
 
-  <ul class="nav flex-column">
-    <li class="nav-item">
-      <a class="nav-link" [class.active]="currentRoute.includes('home')" (click)="goToHome()">
-        <i class="zmdi zmdi-home me-2"></i> Accueil
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" [class.active]="currentRoute.includes('catalogues')" (click)="goToGestionCatalogs()">
-        <i class="zmdi zmdi-layers me-2"></i> Catalogues
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" [class.active]="currentRoute.includes('addproduct')" (click)="goToAddProduct()">
-        <i class="zmdi zmdi-mall me-2"></i> Produits
-      </a>
-    </li>
-  <li class="nav-item">
-  <a class="nav-link" [class.active]="currentRoute.includes('points')" (click)="handlePointsNavigation()">
-    <i class="zmdi zmdi-ticket-star me-2"></i> Gestion des points
-  </a>
-</li>
-
-    <li class="nav-item">
-      <a class="nav-link" [class.active]="currentRoute.includes('profile')" (click)="goToProfile()">
-        <i class="zmdi zmdi-account me-2"></i> Profil
-      </a>
-    </li>
-       <li class="nav-item">
-      <a class="nav-link" [class.active]="currentRoute.includes('commandes')" (click)="goToCarts()">
-        <i class="zmdi zmdi-shopping-basket me-2"></i> Commandes
-      </a>
-    </li>
-  </ul>
+    <!-- Bloc connecté en bas -->
+    <div class="sidebar-user-info border-top mt-3 pt-3 px-3">
+      <small class="text-muted">Connecté en tant que</small>
+      <div class="fw-semibold" style="color:#216490;">
+{{provider.user.name}}      </div>
     </div>
+  </div>
 </nav>
 
 <div class="main-content" [class.full-width]="!sidebarVisible">

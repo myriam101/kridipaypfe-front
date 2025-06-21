@@ -1,8 +1,7 @@
-<!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top" style="z-index: 1000;">
   <div class="container">
     <a class="navbar-brand d-flex align-items-center" >
-      <img src="assets/logo-icone.png" alt="Logo" style="height: 40px; margin-right: 10px;">
+      <img src="assets/logo-icone.png" alt="Logo" style="height: 25px; margin-right: 10px;">
       Bienvenue cher client 
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
@@ -12,7 +11,7 @@
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav ms-auto">
          <li class="nav-item">
-          <a class="nav-link position-relative" (click)="opencomparateur()" title="Comparer deux produits" >
+          <a class="nav-link position-relative" (click)="openComparaisonDialog()" title="Comparer deux produits" >
             <i class="zmdi zmdi-compare me-2"></i>
           </a>
         </li>
@@ -42,13 +41,12 @@
 </nav>
 
 
-<!-- Header affiché seulement sur la page d'accueil -->
 <header *ngIf="currentRoute === '/client'" class="masthead"
   style="background-size: cover; background-position: center; height: 70vh; margin-top: 80px;">
   <div class="container h-100">
     <div class="row h-100 align-items-center">
       <div class="col-12 text-center text-white">
-        <h1 class="display-4 fw-bold">Vers la sensibilisation et au-delà 🌱</h1>
+        <h1 class="display-4 fw-bold">Vers la sensibilisation et au-delà </h1>
         <p class="lead mt-3">
           Ensemble, faisons des choix plus responsables. En tant que consommateur, vous avez le pouvoir d'agir pour un
           avenir plus durable.
@@ -62,7 +60,7 @@
 <!-- Contenu de la page -->
 <section class="py-5 mt-5">
   <div class="container">
-    <!-- Affichage du catalog uniquement sur la page home -->
+
     <app-catalog-display *ngIf="currentRoute === '/client'"></app-catalog-display>
 
     <!-- Affichage du contenu route -->
@@ -70,6 +68,5 @@
   </div>
 </section>
 
-<!-- Footer affiché uniquement sur la page home -->
 <app-footer *ngIf="currentRoute === '/client'"></app-footer>
 <app-chatbot></app-chatbot>

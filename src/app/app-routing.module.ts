@@ -24,7 +24,6 @@ import { DemandesComponent } from './banque/demandes/demandes.component';
 import { GestionCatalogsComponent } from './provider/gestion-catalogs/gestion-catalogs.component';
 import { GestionPointsComponent } from './provider/gestion-points/gestion-points.component';
 import { BoardComponent } from './provider/board/board.component';
-import { AuthRegisterComponent } from './pages/auth-register/auth-register.component';
 import { GestionPointsAdminComponent } from './adminboard/gestion-points-admin/gestion-points-admin.component';
 import { UnauthorizedComponent } from './provider/unauthorized/unauthorized.component';
 import { ChatbotComponent } from './chatbot/chatbot.component';
@@ -55,7 +54,6 @@ const routes: Routes = [
   {path: 'simulateur', component:SimulateurComponent},
   {path:'products', component:ProductsComponent},
   {path:'login',component:AuthLoginComponent},
-  { path: 'register', component: AuthRegisterComponent },
 
   {path:'provider',component:ProviderComponent,
     children: [

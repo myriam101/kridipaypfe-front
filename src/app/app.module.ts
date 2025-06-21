@@ -55,7 +55,6 @@ import { BienvenuComponent } from './banque/bienvenu/bienvenu.component';
 import { GestionCatalogsComponent } from './provider/gestion-catalogs/gestion-catalogs.component';
 import { GestionPointsComponent } from './provider/gestion-points/gestion-points.component';
 import { BoardComponent } from './provider/board/board.component';
-import { AuthRegisterComponent } from './pages/auth-register/auth-register.component';
 import { GestionPointsAdminComponent } from './adminboard/gestion-points-admin/gestion-points-admin.component';
 import { ConfirmDialogAdminComponent } from './adminboard/confirm-dialog-admin/confirm-dialog-admin.component';
 import { UnauthorizedComponent } from './provider/unauthorized/unauthorized.component';
@@ -63,6 +62,9 @@ import { DetailPointbonifComponent } from './adminboard/detail-pointbonif/detail
 import { ChatbotComponent } from './chatbot/chatbot.component';
 import { ComparaisonComponent } from './comparaison/comparaison.component';
 import { DetailspointComponent } from './adminboard/gestion-points-admin/detailspoint/detailspoint.component';
+import { ProgresscrapperComponent } from './adminboard/progresscrapper/progresscrapper.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { LivraisonComponent } from './client/livraison/livraison.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -104,14 +106,15 @@ BienvenuComponent,
 GestionCatalogsComponent,
 GestionPointsComponent,
 BoardComponent,
-AuthRegisterComponent,
 GestionPointsAdminComponent,
 ConfirmDialogAdminComponent,
 UnauthorizedComponent,
 DetailPointbonifComponent,
 ChatbotComponent,
 ComparaisonComponent,
-DetailspointComponent
+DetailspointComponent,
+ProgresscrapperComponent,
+LivraisonComponent
   ],
   imports: [
     BrowserModule,
@@ -143,7 +146,8 @@ DetailspointComponent
     MatDialogModule, 
     MatSnackBarModule,
     MatInputModule,
-    NgChartsModule
+    NgChartsModule,
+    MatProgressSpinnerModule
        ],
   providers: [],
   bootstrap: [AppComponent]

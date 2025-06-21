@@ -23,5 +23,7 @@ export class ProviderService {
   getPackPointsVisibility(providerId: number) {
     return this.http.get<{ id: number, visible: boolean }>(`${this.apiurl}/${providerId}/pack-points-visible`);
   }
-
+ getProviderDetails(providerId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiurl}/details/${providerId}`);
+  }
 }

@@ -2,6 +2,7 @@ import { AfterViewInit, Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BienvenuComponent } from './bienvenu/bienvenu.component';
+import { BanqueService } from '../services/banque.service';
 
 @Component({
   selector: 'app-banque',
@@ -10,8 +11,11 @@ import { BienvenuComponent } from './bienvenu/bienvenu.component';
 })
 export class BanqueComponent implements AfterViewInit {
 currentRoute: string = '';
+  agentId: any;
+  error: string | null = null;
+  agent:any;
 
-  constructor(private router: Router, private route: ActivatedRoute,private dialog: MatDialog) {
+  constructor(private router: Router, private route: ActivatedRoute,private dialog: MatDialog,private agentService: BanqueService) {
      this.router.events.subscribe(() => {
     this.currentRoute = this.router.url;
   });
@@ -36,6 +40,7 @@ currentRoute: string = '';
         wrapper.classList.toggle("toggled");
       });
     }
+    this.loadAgentDetails();
 }
   goToHome() {
     this.router.navigate(['dashboard'], { relativeTo: this.route });
@@ -59,5 +64,16 @@ currentRoute: string = '';
 toggleSidebar(): void {
   this.sidebarVisible = !this.sidebarVisible;
 }
-
+private loadAgentDetails(): void {
+      this.agentId = Number(localStorage.getItem('agentId'));
+    this.agentService.getAgentDetails(this.agentId).subscribe({
+      next: (data) => {
+        this.agent = data;
+      },
+      error: (err) => {
+        console.error(err);
+        this.error = 'Erreur lors du chargement de l\'agent.';
+      }
+    });
+  }
 }

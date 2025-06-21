@@ -6,6 +6,7 @@ import { CatalogService } from 'src/app/services/catalog.service';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
+import { AjoutproductComponent } from '../ajoutproduct/ajoutproduct.component';
 
 @Component({
   selector: 'app-gestion-catalogs',
@@ -36,8 +37,7 @@ export class GestionCatalogsComponent implements OnInit {
     }
     catalog(): void {
   this.providerId = Number(localStorage.getItem('providerId'));
-      this.isLoading = true; 
-
+  this.isLoading = true; 
   this.catalogService.getCatalogsByProvider(this.providerId).subscribe({
     next: (data) => {
           this.isLoading = false;
@@ -126,5 +126,22 @@ cancelEdit(): void {
   this.editingCatalogId = null;
   this.catalogForm.reset();
 }
-
+ openAjoutProduit(catalog:any): void {
+  this.getSelectedCatalog(catalog);
+  const dialogRef = this.dialog.open(AjoutproductComponent, {
+  width: '90vw',
+  maxWidth: '700px',
+  height: 'auto',
+  maxHeight: '90vh',
+  panelClass: 'custom-dialog-container',
+        data: { CatalogId:this.selectedCatalogId,
+        Catalogname:this.catalogname
+       }
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('Le modal a été fermé');
+      this.catalog()
+    });
+  }
 }

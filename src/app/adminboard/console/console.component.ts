@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConsoleService } from 'src/app/services/console.service';
+import { ProgresscrapperComponent } from '../progresscrapper/progresscrapper.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-console',
@@ -31,7 +33,7 @@ export class ConsoleComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private priceService: ConsoleService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,private dialog: MatDialog,
   ) {}
 
   ngOnInit(): void {
@@ -227,7 +229,7 @@ checkElectricityPriceCombinations() {
         this.snackBar.open('Toutes les combinaisons secteur/tranche sont bien définies.', 'Fermer', {
           duration: 4000,
           horizontalPosition: 'end',
-          verticalPosition: 'top'
+          verticalPosition: 'bottom'
         });
       } else {
         let message = '';
@@ -249,7 +251,7 @@ checkElectricityPriceCombinations() {
         this.snackBar.open(message, 'Fermer', {
           duration: 10000,
           horizontalPosition: 'end',
-          verticalPosition: 'top'
+          verticalPosition: 'bottom'
                 });
       }
     },
@@ -257,11 +259,11 @@ checkElectricityPriceCombinations() {
       this.snackBar.open('Erreur lors de la vérification des tarifs.', 'Fermer', {
         duration: 5000,
         horizontalPosition: 'end',
-        verticalPosition: 'top'      });
+        verticalPosition: 'bottom'      });
     }
   });
 }
- onUpdateTarifs(): void {
+ /*onUpdateTarifs(): void {
     this.priceService.processTarifs().subscribe({
       next: (res) => {
       this.snackBar.open('Mise à jour réussie depuis STEG.com.tn !', 'Fermer', { duration: 4000 });
@@ -273,5 +275,35 @@ checkElectricityPriceCombinations() {
         console.error(err);
       }
     });
-  }
+  }*/
+  onUpdateTarifs() {
+  const dialogRef = this.dialog.open(ProgresscrapperComponent, {
+      width: '600px',
+    disableClose: true,
+    data: { message: 'Étape 1/3 : Extraction des données depuis le site STEG...' }
+  });
+
+  dialogRef.componentInstance.updateStep(1, 'Étape 1/3 : Extraction des données depuis le site STEG...');
+
+  setTimeout(() => {
+    dialogRef.componentInstance.updateStep(2, 'Étape 2/3 : Génération du fichier JSON...');
+
+    setTimeout(() => {
+      dialogRef.componentInstance.updateStep(3, 'Étape 3/3 : Mise à jour de la base de données...');
+
+      this.priceService.processTarifs().subscribe({
+        next: (res) => {
+          dialogRef.componentInstance.updateStep(3, 'Mise à jour réussie depuis STEG.com.tn !');
+          dialogRef.componentInstance.allowClose();
+        this.getListElectri();
+          setTimeout(() => dialogRef.close(), 3000);
+        },
+        error: (err) => {
+          dialogRef.componentInstance.updateStep(3, 'Erreur : ' + err.message);
+          dialogRef.componentInstance.allowClose();
+        }
+      });
+    }, 1000);
+  }, 1000);
+}
 }

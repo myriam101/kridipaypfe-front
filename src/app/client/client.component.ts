@@ -2,6 +2,8 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { ProductService } from '../services/product.service';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { ClientService } from '../services/client.service';
+import { ComparaisonComponent } from '../comparaison/comparaison.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-client',
@@ -19,7 +21,7 @@ export class ClientComponent {
   
   @Output() catalogSelected = new EventEmitter<number>();
 
-  constructor(private productService: ProductService,private router: Router, private route: ActivatedRoute,private clientservice : ClientService) {
+  constructor(private modalService: MatDialog,private productService: ProductService,private router: Router, private route: ActivatedRoute,private clientservice : ClientService) {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.currentRoute = event.url;
@@ -61,14 +63,18 @@ export class ClientComponent {
   opencart() {
     this.router.navigate(['shopping-cart'], { relativeTo: this.route });
   }
-  opencomparateur() {
-    this.router.navigate(['comparateur'], { relativeTo: this.route });
-  }
+  
   confirmLogout() {
     const confirmed = window.confirm("Êtes-vous sûr de vouloir vous déconnecter ?");
     if (confirmed) {
       localStorage.removeItem('token'); 
       this.router.navigate(['/login']);
     }
+  }
+   openComparaisonDialog() {
+    this.modalService.open(ComparaisonComponent, {
+      width: '800px',
+      data: {} 
+    });
   }
 }

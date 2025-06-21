@@ -1,0 +1,83 @@
+body {
+  background: #f5f7fa;
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card {
+  border: none;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(33, 100, 144, 0.08);
+  margin-bottom: 2rem;
+}
+
+.card-body {
+  padding: 2rem;
+}
+
+h4, h5, h6 {
+  color: #216490;
+  font-weight: 600;
+}
+
+.text-secondary {
+  color: #6c757d !important;
+}
+
+.text-muted {
+  color: #adb5bd !important;
+}
+
+.btn-primary {
+  background-color: #216490;
+  border-color: #216490;
+  font-weight: 500;
+}
+
+.btn-outline-primary {
+  border-color: #216490;
+  color: #216490;
+  font-weight: 500;
+}
+
+.btn-outline-primary:hover {
+  background-color: #216490;
+  color: #fff;
+}
+
+.rounded-circle {
+  border-radius: 50% !important;
+}
+
+.bg-primary {
+  background-color: #216490 !important;
+}
+
+.form-control {
+  border-radius: 10px;
+  border: 1px solid #ced4da;
+  padding: 0.6rem 0.9rem;
+  box-shadow: none;
+  transition: border 0.2s ease-in-out;
+}
+
+.form-control:focus {
+  border-color: #216490;
+  outline: none;
+  box-shadow: 0 0 0 0.2rem rgba(33, 100, 144, 0.1);
+}
+
+.progress-bar {
+  border-radius: 6px;
+}
+
+.list-group-item {
+  border: none;
+  padding: 1rem 1.25rem;
+}
+
+.icon-inline {
+  vertical-align: middle;
+  margin-right: 0.5rem;
+}

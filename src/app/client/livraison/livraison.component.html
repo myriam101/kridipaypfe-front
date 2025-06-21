@@ -1,0 +1,17 @@
+<h5 class="mb-3">Informations de livraison</h5>
+<form>
+  <div class="mb-3">
+    <label for="adresse" class="form-label">Adresse de livraison</label>
+    <input type="text" id="adresse" class="form-control" required>
+  </div>
+
+  <div class="mb-3">
+    <label for="ville" class="form-label">Ville</label>
+    <input type="text" id="ville" class="form-control" required>
+  </div>
+
+  <div class="text-end">
+    <button type="button" class="btn btn-secondary me-2" (click)="fermer()">Annuler</button>
+    <button type="button" class="btn btn-success" (click)="confirmerLivraison()">Confirmer</button>
+  </div>
+</form>
