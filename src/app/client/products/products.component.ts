@@ -90,8 +90,8 @@ tooltipPosition = { top: 0, left: 0 };
       }
 
       const dialogRef = this.dialog.open(SimulateurComponent, {
-        width: '95vw',
-        maxWidth: '600px',
+        width: '80vw',
+        maxWidth: '500px',
         data: {
           product,
           usageId

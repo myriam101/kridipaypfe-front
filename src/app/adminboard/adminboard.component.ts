@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LogoutModalComponent } from '../pages/logout-modal/logout-modal.component';
 
 @Component({
   selector: 'app-adminboard',
@@ -10,7 +12,7 @@ export class AdminboardComponent {
   currentRoute: string = '';
 isPackVisible: boolean = true; // visible par défaut
 
-  constructor(private router: Router, private route: ActivatedRoute) {
+  constructor(private router: Router, private route: ActivatedRoute,private dialog: MatDialog) {
      this.router.events.subscribe(() => {
     this.currentRoute = this.router.url;
   });
@@ -46,12 +48,18 @@ isPackVisible: boolean = true; // visible par défaut
     this.router.navigate(['pointsbonif'], { relativeTo: this.route });
   }
 
-  confirmLogout() {
-    const confirmed = window.confirm("Êtes-vous sûr de vouloir vous déconnecter ?");
-    if (confirmed) {
-      localStorage.removeItem('token'); 
-      this.router.navigate(['/login']);
-    }
+   confirmLogout() {
+    const dialogRef = this.dialog.open(LogoutModalComponent, {
+      width: '400px',
+      disableClose: true
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        localStorage.removeItem('token'); 
+        this.router.navigate(['/login']);
+      }
+    });
   }
   sidebarVisible: boolean = true;
 

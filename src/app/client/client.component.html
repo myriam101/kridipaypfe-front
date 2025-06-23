@@ -1,69 +1,59 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top" style="z-index: 1000;">
+<nav class="navbar navbar-expand-lg bg-white shadow-sm fixed-top py-3" style="z-index: 1000;">
   <div class="container">
-    <a class="navbar-brand d-flex align-items-center" >
-      <img src="assets/logo-icone.png" alt="Logo" style="height: 25px; margin-right: 10px;">
-      Bienvenue cher client 
+    <a class="navbar-brand d-flex align-items-center fw-bold text-dark">
+      <img src="assets/logo-icone.png" alt="Logo" style="height: 30px; margin-right: 12px;">
+      Bienvenue cher client
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
       aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div class="collapse navbar-collapse" id="navbarResponsive">
-      <ul class="navbar-nav ms-auto">
-         <li class="nav-item">
-          <a class="nav-link position-relative" (click)="openComparaisonDialog()" title="Comparer deux produits" >
-            <i class="zmdi zmdi-compare me-2"></i>
+      <ul class="navbar-nav ms-auto align-items-center gap-3">
+        <li class="nav-item">
+          <a class="nav-link" (click)="openComparaisonDialog()" title="Comparer deux produits">
+            <i class="zmdi zmdi-compare fs-5 text-secondary"></i>
           </a>
         </li>
-        <li class="nav-item">
-          <a (click)="opencart()" class="nav-link position-relative">
-            <i class="zmdi zmdi-shopping-cart me-3"></i>
-            <span *ngIf="cartItemCount > 0" 
-                  class="badge rounded-pill badge-notification bg-danger position-absolute top-2 start-90 translate-middle">
+        <li class="nav-item position-relative">
+          <a (click)="opencart()" class="nav-link">
+            <i class="zmdi zmdi-shopping-cart fs-5 text-secondary"></i>
+            <span *ngIf="cartItemCount > 0"
+              class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
               {{ cartItemCount }}
             </span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link position-relative" (click)="goToProfile()">
-            <i class="zmdi zmdi-account-circle me-2"></i>
+          <a class="nav-link" (click)="goToProfile()">
+            <i class="zmdi zmdi-account-circle fs-5 text-secondary"></i>
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link" (click)="confirmLogout()">
-            <i class="zmdi zmdi-sign-in me-5"></i>
+            <i class="zmdi zmdi-sign-in fs-5 text-secondary"></i>
           </a>
         </li>
-        
       </ul>
     </div>
   </div>
 </nav>
 
-
-<header *ngIf="currentRoute === '/client'" class="masthead"
-  style="background-size: cover; background-position: center; height: 70vh; margin-top: 80px;">
-  <div class="container h-100">
-    <div class="row h-100 align-items-center">
-      <div class="col-12 text-center text-white">
-        <h1 class="display-4 fw-bold">Vers la sensibilisation et au-delà </h1>
-        <p class="lead mt-3">
-          Ensemble, faisons des choix plus responsables. En tant que consommateur, vous avez le pouvoir d'agir pour un
-          avenir plus durable.
-        </p>
-      </div>
+<header *ngIf="currentRoute === '/client'" class="masthead mt-navbar">
+  <div class="container h-100 d-flex align-items-center justify-content-center text-center text-white">
+    <div>
+      <h1 class="display-5 fw-bold mb-3">Vers la sensibilisation et au-delà</h1>
+      <p class="lead px-3 px-md-5">
+        Ensemble, faisons des choix plus responsables. En tant que consommateur, vous avez le pouvoir d’agir pour un avenir plus durable.
+      </p>
     </div>
   </div>
-  
 </header>
 
-<!-- Contenu de la page -->
-<section class="py-5 mt-5">
+<section class="py-5 mt-4">
   <div class="container">
-
     <app-catalog-display *ngIf="currentRoute === '/client'"></app-catalog-display>
-
-    <!-- Affichage du contenu route -->
     <router-outlet></router-outlet>
   </div>
 </section>

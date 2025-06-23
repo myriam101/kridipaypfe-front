@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ProviderService } from 'src/app/services/provider.service';
 import { AjoutproductComponent } from './ajoutproduct/ajoutproduct.component';
 import { MatDialog } from '@angular/material/dialog';
+import { LogoutModalComponent } from '../pages/logout-modal/logout-modal.component';
 
 @Component({
   selector: 'app-provider',
@@ -80,12 +81,19 @@ provider:any;
   }
 
   confirmLogout() {
-    const confirmed = window.confirm("Êtes-vous sûr de vouloir vous déconnecter ?");
-    if (confirmed) {
+  const dialogRef = this.dialog.open(LogoutModalComponent, {
+    width: '400px',
+    disableClose: true
+  });
+
+  dialogRef.afterClosed().subscribe(result => {
+    if (result) {
       localStorage.removeItem('token'); 
       this.router.navigate(['/login']);
     }
-  }
+  });
+}
+
 
   onActivate() {
     this.loading = true;

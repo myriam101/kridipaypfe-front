@@ -6,6 +6,7 @@ import { Category } from 'src/app/models/category';
 import { Designation } from 'src/app/models/enum/designation';
 import { EnergyClass } from 'src/app/models/enum/EnergyClass';
 import { Typefeature } from 'src/app/models/enum/Typefeature';
+import { CarbonService } from 'src/app/services/carbon.service';
 import { CatalogService } from 'src/app/services/catalog.service';
 import { CategoryService } from 'src/app/services/category.service';
 import { ProductService } from 'src/app/services/product.service';
@@ -16,7 +17,8 @@ import { ProductService } from 'src/app/services/product.service';
   styleUrls: ['./ajoutproduct.component.css']
 })
 export class AjoutproductComponent {
-  
+    @Output() productAdded = new EventEmitter<any>();
+
   successMessage: string = '';
   catalogs: any[] = [];
   productForm!: FormGroup;
@@ -46,7 +48,7 @@ export class AjoutproductComponent {
   energyClasses = Object.values(EnergyClass);
   typefeatures = Object.values(Typefeature);
 
-  constructor(  public dialogRef: MatDialogRef<AjoutproductComponent>,
+  constructor(private carbonServie:CarbonService,  public dialogRef: MatDialogRef<AjoutproductComponent>,
       @Inject(MAT_DIALOG_DATA) public data: { CatalogId: any,Catalogname:any },
     private fb: FormBuilder,
     private productService: ProductService,
@@ -97,7 +99,7 @@ export class AjoutproductComponent {
         volume_collect: [],
         seer: [],
         scop: [],
-        energy_class: [],
+        energy_class: [null],
         cycle_duration: [],
         nbr_couvert: [],
         nb_bottle: [],
@@ -120,33 +122,57 @@ export class AjoutproductComponent {
     console.log("selected catalog", id);
   }
 
-  onSubmit(): void {
-    if (this.productForm.valid) {
-      const formValue = this.productForm.value;
-      this.productService.addProduct(this.providerId, formValue).subscribe({
-        next: (response) => {
-          console.log('Produit + Feature ajoutés', response);
-          this.successMessage = 'Produit ajouté avec succès !';
-          
-          this.productForm.reset({
-            id_provider: this.providerId,
-            id_catalog: this.selectedCatalogId,
-            bonifvisible: true,
-            bonifpoint: 0
+ onSubmit(): void {
+  if (this.productForm.valid) {
+    const formValue = this.productForm.value;
+    this.productService.addProduct(this.providerId, formValue).subscribe({
+      next: (response: any) => {
+        console.log('Produit + Feature ajoutés', response);
+        this.successMessage = 'Produit ajouté avec succès !';
+
+        // Appel au service Carbon après ajout du produit
+        const newProductId = response.product_id; 
+        if (newProductId) {
+          this.carbonServie.addCarbonImpact(newProductId, true).subscribe({
+            next: (res) => {
+              console.log('Impact carbone ajouté:', res);
+              this.carbonServie.recalculateCarbonBadges().subscribe({
+                            next: (res) => {
+                                            console.log('recalcul termine', res);
+
+                            },
+            error: (err) => {
+              console.error('Erreur recalcul', err);
+            }
+
+              });
+            },
+            error: (err) => {
+              console.error('Erreur ajout impact carbone:', err);
+            }
           });
-
-          this.resetFlags();
-
-          setTimeout(() => {
-            this.successMessage = '';
-          }, 3000);
-        },
-        error: (err) => {
-          console.error('Erreur ajout', err);
         }
-      });
-    }
+
+        this.productForm.reset({
+          id_provider: this.providerId,
+          id_catalog: this.selectedCatalogId,
+          bonifvisible: true,
+          bonifpoint: 0
+        });
+
+        this.resetFlags();
+
+        setTimeout(() => {
+          this.successMessage = '';
+        }, 3000);
+      },
+      error: (err) => {
+        console.error('Erreur ajout', err);
+      }
+    });
   }
+}
+
 
   getDesignationName(value: number): string {
     return this.designationEnum[value];

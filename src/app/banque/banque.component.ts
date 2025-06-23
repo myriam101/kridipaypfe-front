@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BienvenuComponent } from './bienvenu/bienvenu.component';
 import { BanqueService } from '../services/banque.service';
+import { LogoutModalComponent } from '../pages/logout-modal/logout-modal.component';
 
 @Component({
   selector: 'app-banque',
@@ -50,14 +51,18 @@ currentRoute: string = '';
     this.router.navigate(['demandes'], { relativeTo: this.route });
   }
 
-  confirmLogout() {
-    const confirmed = window.confirm("Êtes-vous sûr de vouloir vous déconnecter ?");
-    if (confirmed) {
-      localStorage.removeItem('token'); 
-      this.router.navigate(['/login']);
-      sessionStorage.removeItem('agentWelcomed');
-
-    }
+   confirmLogout() {
+    const dialogRef = this.dialog.open(LogoutModalComponent, {
+      width: '400px',
+      disableClose: true
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        localStorage.removeItem('token'); 
+        this.router.navigate(['/login']);
+      }
+    });
   }
   sidebarVisible: boolean = true;
 

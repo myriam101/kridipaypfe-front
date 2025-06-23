@@ -65,6 +65,7 @@ import { DetailspointComponent } from './adminboard/gestion-points-admin/details
 import { ProgresscrapperComponent } from './adminboard/progresscrapper/progresscrapper.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { LivraisonComponent } from './client/livraison/livraison.component';
+import { LogoutModalComponent } from './pages/logout-modal/logout-modal.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -114,7 +115,8 @@ ChatbotComponent,
 ComparaisonComponent,
 DetailspointComponent,
 ProgresscrapperComponent,
-LivraisonComponent
+LivraisonComponent,
+LogoutModalComponent
   ],
   imports: [
     BrowserModule,

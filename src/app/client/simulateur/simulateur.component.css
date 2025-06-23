@@ -1,42 +1,149 @@
-/* Ajout esthétique sur le titre */
-h1[mat-dialog-title] {
-  font-size: 1.4rem;
-  border-bottom: 2px solid #d9e6ef;
+h2[mat-dialog-title] {
+  font-size: 1.5rem;
+  color: #216490;
+  border-bottom: 2px solid #e3eef8;
 }
 
-/* Espacement et arrondi des boutons radio */
-.form-check-input:checked {
-  background-color: #216490;
-  border-color: #216490;
-  box-shadow: 0 0 0 0.15rem rgba(33, 100, 144, 0.3);
-}
-
-/* Badge modernisé */
-.value-badge {
-  padding: 0.35em 1em;
-  border-radius: 12px;
-  font-size: 0.75rem;
+.btn-outline-primary {
+  border-radius: 20px;
+  padding: 0.4rem 1.2rem;
   font-weight: 500;
-  color: white;
-  background-color: #216490;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Bouton "Simuler" amélioré */
+.btn-check:checked + .btn-outline-primary {
+  background-color: #216490;
+  color: white;
+  border-color: #216490;
+  box-shadow: 0 0 0 0.2rem rgba(33, 100, 144, 0.3);
+}
+
+input[type='range'] {
+  accent-color: #216490;
+  transition: box-shadow 0.2s ease;
+}
+input[type='range']::-webkit-slider-thumb {
+  background: #216490;
+}
+
+.badge {
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+.badge:hover {
+  filter: brightness(1.1);
+  transform: scale(1.05);
+}
+
+.fixed-tooltip {
+  position: fixed;
+  z-index: 1020;
+  background: #216490;
+  color: white;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.85rem;
+  max-width: 300px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  animation: fadeSlideDown 0.3s ease forwards;
+  transform: translateX(-50%);
+}
+.tooltip-arrow {
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid #216490;
+}
+.btn-close-tooltip {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+.btn-close-tooltip:hover {
+  color: #ddd;
+}
+@keyframes fadeSlideDown {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -10px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.result-card {
+  background: #f8fbfd;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(33, 100, 144, 0.1);
+  padding: 1.5rem;
+  transition: all 0.3s ease-in-out;
+}
+
+.result-card strong {
+  animation: fadeInScale 0.4s ease-in;
+}
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 .btn-primary {
   background-color: #216490;
   border-color: #216490;
   color: #fff;
   font-weight: 500;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.3s ease;
 }
-
 .btn-primary:hover {
   background-color: #1a5076;
   color: #fff;
 }
+.mat-dialog-actions .btn {
+  min-height: 40px;
+  border-radius: 8px !important;
+}
 
-/* Ajoute un peu d'air autour des sliders */
-.slider {
-  flex: 1;
+.loading-dots span {
+  animation: blink 1.4s infinite;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+.loading-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.loading-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+@keyframes blink {
+  0% { opacity: 0.2; }
+  20% { opacity: 1; }
+  100% { opacity: 0.2; }
+}
+
+.text-custom-blue {
+  color: #216490;
+}
+.form-hint-invalid {
+  font-size: 0.5rem;
+  color: #cc0000;
+  opacity: 0.8;
+  text-align: center;
+  margin-top: 0.3rem;
 }

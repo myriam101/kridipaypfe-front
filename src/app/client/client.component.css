@@ -1,24 +1,27 @@
 .masthead {
-  height: 100vh;
-  min-height: 500px;
-  background-color: #216490; 
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-
-}
-
-.nav-link.active,
-.nav-link:hover {
-  color: #216490 !important;
-}
-.btn-primary, .btn-outline-primary {
+  height: 45vh;
   background-color: #216490;
-  border-color: #216490;
-}
-.btn-outline-light:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
   color: #fff;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.mt-navbar {
+  margin-top: 70px;
+}
+
+.navbar .nav-link:hover {
+  color: #216490 !important;
+  transition: color 0.3s ease-in-out;
+}
+
+.navbar .nav-link i {
+  vertical-align: middle;
+}
+
+.badge-notification {
+  font-size: 0.75rem;
+  padding: 0.4em 0.6em;
 }

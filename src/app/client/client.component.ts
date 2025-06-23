@@ -4,6 +4,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { ClientService } from '../services/client.service';
 import { ComparaisonComponent } from '../comparaison/comparaison.component';
 import { MatDialog } from '@angular/material/dialog';
+import { LogoutModalComponent } from '../pages/logout-modal/logout-modal.component';
 
 @Component({
   selector: 'app-client',
@@ -21,7 +22,7 @@ export class ClientComponent {
   
   @Output() catalogSelected = new EventEmitter<number>();
 
-  constructor(private modalService: MatDialog,private productService: ProductService,private router: Router, private route: ActivatedRoute,private clientservice : ClientService) {
+  constructor(private dialog: MatDialog,private modalService: MatDialog,private productService: ProductService,private router: Router, private route: ActivatedRoute,private clientservice : ClientService) {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.currentRoute = event.url;
@@ -63,14 +64,19 @@ export class ClientComponent {
   opencart() {
     this.router.navigate(['shopping-cart'], { relativeTo: this.route });
   }
-  
-  confirmLogout() {
-    const confirmed = window.confirm("Êtes-vous sûr de vouloir vous déconnecter ?");
-    if (confirmed) {
+   confirmLogout() {
+  const dialogRef = this.dialog.open(LogoutModalComponent, {
+    width: '400px',
+    disableClose: true
+  });
+
+  dialogRef.afterClosed().subscribe(result => {
+    if (result) {
       localStorage.removeItem('token'); 
       this.router.navigate(['/login']);
     }
-  }
+  });
+}
    openComparaisonDialog() {
     this.modalService.open(ComparaisonComponent, {
       width: '800px',

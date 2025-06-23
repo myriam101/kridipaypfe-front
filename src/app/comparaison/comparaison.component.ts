@@ -54,7 +54,7 @@ submitQuestion() {
         response: res
       });
 
-      this.response = res; // si tu veux garder la réponse globale
+      this.response = res; 
     },
     error: (err) => {
       this.isTyping = false;
@@ -79,11 +79,10 @@ submitQuestion() {
 
 
   ngOnInit() {
-    // Affiche le tooltip dès l'ouverture
     setTimeout(() => {
       this.setTooltipPosition();
       this.showInfoTooltip = true;
-    }, 300); // léger délai pour que le DOM soit prêt
+    }, 300); 
   }
 
   setTooltipPosition() {

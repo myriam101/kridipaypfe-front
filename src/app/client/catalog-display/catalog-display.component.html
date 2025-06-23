@@ -1,16 +1,23 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
-<div class="container">
-    <div class="row mt-n1-9">
-      <div class="col-md-6 col-xl-3 my-1-9 wow fadeInUp" *ngFor="let catalog of catalogs" data-wow-delay=".2s">
-        <div class="team-style07" 
-             [ngClass]="{ 'selected-catalog': selectedCatalogId === catalog.id_catalog }"
-             (click)="onSelectCatalog(catalog.id_catalog)">
-          <h3 class="h5 mb-1"><a>{{ catalog.name }}</a></h3>
-        </div>
-      </div>
-      
-      
+<div class="container py-4">
+  <div class="row gy-4">
+    <div class="col-12 col-md-6 col-xl-3" *ngFor="let catalog of catalogs">
+      <button 
+        class="catalog-card" 
+        [ngClass]="{ 'selected': selectedCatalogId === catalog.id_catalog }"
+        (click)="onSelectCatalog(catalog.id_catalog)"
+        (keydown.enter)="onSelectCatalog(catalog.id_catalog)"
+        [attr.aria-pressed]="selectedCatalogId === catalog.id_catalog"
+        type="button"
+        [attr.title]="'Sélectionner le catalogue ' + catalog.name"
+      >
+        <h3 class="catalog-title">
+          <a>{{ catalog.name }}</a>
+          <i *ngIf="selectedCatalogId === catalog.id_catalog" 
+             class="fas fa-check-circle selected-icon" aria-hidden="true"></i>
+        </h3>
+      </button>
     </div>
-    
   </div>
-  <app-products [catalogId]="selectedCatalogId"></app-products>   
+</div>
+
+<app-products [catalogId]="selectedCatalogId"></app-products>
