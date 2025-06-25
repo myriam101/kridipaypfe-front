@@ -40,7 +40,7 @@ provider:any;
         wrapper.classList.toggle("toggled");
       });
     }
-
+    this.providerId = Number(localStorage.getItem('providerId'));
     // Charger la visibilité du pack de points
     this.providerService.getPackPointsVisibility(this.providerId).subscribe({
       next: res => this.isVisiblePoints = res.visible,

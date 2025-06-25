@@ -17,6 +17,8 @@ export class ModalfactureComponent implements OnInit {
   facture: any[] = []; 
   simulations: any;
   successMessage: string | null = null;
+  pdfUrl: string | undefined;
+downloaded: boolean = false;
 
   constructor(
     private simulationService: SimulationService,
@@ -30,9 +32,14 @@ export class ModalfactureComponent implements OnInit {
     this.clientId = Number(localStorage.getItem('clientId'));
   }
 
-  close() {
-    this.dialogRef.close();
+ close() {
+  if (this.pdfUrl) {
+    URL.revokeObjectURL(this.pdfUrl);
+    this.pdfUrl = undefined;
   }
+  this.dialogRef.close();
+}
+
 
   valider(): void {
     this.isLoading = true;
@@ -66,6 +73,8 @@ export class ModalfactureComponent implements OnInit {
 
         if (response.id) {
           this.successMessage = "Votre estimation de facture énergétique est prête à être téléchargée.";
+            this.loadPdf(response.id);
+
         } else {
           console.warn("Aucun ID de GlobalEnergyBill reçu. Le traitement est-il fini ?");
         }
@@ -73,6 +82,7 @@ export class ModalfactureComponent implements OnInit {
       error: (error) => {
               this.isLoading = false; 
         console.error('Erreur calcul facture :', error);
+        
       }
     });
   }
@@ -91,8 +101,10 @@ export class ModalfactureComponent implements OnInit {
 
     return true;
   }
+
 downloadPdf() {
   this.clientId = Number(localStorage.getItem('clientId'));
+  this.downloaded = true;
 
   this.energybillService.downloadEnergyEstimationPdf(this.clientId).subscribe(blob => {
     const link = document.createElement('a');
@@ -107,5 +119,26 @@ downloadPdf() {
     });
   });
 }
+loadPdf(billId: number) {
+  this.energybillService.getPdfAsBase64(billId).subscribe(res => {
+    const base64 = res.base64;
+    const byteCharacters = atob(base64);
+    const byteArray = new Uint8Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteArray[i] = byteCharacters.charCodeAt(i);
+    }
+    const blob = new Blob([byteArray], { type: 'application/pdf' });
+    this.pdfUrl = URL.createObjectURL(blob);
+  });
+}
+
+resetFacture() {
+  this.successMessage = null;
+  if (this.pdfUrl) {
+    URL.revokeObjectURL(this.pdfUrl);
+    this.pdfUrl = undefined;
+  }
+}
+
 
 }

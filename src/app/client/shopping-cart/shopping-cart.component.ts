@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { ProductService } from 'src/app/services/product.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
@@ -7,6 +7,8 @@ import { ModalfactureComponent } from '../modalfacture/modalfacture.component';
 import { SimulationService } from 'src/app/services/simulation.service';
 import { EnergybillService } from 'src/app/services/energybill.service';
 import { ConfirmDialogComponent } from 'src/app/provider/confirm-dialog/confirm-dialog.component';
+import { LivraisonComponent } from '../livraison/livraison.component';
+import { DeliveryService } from 'src/app/services/delivery.service';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -18,49 +20,57 @@ export class ShoppingCartComponent implements OnInit {
   loading: boolean = true;
   emptyCartMessage: string | null = null;
   disableValidateBtn: boolean = false;
-
-  constructor(
+  currentRoute: string = '';
+  idcart:any;
+  constructor( private deliveryService:DeliveryService,private route: ActivatedRoute,
     private simulationService: SimulationService,
     private cartService: ProductService,
     private router: Router,
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
     private EnergyBillService: EnergybillService
-  ) {}
+  ) {this.router.events.subscribe(event => {
+        if (event instanceof NavigationEnd) {
+          this.currentRoute = event.url;
+        }
+      });}
 
   ngOnInit(): void {
     this.loadCart();
   }
 
   loadCart(): void {
-    const clientId = Number(localStorage.getItem('clientId'));
-    if (!clientId) {
-      this.cartItems = [];
-      this.emptyCartMessage = "Client non identifié.";
-      this.loading = false;
-      return;
-    }
-
-    this.loading = true;
-    this.cartService.getCartDetails(clientId).subscribe({
-      next: (data: any) => {
-        if (Array.isArray(data)) {
-          this.cartItems = data;
-          this.emptyCartMessage = null;
-        } else if (data.message) {
-          this.cartItems = [];
-          this.emptyCartMessage = data.message;
-        }
-        this.loading = false;
-      },
-      error: (err) => {
-        this.cartItems = [];
-        this.loading = false;
-        this.emptyCartMessage = "Le panier est vide.";
-        console.error('Erreur de récupération du panier', err);
-      }
-    });
+  const clientId = Number(localStorage.getItem('clientId'));
+  if (!clientId) {
+    this.cartItems = [];
+    this.emptyCartMessage = "Client non identifié.";
+    this.loading = false;
+    return;
   }
+
+  this.loading = true;
+  this.cartService.getCartDetails(clientId).subscribe({
+    next: (data: any) => {
+      if (data && Array.isArray(data.products)) {
+        this.cartItems = data.products;
+        this.idcart = data.cart_id; 
+        console.log("id cart",this.idcart)
+        this.emptyCartMessage = null;
+      } else if (data.message) {
+        this.cartItems = [];
+        this.emptyCartMessage = data.message;
+      }
+      this.loading = false;
+    },
+    error: (err) => {
+      this.cartItems = [];
+      this.loading = false;
+      this.emptyCartMessage = "Le panier est vide.";
+      console.error('Erreur de récupération du panier', err);
+    }
+  });
+}
+
 
  removeItem(index: number): void {
   const clientId = Number(localStorage.getItem('clientId'));
@@ -104,26 +114,10 @@ export class ShoppingCartComponent implements OnInit {
     });
   }
 
-  validate(): void {
-    const clientId = Number(localStorage.getItem('clientId'));
-    this.disableValidateBtn = true;
- const dialogRef = this.dialog.open(ConfirmDialogComponent);
+ isCartEmpty(): boolean {
+  return this.cartItems.length === 0;
+}
 
-  dialogRef.afterClosed().subscribe(result => {
-    if (result) {
-    this.cartService.validateCartByclient(clientId).subscribe({
-      next: () => {
-        this.snackBar.open('Commande validée avec succès.', 'Fermer', { duration: 4000 });
-        this.disableValidateBtn = false;
-        this.loadCart();
-      },
-      error: (err) => {
-        this.snackBar.open('Erreur lors de la validation.', 'Fermer', { duration: 4000 });
-        this.disableValidateBtn = false;
-      }
-    });  }});
-
-  }
 
   downloadPdf(pdfBlob: Blob, fileName: string) {
     const blob = new Blob([pdfBlob], { type: 'application/pdf' });
@@ -139,5 +133,9 @@ export class ShoppingCartComponent implements OnInit {
     .filter(item => item.visible === 1)
     .reduce((total, item) => total + (item.points * item.quantity), 0);
 }
+  openDelivery() {
+    this.router.navigate(['delivery'], { relativeTo: this.route });
+  this.deliveryService.setCartId(this.idcart);  
 
+  }
 }

@@ -133,10 +133,9 @@ export class ReglagesComponent implements OnInit {
     next: () => {
       this.showSnackBar('Valeur du facteur mise à jour avec succès.');
 
-      // ✅ Recharge l'affichage
       this.loadFacteur();
 
-      // 🔁 Ensuite, appelle la mise à jour des carbons
+      //  Ensuite, appelle la mise à jour des carbons
       this.carbonService.updateAllCarbonValues().subscribe({
         next: () => {
           this.showSnackBar('Tous les impacts carbone ont été recalculés.');

@@ -9,37 +9,38 @@ import { GlobalEnergyBill } from '../models/GlobalEnergyBill';
 export class EnergybillService {
 
 
-  private urlenergys = 'http://localhost:8000/EnergyBill';
+  private urlenergys = 'http://localhost:8000/';
 
   constructor(private http: HttpClient) {}
   getBillBySimulationId(simulationId: number): Observable<any> {
-  return this.http.get<any>(`${this.urlenergys}/get/${simulationId}`);
+  return this.http.get<any>(`${this.urlenergys}EnergyBill/get/${simulationId}`);
 }
 calculateEnergyBill(id: number): Observable<any> {
-    return this.http.post<any>(`${this.urlenergys}/calculate-bill/${id}`, {});
+    return this.http.post<any>(`${this.urlenergys}EnergyBill/calculate-bill/${id}`, {});
   }
  calculerFactures(simulationIds: number[]) {
-  return this.http.post<any>(`${this.urlenergys}/calculate-bills`, {
+  return this.http.post<any>(`${this.urlenergys}EnergyBill/calculate-bills`, {
     simulation_ids: simulationIds
   });
 }
 
  
   downloadEnergyEstimationPdf(clientId: number) {
-    return this.http.get(`${this.urlenergys}/${clientId}/energy-estimation-pdf`, {
+    return this.http.get(`${this.urlenergys}EnergyBill/${clientId}/energy-estimation-pdf`, {
       responseType: 'blob'
     });
   }
-  getGlobalBillsByClientId(clientId: number): Observable<GlobalEnergyBill[]> {
-  return this.http.get<GlobalEnergyBill[]>(`http://localhost:8000/globalenergybill/client/${clientId}`);
+
+
+  getPdfAsBase64(billId: number): Observable<any> {
+  return this.http.get<any>(`${this.urlenergys}EnergyBill/energy-estimation-pdf/${billId}`);
 }
- downloadEnergyEstimationPdfbyid(billId: number) {
-    return this.http.get(`${this.urlenergys}/energy-estimation-pdf/${billId}`, {
-      responseType: 'blob'
-    });
-  }
+
   cleanupEnergyEstimation(clientId: number): Observable<any> {
-  return this.http.delete(`${this.urlenergys}/cleanup-energy-estimation/${clientId}`);
+  return this.http.delete(`${this.urlenergys}EnergyBill/cleanup-energy-estimation/${clientId}`);
+}
+ getGlobalBillsByClientId(clientId: number): Observable<GlobalEnergyBill[]> {
+  return this.http.get<GlobalEnergyBill[]>(`${this.urlenergys}globalenergybill/client/${clientId}`);
 }
 
 }

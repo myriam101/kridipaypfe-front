@@ -1,7 +1,7 @@
 <div class="container py-4">
   <div class="row mb-4">
     <div class="col-12">
-      <nav aria-label="breadcrumb" class="bg-light rounded p-2">
+      <nav aria-label="breadcrumb" class="bg-white rounded-3 shadow-sm px-3 py-2">
         <ol class="breadcrumb mb-0">
           <li class="breadcrumb-item" style="cursor: pointer;"><a (click)="closeProfile()">Accueil</a></li>
           <li class="breadcrumb-item active" aria-current="page">Votre profil</li>
@@ -9,6 +9,7 @@
       </nav>
     </div>
   </div>
+  <div class="py-3"><app-bonif-gam></app-bonif-gam></div>
 
   <div class="row g-4">
     <!-- Carte Profil -->
@@ -49,7 +50,7 @@
               <a class="nav-link active" data-bs-toggle="pill" href="#paniers" role="tab">Vos paniers</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" data-bs-toggle="pill" href="#tab-simulations" role="tab">Simulations</a>
+              <a class="nav-link" data-bs-toggle="pill" href="#tab-simulations" role="tab">Vos factures énergétiques</a>
             </li>
              <li class="nav-item">
               <a class="nav-link" data-bs-toggle="pill" href="#tab-points" role="tab">Vos points</a>
@@ -57,9 +58,10 @@
           </ul>
         </div>
         <div class="card-body tab-content">
-          <div class="tab-pane fade show active" id="paniers" role="tabpanel">
-<div class="tab-pane fade show active" id="paniers" role="tabpanel">
-
+      <div class="tab-pane fade show active" id="paniers" role="tabpanel">
+<div class="d-flex align-items-center mb-4" style="background-color: #eaf4fd; padding: 10px; border-left: 4px solid #2196f3; border-radius: 6px; font-size: 0.95rem;">
+  <i class="zmdi zmdi-info-outline me-2 fs-5 text-primary"></i>
+Voici l'historique de vos commandes validées</div>
   <!-- Si erreur lors du chargement -->
   <div *ngIf="cartLoadError" class="alert alert-danger text-center">
     Une erreur est survenue lors du chargement de vos paniers. Veuillez réessayer plus tard.
@@ -67,11 +69,11 @@
 
   <!-- Si aucun panier en attente -->
   <div *ngIf="!cartLoadError && waitingCarts.length === 0" class="alert alert-info text-center">
-    Aucun panier en attente pour le moment.
+    Aucune commande le moment.
   </div>
 
-  <!-- Affichage des paniers si disponibles -->
-  <div *ngFor="let cart of waitingCarts" class="mb-4">
+  <!-- Affichage des paniers avec pagination -->
+  <div *ngFor="let cart of paginatedCarts" class="mb-4">
     <div class="card shadow-sm border-0">
       <div class="card-header d-flex justify-content-between align-items-center bg-light">
         <div>
@@ -103,7 +105,7 @@
                 <strong>{{ product.name }}</strong>
                 <small class="text-muted ms-2">({{ product.brand }})</small>
               </div>
-              <span class="badge " style="background-color: #216490;">x{{ product.quantity }}</span>
+              <span class="badge" style="background-color: #216490;">x{{ product.quantity }}</span>
             </li>
           </ul>
         </div>
@@ -114,12 +116,34 @@
     </div>
   </div>
 
+  <!-- Pagination -->
+  <nav *ngIf="totalPages > 1" class="d-flex justify-content-center mt-4">
+    <ul class="pagination mb-0">
+      <li class="page-item" [class.disabled]="currentPage === 1">
+        <a class="page-link" (click)="goToPage(currentPage - 1)">Précédent</a>
+      </li>
+
+      <li class="page-item"
+          *ngFor="let page of [].constructor(totalPages); let i = index"
+          [class.active]="currentPage === i + 1">
+        <a class="page-link" (click)="goToPage(i + 1)">{{ i + 1 }}</a>
+      </li>
+
+      <li class="page-item" [class.disabled]="currentPage === totalPages">
+        <a class="page-link" (click)="goToPage(currentPage + 1)">Suivant</a>
+      </li>
+    </ul>
+  </nav>
+
 </div>
-          </div>
+
 
         <div class="tab-pane fade" id="tab-simulations" role="tabpanel">
+          <div class="d-flex align-items-center mb-4" style="background-color: #eaf4fd; padding: 10px; border-left: 4px solid #2196f3; border-radius: 6px; font-size: 0.95rem;">
+  <i class="zmdi zmdi-info-outline me-2 fs-5 text-primary"></i>
+ Voici les estimations de factures énergétiques qui n'ont pas encore été téléchargées.</div>
   <div *ngIf="globalEnergyBills.length === 0" class="alert alert-info text-center">
-    Aucune simulation enregistrée pour le moment.
+    Toutes vos facture énergétiques ont été téléchargées.
   </div>
 
   <div *ngIf="globalEnergyBills.length > 0">
@@ -129,9 +153,27 @@
           <h5 class="mb-0 fw-semibold" style="color: #216490;">Simulation du {{ bill.dateCreated | date:'dd/MM/yyyy' }}</h5>
           <small class="text-muted">Période : {{ bill.periodeUse | titlecase }}</small>
         </div>
-        <button class="btn btn-sm" style="background-color: #216490; color: white;" (click)="downloadPdf(bill.id)">
-          <i class="fas fa-file-pdf me-2"></i>Télécharger PDF
-        </button>
+        <div>
+       <button class="btn btn-sm me-2" style="background-color: #216490; color: white;" (click)="previewPdf(bill.id)">
+  <i class="fas fa-eye me-1"></i> Aperçu
+</button>
+<button 
+  class="btn btn-sm" 
+  style="background-color: #216490; color: white;" 
+  (click)="downloadPdf(bill.id)"
+  [disabled]="loadingBills[bill.id]">
+  
+  <ng-container *ngIf="!loadingBills[bill.id]; else loadingTpl">
+    <i class="fas fa-file-pdf me-1"></i> Télécharger PDF
+  </ng-container>
+  
+  <ng-template #loadingTpl>
+    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Chargement...
+  </ng-template>
+</button>
+
+
+          </div>
       </div>
       <div class="card-body">
         <div class="row g-3">
@@ -186,43 +228,40 @@
   <!-- Liste des points -->
   <div *ngIf="bonifPoints.length > 0">
 
-    <div *ngFor="let point of bonifPoints" class="card shadow-sm mb-3 border-0">
-      <div class="card-header d-flex justify-content-between align-items-center bg-light">
-        
-        <div>
-          <h6 class="mb-0 fw-semibold" style="color: #216490;">
-            {{ point.product.name }} <small class="text-muted">({{ point.product.brand }})</small>
-          </h6>
-          <small class="text-muted">Réf: {{ point.product.reference }}</small>
-        </div>
-        <span class="badge rounded-pill bg-success">
-          {{ point.nbr_pt }} pts
+    <div class="timeline">
+  <div *ngFor="let point of bonifPoints" class="timeline-item">
+    <div class="timeline-marker"
+         [ngClass]="{
+           'bg-success': point.type === 'actif',
+           'bg-secondary': point.type === 'utilisé'
+         }">
+      <i class="zmdi" 
+         [ngClass]="{
+           'zmdi-check': point.type === 'actif',
+           'zmdi-check-all': point.type === 'utilisé'
+         }"></i>
+    </div>
+    <div class="timeline-content card shadow-sm border-0">
+      <div class="card-body">
+        <h6 class="fw-bold mb-1">
+          {{ point.product.name }} <small class="text-muted">({{ point.product.brand }})</small>
+        </h6>
+        <p class="mb-1"><small class="text-muted">Réf: {{ point.product.reference }}</small></p>
+        <p class="mb-1">Gagnés le : <strong>{{ point.date_win | date:'dd/MM/yyyy HH:mm' }}</strong></p>
+        <p class="mb-1">Points : <strong>{{ point.nbr_pt }}</strong></p>
+        <p class="mb-1">Restants : <strong>{{ point.remainingPts }}</strong></p>
+        <span class="badge rounded-pill"
+              [ngClass]="{
+                'bg-success text-white': point.type === 'actif',
+                'bg-secondary text-white': point.type === 'utilisé'
+              }">
+          {{ point.type === 'actif' ? 'Actif' : 'Utilisé' }}
         </span>
       </div>
-      <div class="card-body">
-        <p class="mb-1">Gagnés le : <strong>{{ point.date_win | date:'dd/MM/yyyy HH:mm' }}</strong></p>
-        <p class="mb-1">Points restants : <strong>{{ point.remainingPts }}</strong></p>
-       <p class="mb-0">
-  Statut :
-  <span 
-    class="badge d-inline-flex align-items-center px-3 py-1 rounded-pill fw-medium"
-    [ngClass]="{
-      'bg-success text-white': point.type === 'actif',
-      'bg-secondary text-white': point.type === 'utilisé'
-    }">
-    <i 
-      class="zmdi me-1"
-      [ngClass]="{
-        'zmdi-check': point.type === 'actif',
-        'zmdi-check-all': point.type === 'utilisé'
-      }">
-    </i>
-    {{ point.type === 'actif' ? 'Actif' : 'Utilisé' }}
-  </span>
-</p>
-
-      </div>
     </div>
+  </div>
+</div>
+
   </div>
 </div>
 

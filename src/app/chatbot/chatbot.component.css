@@ -29,22 +29,22 @@
   height: 480px;
   max-width: 95vw;
   max-height: 90vh;
-  background-color: white;
-  border-radius: 16px;
+  background: linear-gradient(to bottom, #216490 0%, #ffffff 100%);
+  border-radius: 20px;
   box-shadow: 0 12px 28px rgba(33, 100, 144, 0.25);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   z-index: 1100;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .chatbot-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #216490;
-  color: #b3d6ed;
+  background-color: transparent;
+  color: #fff;  color: #b3d6ed;
   padding: 14px 20px;
   font-weight: 200;
   border-radius: 16px 16px 0 0;
@@ -58,12 +58,13 @@
   font-size: 22px;
   cursor: pointer;
 }
-
 .chatbot-body {
   display: flex;
   flex-direction: column;
-  padding: 16px 20px;
+  justify-content: space-between; /* important pour forcer l'input-group en bas */
   flex-grow: 1;
+  padding: 16px 20px;
+  background-color: transparent;
   overflow: hidden;
 }
 
@@ -135,12 +136,12 @@
   50% { opacity: 1; }
   100% { opacity: 0.2; }
 }
-
 .input-group {
   display: flex;
   gap: 10px;
-  padding-top: 10px;
   border-top: 1px solid #eee;
+  padding-top: 10px;
+  flex-shrink: 0; /* ← Empêche de rétrécir */
 }
 
 .chatbot-body input {
@@ -149,6 +150,7 @@
   font-size: 15px;
   border: 1.5px solid #b3d6ed;
   border-radius: 8px;
+  min-width: 0; /* ← Ajouté pour éviter que le bouton passe en dessous */
 }
 
 .chatbot-body input:focus {

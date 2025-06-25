@@ -182,4 +182,13 @@ results(){
       this.impactCarbone=null;
 
 }
+get selectedPeriodLabel(): string {
+  switch (this.selectedPeriod) {
+    case 'month': return '30 jours';
+    case 'three_months': return '90 jours';
+    case 'year': return '1 an';
+    default: return '';
+  }
+}
+
 }

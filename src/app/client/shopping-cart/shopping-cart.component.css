@@ -50,12 +50,10 @@
   100% { transform: rotate(360deg); }
 }
 
-/* Responsive boutons dans actions */
 .d-flex.flex-column.flex-md-row.gap-2 > button {
   min-width: 160px;
 }
 
-/* Ajout d’un style pour le message d’alerte info au-dessus */
 .alert-info {
   background-color: #e7f3fe;
   border-color: #bee5eb;

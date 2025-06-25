@@ -1,17 +1,19 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { ProductService } from '../../services/product.service';
 import { CarbonService } from '../../services/carbon.service';
-import { MatDialog } from '@angular/material/dialog'; // Importer MatDialog
+import { MatDialog } from '@angular/material/dialog'; 
 import { ProductdetailsComponent } from '../productdetails/productdetails.component';
 import { SimulateurComponent } from '../simulateur/simulateur.component';
 import { ClientService } from 'src/app/services/client.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SimulatorUsageService } from 'src/app/services/simulator-usage.service';
+
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.css']
 })
+
 export class ProductsComponent implements OnChanges,OnInit {
   @Input() catalogId!: number;
   products: any[] = [];

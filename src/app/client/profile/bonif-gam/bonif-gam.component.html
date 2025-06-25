@@ -1,0 +1,40 @@
+<div class="gamified-progress-container animate__animated animate__fadeInUp">
+  <h5 class="mb-3 text-center fw-bold" style="color: #216490;">Mon Avancement</h5>
+
+  <div class="progress-levels mb-4">
+    <div *ngFor="let step of steps" class="step">
+      <div 
+        class="step-circle"
+        [ngClass]="{ 'completed': totalPoints >= step.threshold }">
+        <i class="zmdi zmdi-star" *ngIf="totalPoints >= step.threshold"></i>
+        <span *ngIf="totalPoints < step.threshold">{{ step.threshold }}</span>
+      </div>
+      <div class="step-label">{{ step.label }}</div>
+    </div>
+  </div>
+
+  <div class="progress rounded-pill overflow-hidden" style="height: 20px;">
+    <div class="progress-bar fw-semibold" style="background-color: #216490;"
+         role="progressbar" 
+         [style.width.%]="getProgressPercentage()"
+         [attr.aria-valuenow]="totalPoints"
+         aria-valuemin="0"
+         aria-valuemax="maxThreshold">
+      {{ getProgressPercentage() }}%
+    </div>
+  </div>
+
+  <div class="text-center mt-4">
+    <p class="fw-medium text-muted mb-1">
+      Tu as actuellement <strong class="text-success">{{ getTotalRemainingPoints() }}</strong> points 🎯
+    </p>
+    <small class="text-muted d-block mb-3">Ces points amélioreront ton taux pour un crédit écologique plus avantageux 🏦</small>
+
+    <p class="encouragement" *ngIf="getProgressPercentage() < 100">
+      {{ getEncouragementMessage() }}
+    </p>
+    <p class="congrats" *ngIf="getProgressPercentage() === 100">
+       Félicitations ! Tu es au niveau maximum, prêt(e) pour une offre bancaire spéciale 
+    </p>
+  </div>
+</div>

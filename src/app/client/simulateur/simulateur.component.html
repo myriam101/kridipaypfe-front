@@ -1,5 +1,4 @@
-<h2 mat-dialog-title #titleElement class="text-center fw-bold text-primary-emphasis border-bottom pb-3 mb-4">
-  <i class="bi bi-bar-chart-line me-2 text-primary"></i>
+<h2 mat-dialog-title #titleElement class="text-center fw-bold border-bottom pb-3 mb-4">
   Simulation – <em>{{ data.product.name }}</em>
 </h2>
 
@@ -59,26 +58,62 @@
   </div>
 
   <!-- Résultat -->
-  <div *ngIf="!isLoading && simulationResult && facture && impactCarbone !== null" class="result-card mt-4">
-    <h5 class="text-center fw-semibold mb-3">Résumé de la simulation</h5>
-    <p class="text-center text-muted">
-      Selon votre utilisation, <strong class="text-custom-blue">{{ data.product.name }}</strong> consommera environ
-      <strong class="text-custom-blue">{{ simulationResult.estimated_consumption.kwh }} kWh</strong> d’électricité
-      et <strong class="text-custom-blue">{{ simulationResult.estimated_consumption.litres }} litres</strong> d’eau sur la période choisie.
-    </p>
-    <p class="text-center text-muted">
-      Cela vous coûtera environ
-      <strong class="text-custom-blue">{{ facture.montant_total }} <span style="font-size: smaller;">millimes</span></strong>
-      au total (électricité :
-      <strong class="text-custom-blue">{{ facture.montant_electricite }}</strong>,
-      eau :
-      <strong class="text-custom-blue">{{ facture.montant_eau }}</strong>).
-    </p>
-    <p class="text-center text-muted">
-      Son impact environnemental est estimé à
-      <strong class="text-custom-blue">{{ impactCarbone | number:'1.2-2' }} kg de CO₂</strong>.
-    </p>
+  <div *ngIf="!isLoading && simulationResult && facture && impactCarbone !== null" class="chat-bubble bot animate">
+  <div class="result-grid">
+
+    <!-- Électricité -->
+    <div class="result-item animate-zoom" matTooltip="Énergie électrique consommée sur la période">
+      <div class="result-icon bg-electric">
+        <i class="zmdi zmdi-lamp"></i>
+      </div>
+      <div>
+        <h6 class="result-label">Électricité</h6>
+        <p class="result-value">{{ simulationResult.estimated_consumption.kwh }} kWh</p>
+      </div>
+    </div>
+
+    <!-- Eau -->
+    <div class="result-item animate-zoom" matTooltip="Quantité d'eau utilisée pendant toute la période">
+      <div class="result-icon bg-water">
+        <i class="fa fa-tint"></i>
+      </div>
+      <div>
+        <h6 class="result-label">Eau</h6>
+        <p class="result-value">{{ simulationResult.estimated_consumption.litres }} litres</p>
+      </div>
+    </div>
+
+    <!-- Coût -->
+    <div class="result-item animate-zoom" matTooltip="Coût total estimé en millimes pour cette consommation">
+      <div class="result-icon bg-money">
+        <i class="zmdi zmdi-money"></i>
+      </div>
+      <div>
+        <h6 class="result-label">Coût</h6>
+        <p class="result-value">{{ facture.montant_total }} millimes</p>
+      </div>
+    </div>
+
+    <!-- CO₂ -->
+    <div class="result-item animate-zoom" matTooltip="Impact en dioxyde de carbone (CO₂) de cette utilisation">
+      <div class="result-icon bg-carbon">
+        <i class="zmdi zmdi-globe"></i>
+      </div>
+      <div>
+        <h6 class="result-label">CO₂</h6>
+        <p class="result-value">{{ impactCarbone | number:'1.2-2' }} kg</p>
+      </div>
+    </div>
+
   </div>
+
+  <p class="fst-italic text-muted mt-4 text-center fade-in">
+    Sur la période <strong class="text-custom-blue">{{ selectedPeriodLabel }}</strong>, ces résultats sont estimés selon votre utilisation.
+  </p>
+</div>
+
+
+
 </div>
 
 <!-- Boutons -->

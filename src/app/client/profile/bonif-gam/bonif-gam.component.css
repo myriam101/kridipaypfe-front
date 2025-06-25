@@ -1,0 +1,51 @@
+.gamified-progress-container {
+  background: #f4fbff;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 6px 18px rgba(33, 100, 144, 0.1);
+}
+
+.progress-levels {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.step {
+  text-align: center;
+  flex: 1;
+}
+
+.step-circle {
+  width: 42px;
+  height: 42px;
+  margin: 0 auto 0.5rem;
+  background: #ddd;
+  border-radius: 50%;
+  font-size: 0.85rem;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.step-circle.completed {
+  background: #216490;
+  box-shadow: 0 0 10px rgba(33, 100, 144, 0.4);
+}
+
+.step-label {
+  font-size: 0.75rem;
+  color: #555;
+}
+
+.encouragement {
+  font-style: italic;
+  color: #555;
+}
+
+.congrats {
+  font-weight: bold;
+  color: #28a745;
+}

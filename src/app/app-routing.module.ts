@@ -28,11 +28,12 @@ import { GestionPointsAdminComponent } from './adminboard/gestion-points-admin/g
 import { UnauthorizedComponent } from './provider/unauthorized/unauthorized.component';
 import { ChatbotComponent } from './chatbot/chatbot.component';
 import { ComparaisonComponent } from './comparaison/comparaison.component';
+import { LivraisonComponent } from './client/livraison/livraison.component';
 
 const routes: Routes = [
   {path:'chatbot',component:ChatbotComponent},
   {path:'client',component: ClientComponent,
-    children :[  {path:'comparateur',component:ComparaisonComponent},
+    children :[  {path:'comparateur',component:ComparaisonComponent},{path:'shopping-cart/delivery',component:LivraisonComponent},
 {path:'profile',component:ProfileComponent},{path:'shopping-cart',component:ShoppingCartComponent} ,{path: 'checkout', component:CheckoutComponent,
 }],
     canActivate: [AuthGuard],data: { roles: ['ROLE_CLIENT']}},

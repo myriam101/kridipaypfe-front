@@ -1,0 +1,40 @@
+#map {
+  width: 100%;
+  height: 420px;
+  min-height: 320px;
+  border-radius: 1rem;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background-color: #216490;
+  border-color: #216490;
+  transition: all 0.3s ease-in-out;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: #184f70;
+  border-color: #184f70;
+}
+
+.alert-info {
+  font-size: 0.875rem;
+  color: #0d3c61;
+  background-color: #e3f2fd;
+  border: 1px solid #cde4f8;
+  border-left: 4px solid #216490;
+}
+
+.form-select:focus {
+  border-color: #216490;
+  box-shadow: 0 0 0 0.2rem rgba(33, 100, 144, 0.25);
+}
+
+.card {
+  transition: all 0.3s ease-in-out;
+}
+
+.card:hover {
+  box-shadow: 0 4px 16px rgba(33, 100, 144, 0.1);
+}

@@ -66,6 +66,10 @@ import { ProgresscrapperComponent } from './adminboard/progresscrapper/progressc
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { LivraisonComponent } from './client/livraison/livraison.component';
 import { LogoutModalComponent } from './pages/logout-modal/logout-modal.component';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { PdfViewerFactureComponent } from './client/profile/pdf-viewer-facture/pdf-viewer-facture.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { BonifGamComponent } from './client/profile/bonif-gam/bonif-gam.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -78,48 +82,52 @@ export function tokenGetter() {
     CheckoutComponent,
     ProductsComponent,
     FooterComponent,
-  AuthLoginComponent,
-  ProductdetailsComponent,
-AdminboardComponent,
-ProviderComponent,
-AjoutproductComponent,
-ListproductsComponent,
-ProfileComponent,
-CardsComponent,
-SimulateurComponent,
-CatalogsCornerComponent,
-HomeCornerComponent,
-ClientsCornerComponent,
-CatalogDisplayComponent,
-ShoppingCartComponent,
-CartsComponent,
-ConsoleComponent,
-CheckoutComponent,
-ModalfactureComponent,
-ProfileProviderComponent,
-DashboardComponent,
-ListproduitsComponent,
-ConfirmDialogComponent,
-ReglagesComponent,
-BanqueComponent,
-DemandesComponent,
-BienvenuComponent,
-GestionCatalogsComponent,
-GestionPointsComponent,
-BoardComponent,
-GestionPointsAdminComponent,
-ConfirmDialogAdminComponent,
-UnauthorizedComponent,
-DetailPointbonifComponent,
-ChatbotComponent,
-ComparaisonComponent,
-DetailspointComponent,
-ProgresscrapperComponent,
-LivraisonComponent,
-LogoutModalComponent
+    AuthLoginComponent,
+    ProductdetailsComponent,
+    AdminboardComponent,
+    ProviderComponent,
+    AjoutproductComponent,
+    ListproductsComponent,
+    ProfileComponent,
+    CardsComponent,
+    SimulateurComponent,
+    CatalogsCornerComponent,
+    HomeCornerComponent,
+    ClientsCornerComponent,
+    CatalogDisplayComponent,
+    ShoppingCartComponent,
+    CartsComponent,
+    ConsoleComponent,
+    CheckoutComponent,
+    ModalfactureComponent,
+    ProfileProviderComponent,
+    DashboardComponent,
+    ListproduitsComponent,
+    ConfirmDialogComponent,
+    ReglagesComponent,
+    BanqueComponent,
+    DemandesComponent,
+    BienvenuComponent,
+    GestionCatalogsComponent,
+    GestionPointsComponent,
+    BoardComponent,
+    GestionPointsAdminComponent,
+    ConfirmDialogAdminComponent,
+    UnauthorizedComponent,
+    DetailPointbonifComponent,
+    ChatbotComponent,
+    ComparaisonComponent,
+    DetailspointComponent,
+    ProgresscrapperComponent,
+    LivraisonComponent,
+    LogoutModalComponent,
+    PdfViewerFactureComponent,
+    BonifGamComponent
   ],
   imports: [
     BrowserModule,
+    PdfViewerModule,
+    MatTooltipModule,
     CommonModule,
     FormsModule,
     AppRoutingModule,
@@ -128,7 +136,7 @@ LogoutModalComponent
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
-        allowedDomains: ['localhost:8000'],  // autorise l'envoi du token
+        allowedDomains: ['localhost:8000'], 
         disallowedRoutes: ['http://localhost:8000/api/login_check']
       }
     }),
@@ -149,7 +157,8 @@ LogoutModalComponent
     MatSnackBarModule,
     MatInputModule,
     NgChartsModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    
        ],
   providers: [],
   bootstrap: [AppComponent]
