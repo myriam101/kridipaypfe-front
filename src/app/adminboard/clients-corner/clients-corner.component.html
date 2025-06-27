@@ -1,39 +1,51 @@
 <div class="container py-4">
+   <div class="text-center mb-5">
+    <h3 class="fw-bold" style="color:#216490;">
+      <i class="zmdi zmdi-accounts-alt me-2"></i> Liste de vos clients
+    </h3>
+    <p class="text-secondary fst-italic">Ayez une visiblité sur les données de vos clients.</p>
+  </div>
   <div class="row g-4">
     <div class="loader-container" *ngIf="isLoading">
-  <div class="loader"></div>
-</div>
+      <div class="loader"></div>
+    </div>
 
     <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let client of clients">
-      <div class="card h-100 shadow-sm admin-card">
-        <div class="card-body text-center">
-          <div class="profile-wrapper">
-            <img src="assets/profile.png" class="rounded-circle profile-pic mb-3" alt="User">
-          </div>
-
-          <h5 class="card-title mb-1 text-primary-custom">
+      <div class="card h-100 shadow-sm admin-card border-0 p-3">
+        <div class="text-center mb-3">
+          <img src="assets/profile.png" class="rounded-circle profile-pic mb-2" alt="User">
+          <h5 class="card-title text-custom-blue mb-1">
             {{ client.User.name }} {{ client?.User.last_name }}
           </h5>
-          <p class="username mb-1">@{{ client.User.username }}</p>
-          <p class="text-muted small mb-1">{{ client.User.email }}</p>
-          <p class="text-muted small mb-1">{{ client.adress }}</p>
-          <p class="text-muted small mb-3">
-            Points : <strong>{{ client.totalBonifPts }}</strong>
-          </p>
-
-          <div class="star-rating mb-2">
-            <ng-container *ngFor="let star of [1,2,3,4,5]">
-              <span [class.filled]="client.score.valeur >= star">&#9733;</span>
-            </ng-container>
-          </div>
+          <p class="text-muted small mb-0">@{{ client.User.username }}</p>
         </div>
 
-        <div class="card-footer d-flex justify-content-between bg-white border-0">
-          <button (click)="openBonifModal(client.id)" class="btn btn-action btn-sm w-100" type="button">Action</button>
+        <!-- Infos contact -->
+        <div class="text-center mb-3">
+          <p class="mb-1 text-muted small" style="font-size: smaller;"><i class="bi bi-envelope me-1 text-custom-blue"></i>{{ client.User.email }}</p>
+          <p class="mb-0 text-muted small"><i class="bi bi-geo-alt me-1 text-custom-blue"></i>{{ client.adress }}</p>
+        </div>
+
+        <!-- Points + détail -->
+        <div class="d-flex justify-content-center align-items-center gap-2 mb-3">
+          <span class="fw-semibold text-custom-blue">Points : {{ client.totalBonifPts }}</span>
+          <i
+  class="bi bi-info-circle-fill info-icon"
+            style="cursor: pointer;"
+            matTooltip="Voir les détails des points bonifiants"
+            (click)="openBonifModal(client.id)"
+          ></i>
+        </div>
+
+        <!-- Étoiles score -->
+        <div class="star-rating d-flex justify-content-center mb-1" matTooltip="Représente le score du client basé sur la proportion de ses achats éco-responsables.">
+          <ng-container *ngFor="let star of [1,2,3,4,5]">
+            <span [class.filled]="client.score.valeur >= star">&#9733;</span>
+          </ng-container>
         </div>
       </div>
     </div>
-    <app-detail-pointbonif [bonifPoints]="selectedBonifPoints"></app-detail-pointbonif>
 
+    <app-detail-pointbonif [bonifPoints]="selectedBonifPoints"></app-detail-pointbonif>
   </div>
 </div>

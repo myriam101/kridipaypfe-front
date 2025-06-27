@@ -1,112 +1,63 @@
-body {
-  margin-top: 20px;
-  color: #1a202c;
-  text-align: left;
-  background-color: #f1f5f9;
-  font-family: 'Arial', sans-serif;
+:root {
+  --main-blue: #216490;
 }
 
-.main-body {
-  padding: 15px;
-}
-
-.card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  background-color: #ffffff;
-  border: none;
-  border-radius: 1rem;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
-}
-
-.card-body {
-  padding: 2rem 1rem 1rem;
-  text-align: center;
-}
-
-.profile-pic {
-  width: 90px;
-  height: 90px;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 3px solid #e2e8f0;
-  margin-top: -60px;
-  background-color: #fff;
+.text-custom-blue {
+  color: var(--main-blue) !important;
 }
 
 .card-title {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #2d3748;
 }
 
-.card p {
-  margin: 0.25rem 0;
-  font-size: 0.85rem;
+.profile-pic {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #dbeafe;
+  background-color: #fff;
 }
 
-.card p.text-secondary {
-  color: #718096;
+.card {
+  border-radius: 1rem;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.05);
+  transition: 0.2s ease-in-out;
 }
 
-.card-footer {
-  display: flex;
-  justify-content: center;
-  background-color: transparent;
-  border-top: none;
-  padding: 0.75rem 1rem 1.25rem;
-}
-
-.btn-action {
-  background-color: #216490;
-  color: white;
-  border: none;
-  padding: 0.4rem 0.75rem;
-  font-size: 0.85rem;
-  border-radius: 0.5rem;
-  transition: background-color 0.3s ease;
-  width: 100%;
-}
-
-.btn-action:hover {
-  background-color: #1a4f73;
-}
-
-.star-rating {
-  display: flex;
-  justify-content: center;
-  margin: 0.5rem 0;
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
 }
 
 .star-rating span {
-  font-size: 1rem;
+  font-size: 1.1rem;
   color: #d1d5db;
   margin: 0 2px;
 }
 
 .star-rating span.filled {
-  color: #facc15; /* doré */
+  color: #facc15;
 }
 
 @media (max-width: 576px) {
-  .card-body {
-    padding: 1.5rem 1rem 1rem;
-  }
-
   .profile-pic {
     width: 70px;
     height: 70px;
-    margin-top: -50px;
   }
 
-  .btn-action {
-    font-size: 0.8rem;
+  .card {
+    padding: 1rem;
   }
+}
+.info-icon {
+  color: #216490;
+  font-size: 1.1rem;
+  transition: color 0.2s ease;
+  cursor: pointer;
+}
+
+.info-icon:hover {
+  color: #164866; 
 }

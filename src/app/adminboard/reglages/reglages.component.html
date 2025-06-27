@@ -12,15 +12,21 @@
         
        <ng-container *ngSwitchCase="'seuil'">
   <div class="card p-4 shadow seuil-card border-0">
-    <h2 class="h5 text-custom-blue mb-4 d-flex align-items-center">
-      <i class="bi bi-bar-chart-fill me-2 fs-4"></i>
-      Gestion du seuil du score écologique des clients
-    </h2>
-
     <!-- Loader -->
     <div class="loader-container" *ngIf="isLoading">
       <div class="loader"></div>
     </div>
+<div class="alert alert-info d-flex align-items-start gap-2 small p-2 mb-3 rounded-3">
+      <i class="bi bi-info-circle-fill text-info mt-1"></i>
+  <div>
+    <strong>À quoi sert ce seuil ?</strong><br>
+    Ce seuil représente le <strong>nombre minimal d’achats aboutis</strong> qu’un client doit effectuer pour que son score écologique soit calculé. <br>
+    <br>
+    Si un client a validé moins de <strong>{{ valeur }} achats</strong>, son score est automatiquement <strong>0</strong>, car il n’est pas encore assez actif pour une évaluation pertinente.<br>
+    <br>
+    Une fois le seuil atteint, un <strong>score écologique sur 5</strong> est attribué au client en fonction de la proportion de ses achats « éco-responsables » (produits ayant un <span class="text-success fw-semibold">badge PEU</span>).<br>
+  </div>
+</div>
 
     <!-- Valeur actuelle -->
     <div *ngIf="valeur !== null" class="bg-light p-3 rounded border border-custom-blue-subtle mb-3 d-flex justify-content-between align-items-center">
@@ -39,49 +45,103 @@
     </div>
 
     <!-- Champ de modification -->
-    <div class="mt-3">
-      <label for="seuilInput" class="form-label fw-semibold text-custom-blue mb-2">
-        Nouvelle valeur
-      </label>
-      <div class="input-group mb-3">
-        <input
-          id="seuilInput"
-          type="number"
-          class="form-control"
-          placeholder="ex: 20"
-          [(ngModel)]="newValeur"
-        >
-        <span class="input-group-text bg-light text-muted">pts</span>
-      </div>
+<div class="mt-3">
+  <label for="seuilInput" class="form-label fw-semibold text-custom-blue mb-2">
+    Nouvelle valeur
+  </label>
+  <div class="input-group input-group-sm" style="max-width: 240px;">
+    <input
+      id="seuilInput"
+      type="number"
+      class="form-control"
+      placeholder="ex: 20"
+      [(ngModel)]="newValeur"
+    >
+    <span class="input-group-text bg-light text-muted">pts</span>
+    <button class="btn btn-sm btn-outline-primary-blue" (click)="updateSeuil()">
+      <i class="bi bi-check2-circle"></i>
+    </button>
+  </div>
+</div>
 
-      <button (click)="updateSeuil()" class="btn btn-custom-blue w-100">
-        <i class="bi bi-arrow-repeat me-1"></i> Mettre à jour
-      </button>
-    </div>
   </div>
 </ng-container>
 
 
         <!-- Bloc POINTS (à compléter) -->
-        <ng-container *ngSwitchCase="'points'">
-          <!-- À insérer ici : contenu gestion des points bonifiants -->
-          <p class="text-muted">Contenu à venir pour la gestion des points bonifiants...</p>
-        </ng-container>
+     <ng-container *ngSwitchCase="'points'">
+  <div class="card p-3 shadow-sm border-0 rounded-4 bg-white">
+    <!-- Info -->
+    <div class="alert alert-info d-flex align-items-start gap-2 small p-2 mb-3 rounded-3">
+      <i class="bi bi-info-circle-fill text-info mt-1"></i>
+      <span>
+        Définissez ici les seuils de points bonifiants attribués aux clients selon le badge écologique des produits achetés.
+        <br>
+        Cela incite les clients à privilégier les produits à faible impact environnemental.
+      </span>
+    </div>
+     
+
+   <div class="loader-container" *ngIf="isLoading">
+      <div class="loader"></div>
+    </div>
+
+    <!-- Message -->
+    <div *ngIf="message" class="alert alert-success py-1 px-2 small rounded-2 mb-3 d-flex justify-content-between align-items-center">
+      {{ message }}
+      <button type="button" class="btn-close btn-sm" aria-label="Close" (click)="message = ''"></button>
+    </div>
+
+    <!-- SeuilsBonif -->
+  <div *ngFor="let seuilbonif of seuilsBonif"
+  class="bg-light rounded-3 p-3 mb-2 border d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2">
+  <div
+    class="badge text-uppercase px-2 py-1"
+    [ngClass]="{
+      'bg-success-subtle text-success': seuilbonif.type_badge === 'peu',
+      'bg-warning-subtle text-warning': seuilbonif.type_badge === 'moyen',
+      'bg-danger-subtle text-danger': seuilbonif.type_badge === 'eleve'
+    }"
+    matTooltip="{{ getTooltip(seuilbonif.type_badge) }}"
+    matTooltipPosition="above"
+  >
+    <span class="text-capitalize">{{ seuilbonif.type_badge }}</span>
+  </div>
+
+  <div class="input-group input-group-sm" style="max-width: 220px;">
+    <input
+      type="number"
+      class="form-control"
+      [(ngModel)]="seuilbonif.valeur"
+      min="0"
+    />
+    <span class="input-group-text bg-light text-muted">pts</span>
+    <button
+      class="btn btn-sm btn-outline-primary-blue"
+      (click)="updateSeuilBonif(seuilbonif.type_badge, seuilbonif.valeur)"
+    >
+      <i class="bi bi-check2-circle"></i>
+    </button>
+  </div>
+</div>
+
+
+  </div>
+</ng-container>
+
+
 
         <!-- FACTEUR D'ÉMISSION CO₂ -->
   <ng-container *ngSwitchCase="'facteur'">
     <div class="card p-4 shadow seuil-card border-0">
-      <h2 class="h5 text-custom-blue mb-4 d-flex align-items-center">
-        <i class="bi bi-bar-chart-fill me-2 fs-4"></i>
-        Gestion du facteur d’émission CO₂
-      </h2>
 <!-- Info message -->
-<div class="alert alert-info d-flex align-items-center gap-2 mb-3 fade show" style="border-radius: 8px;">
-  <i class="bi bi-info-circle-fill text-info"></i>
-  <span>
+  <div class="alert alert-info d-flex align-items-start gap-2 small p-2 mb-3 rounded-3">
+      <i class="bi bi-info-circle-fill text-info mt-1"></i>
+      <span>
     Lorsqu’une nouvelle valeur du facteur d’émission CO₂ est enregistrée, l’impact environnemental de tous les produits des différents catalogues est automatiquement recalculé, ainsi que leurs badges.
-  </span>
-</div>
+      </span>
+    </div>
+
 
       <!-- Loader -->
       <div class="loader-container" *ngIf="isLoading">
@@ -104,27 +164,27 @@
         <i class="bi bi-cloud-sun-fill text-secondary fs-2"></i>
       </div>
 
-      <!-- Champ de modification -->
-      <div class="mt-3">
-        <label for="facteurInput" class="form-label fw-semibold text-custom-blue mb-2">
-          Nouvelle valeur
-        </label>
-        <div class="input-group mb-3">
-          <input
-            id="facteurInput"
-            type="text"
-            class="form-control"
-            placeholder="ex: 0.58"
-            (input)="onFacteurInput($event)"
-            [value]="new_facteur"
-          >
-          <span class="input-group-text bg-light text-muted">kg/kWh</span>
-        </div>
+     <!-- Champ de modification -->
+<div class="mt-3">
+  <label for="facteurInput" class="form-label fw-semibold text-custom-blue mb-2">
+    Nouvelle valeur
+  </label>
+  <div class="input-group input-group-sm" style="max-width: 240px;">
+    <input
+      id="facteurInput"
+      type="text"
+      class="form-control"
+      placeholder="ex: 0.58"
+      (input)="onFacteurInput($event)"
+      [value]="new_facteur"
+    >
+    <span class="input-group-text bg-light text-muted">kg/kWh</span>
+    <button class="btn btn-sm btn-outline-primary-blue" (click)="updateFacteur()">
+      <i class="bi bi-check2-circle"></i>
+    </button>
+  </div>
+</div>
 
-        <button (click)="updateFacteur()" class="btn btn-custom-blue w-100">
-          <i class="bi bi-arrow-repeat me-1"></i> Mettre à jour
-        </button>
-      </div>
     </div>
   </ng-container>
 

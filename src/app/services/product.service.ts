@@ -109,5 +109,8 @@ assignRandomPointsToProvider( selectedProductIds: number[]): Observable<any> {
   return this.http.post(`${this.apiProducts}/assign`, { productIds: selectedProductIds });
 }
 
+updateBonifs(): Observable<any> {
+  return this.http.put(`${this.apiProducts}/update-bonifpoints`, {});
+}
 
 }

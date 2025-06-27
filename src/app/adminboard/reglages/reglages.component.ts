@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CarbonService } from 'src/app/services/carbon.service';
+import { ProductService } from 'src/app/services/product.service';
+import { SeuilBonifService } from 'src/app/services/seuil-bonif.service';
 import { SeuilService } from 'src/app/services/seuil.service';
 
 @Component({
@@ -9,6 +11,8 @@ import { SeuilService } from 'src/app/services/seuil.service';
   styleUrls: ['./reglages.component.css']
 })
 export class ReglagesComponent implements OnInit {
+  seuilsBonif: any[] = [];
+
   items = [
     {
       title: 'Gestion du seuil du score écologique des clients',
@@ -34,16 +38,18 @@ export class ReglagesComponent implements OnInit {
   date: string | null = null;
   newValeur: number = 0;
   isLoading: boolean = false;
+  message: string | undefined;
 
-  constructor(
+  constructor(private seuilBonifService: SeuilBonifService,
     private seuilService: SeuilService,
     private snackBar: MatSnackBar,
-    private carbonService: CarbonService
+    private carbonService: CarbonService,private productService: ProductService
   ) {}
 
   ngOnInit(): void {
     this.loadSeuil();
     this.loadFacteur();
+    this.loadSeuilBonif();
   }
 
   toggle(index: number): void {
@@ -160,5 +166,61 @@ export class ReglagesComponent implements OnInit {
   this.new_facteur = isNaN(parsed) ? 0 : parsed;
 }
 
+loadSeuilBonif() {
+    this.seuilBonifService.getSeuilsBonif().subscribe({
+      next: data => {this.seuilsBonif = data,
+        console.log("data bonif",data);
+      },
+      error: err => this.message = 'Erreur chargement des seuils.'
+    });
+  }
+
+  updateSeuilBonif(type: 'peu' | 'moyen' | 'eleve', valeur: number) {
+    this.isLoading = true;
+    const seuil: any = { type_badge: type, valeur };
+    this.seuilBonifService.saveSeuilBonif(seuil).subscribe({
+      next: () => {
+         this.showSnackBar('Marge des points bonifiants mis à jour avec succès.');
+        this.loadSeuilBonif();
+      },
+      error: () => this.showSnackBar('Erreur lors de la mise à jour des marges.'),
+      complete: () => this.isLoading = false
+    });
+    this.onUpdateBonifPoints();
+  }
+
+ onUpdateBonifPoints(): void {
+  this.isLoading = true;
+
+  this.productService.updateBonifs().subscribe({
+    next: (res) => {
+      if (res.success) {
+        this.showSnackBar(res.message);
+      } else {
+        this.showSnackBar('Une erreur s’est produite.', 4000, true);
+      }
+      this.isLoading = false;
+    },
+    error: () => {
+      this.showSnackBar("Une erreur s'est produite lors de la mise à jour.", 5000, true);
+      this.isLoading = false;
+    }
+  });
+}
+
+
+
+  getTooltip(type: string): string {
+  switch (type) {
+    case 'peu':
+      return 'Badge PEU : Impact environnemental faible — encourage à privilégier ce produit en attribuant une marge plus élevée.';
+    case 'moyen':
+      return 'Badge MOYEN : Impact environnemental modéré — attribuer une valeur en dessous de celle du badge "PEU".';
+    case 'eleve':
+      return 'Badge ÉLEVÉ : Impact plus élevé — à limiter si possible, donc attribuer une valeur moindre voir zero.';
+    default:
+      return 'Type de badge inconnu';
+  }
+}
 
 }

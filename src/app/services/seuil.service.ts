@@ -12,6 +12,7 @@ private urlScore = 'http://localhost:8000/score';
 
 
   constructor(private http: HttpClient) {}
+  
   getCurrentSeuil(): Observable<any> {
     return this.http.get(`${this.baseUrl}/current`);
   }

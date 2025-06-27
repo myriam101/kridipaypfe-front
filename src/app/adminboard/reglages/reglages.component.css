@@ -79,22 +79,6 @@
   border-radius: 8px;
 }
 
-.loader-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 40px;
-}
-
-.loader {
-  border: 4px solid rgba(0, 0, 0, 0.1);
-  border-left-color: #216490;
-  border-radius: 50%;
-  width: 28px;
-  height: 28px;
-  animation: spin 0.8s linear infinite;
-}
-
 @keyframes spin {
   to {
     transform: rotate(360deg);
@@ -103,4 +87,18 @@
 
 input, button {
   transition: all 0.2s ease-in-out;
+}
+.text-primary-blue {
+  color: #216490 !important;
+}
+
+.btn-outline-primary-blue {
+  color: #216490;
+  border: 1px solid #216490;
+  background-color: transparent;
+}
+
+.btn-outline-primary-blue:hover {
+  background-color: #216490;
+  color: white;
 }

@@ -13,13 +13,13 @@
   <div class="row g-4 mb-5">
 
     <div class="col-md-6 col-xl-3" style="--delay: 0s">
-      <div class="card stat-card border-start border-primary shadow-sm">
+      <div class="card stat-card border-start border-primary shadow-sm" matTooltip="Nombre total de clics sur le simulateur par tous les utilisateurs">
         <div class="card-body d-flex align-items-center gap-3">
           <div class="icon-box  text-white shadow-sm">
             <i class="fa fa-database fs-3"></i>
           </div>
           <div>
-            <p class="text-muted mb-1" title="Nombre total d'ouvertures de simulations">Total d'ouvertures</p>
+            <p class="text-muted mb-1">Total clics</p>
             <h4 class="text-primary fw-bold mb-0">{{ total }}
               
             </h4>
@@ -44,7 +44,8 @@
     </div>
 
     <div class="col-md-6 col-xl-3" style="--delay: 0.2s">
-      <div class="card stat-card border-start border-primary shadow-sm">
+<div class="card stat-card border-start border-primary shadow-sm"  
+     matTooltip="Nombre total de simulations réussies effectuées sur des produits avant leur achat">
         <div class="card-body d-flex align-items-center">
           <div>
             <p class="text-muted mb-1">Avant Achat</p>
@@ -58,11 +59,12 @@
     </div>
 
     <div class="col-md-6 col-xl-3" style="--delay: 0.3s">
-      <div class="card stat-card border-start border-primary shadow-sm">
+<div class="card stat-card border-start border-primary shadow-sm" 
+     matTooltip="Pourcentage de clients ayant utilisé le simulateur au moins une fois parmi l'ensemble des clients inscrits.">
         <div class="card-body d-flex align-items-center">
           <div>
             <p class="text-muted mb-1">Taux de Simulation</p>
-            <h4 class="text-primary fw-bold mb-0">{{ simulationRate }}%</h4>
+            <h4 class="text-primary fw-bold mb-0">{{ usage_rate_percent }}%</h4>
           </div>
           <div class="icon-box ms-auto bg-primary text-white rounded-circle p-3">
             <i class="zmdi zmdi-flash"></i>

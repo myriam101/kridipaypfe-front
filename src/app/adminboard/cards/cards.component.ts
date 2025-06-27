@@ -17,7 +17,7 @@ interface Top3Product {
 export class CardsComponent implements OnInit {
 
   isLoading = false; 
-
+  usage_rate_percent:any;
   top3: Top3Product[] = [];
   total = 0;
   withSimulation = 0;
@@ -82,7 +82,7 @@ export class CardsComponent implements OnInit {
         return;
       }
     this.isLoading = false; 
-
+      this.usage_rate_percent=data.usage_rate_percent ?? 0;
       this.total = data.total ?? 0;
       this.withSimulation = data.with_simulation ?? 0;
       this.beforePurchase = data.before_purchase ?? 0;
@@ -112,8 +112,8 @@ export class CardsComponent implements OnInit {
           datasets: [{
             data: [data.with_simulation, data.before_purchase],
             backgroundColor: [
-              'rgba(33, 100, 144, 0.8)',  // #216490 avec alpha 0.8
-              'rgba(216, 14, 45, 0.7)'    // #D80E2D avec alpha 0.7
+              'rgba(33, 100, 144, 0.8)', 
+              'rgba(216, 14, 45, 0.7)' 
             ],
             borderColor: [
               'rgba(33, 100, 144, 1)',
@@ -131,8 +131,8 @@ export class CardsComponent implements OnInit {
             label: 'Ouvertures mensuelle du simulateur',
             data: data.monthly_usage.map((m: any) => m.totalCount ?? 0),
             fill: true,
-            backgroundColor: 'rgba(229, 147, 0, 0.4)', 
-            borderColor: '#E59300',
+            backgroundColor: '#216490', 
+            borderColor: '#88c7f0',
             tension: 0.4
           }]
         };
@@ -145,7 +145,7 @@ export class CardsComponent implements OnInit {
             {
               label: 'Total Ouverture du simulateur',
               data: data.by_client.map((c: any) => c.total ?? 0),
-              backgroundColor: 'rgba(33, 100, 144, 0.7)'
+              backgroundColor: '#216490'
             },
             {
               label: 'Ouvertures avec simulation aboutie',
@@ -163,7 +163,7 @@ export class CardsComponent implements OnInit {
             data: Object.values(data.age_groups),
             backgroundColor: [
               'rgba(216, 14, 45, 0.8)', // #D80E2D
-              'rgba(33, 100, 144, 0.8)', // #216490
+              '#216490', //
               'rgba(229, 147, 0, 0.8)', // #E59300
               'rgba(33, 100, 144, 0.5)' // plus clair
             ]
