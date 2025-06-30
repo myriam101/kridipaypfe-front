@@ -7,7 +7,10 @@ import { Observable } from 'rxjs';
 })
 export class DeliveryService {
 
+  private urlAPI = 'http://localhost:8000';
+
 private baseUrl = 'http://localhost:8000/Delivery/';
+  private cartWeight: number | null = null;
 
   constructor(private http: HttpClient) {}
     geocode(address: string): Observable<any> {
@@ -34,4 +37,24 @@ private currentCartId: number | null = null;
   getCartId(): number | null {
     return this.currentCartId;
   }
+ setCartWeight(weight: number) {
+    this.cartWeight = weight;
+  }
+
+  getCartWeightStored(): number | null {
+    return this.cartWeight;
+  }
+
+ 
+  getCartWeight(cartId: number) {
+  return this.http.post<any>(`${this.baseUrl}cart-weight`, {
+    cart_id: cartId
+  });
+}
+estimateCO2(weightKg: number, distanceKm: number) {
+  return this.http.post<any>(`${this.urlAPI}/api/co2-estimate`, {
+    weight: weightKg,
+    distance: distanceKm
+  });
+}
 }

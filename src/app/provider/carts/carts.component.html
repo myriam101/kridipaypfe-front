@@ -22,11 +22,15 @@
   <div *ngIf="!isLoading">
     <!-- Paniers en attente -->
     <div *ngIf="activeTab === 'waiting'">
-      <div *ngIf="cartLoadError" class="alert alert-danger text-center">Une erreur est survenue lors du chargement des paniers.</div>
-      <div *ngIf="!cartLoadError && waitingCarts.length === 0" class="alert alert-info text-center">Aucun panier en attente pour le moment.</div>
+      <div *ngIf="cartLoadError" class="custom-alert-info">Une erreur est survenue lors du chargement des paniers.</div>
+<div *ngIf="!cartLoadError && waitingCarts.length === 0" class="custom-alert-info">
+  <i class="bi bi-info-circle-fill "></i>
+  Aucun panier en attente pour le moment.
+</div>
 
       <div *ngFor="let cart of waitingCarts" class="card mb-3 border-warning shadow-sm">
         <div class="card-header bg-light fw-semibold d-flex justify-content-between align-items-center">
+          
 <div>
     <i class="bi bi-clock text-warning me-2"></i> 
     Panier #{{ cart.cart_id }} - {{ cart.client_name }} {{ cart.client_lastname }}
@@ -43,19 +47,30 @@
             </li>
           </ul>
         </div>
-        <div class="card-footer bg-light px-4 py-3 text-end ">
-    <button class="btn btn-success btn-sm d-inline-flex align-items-center gap-1 me-2" (click)="onValidateCart(cart.cart_id)"> Valider
-    </button>
-     <button class="btn btn-danger btn-sm d-inline-flex align-items-center gap-1" (click)="onCancelCart(cart.cart_id)"> Annuler
-    </button>
-  </div>
+        <!-- Message d'attente autre fournisseur -->
+<div *ngIf="cart.providerStatus === 'waiting'" class="alert-provider-waiting"  matTooltip="Ce panier a été validé par vous. Il reste des validations en attente par d'autres fournisseurs.">
+  <i class="bi bi-info-circle-fill me-1" ></i> {{ cart.providerMessage }}
+</div>
+
+
+<!-- Footer avec boutons -->
+<div class="card-footer text-end" *ngIf="cart.providerStatus === 'not_validated'">
+  <button class="btn btn-success btn-sm me-2" (click)="onValidateCart(cart.cart_id)">
+    <i class="bi bi-check-circle"></i> Valider
+  </button>
+  <button class="btn btn-danger btn-sm" (click)="onCancelCart(cart.cart_id)">
+    <i class="bi bi-x-circle"></i> Annuler
+  </button>
+</div>
+
+
       </div>
     </div>
 
     <!-- Paniers validés -->
     <div *ngIf="activeTab === 'validated'">
-      <div *ngIf="cartLoadError" class="alert alert-danger text-center">Une erreur est survenue lors du chargement des paniers.</div>
-      <div *ngIf="!cartLoadError && validCarts.length === 0" class="alert alert-info text-center">Aucun panier validé pour le moment.</div>
+      <div *ngIf="cartLoadError" class="custom-alert-info">Une erreur est survenue lors du chargement des paniers.</div>
+      <div *ngIf="!cartLoadError && validCarts.length === 0" class="custom-alert-info">Aucun panier validé pour le moment.</div>
 
       <div *ngFor="let cart of validCarts" class="card mb-3 border-success shadow-sm">
         <div class="card-header bg-light fw-semibold d-flex justify-content-between align-items-center">
@@ -80,8 +95,8 @@
 
     <!-- Paniers annulés -->
     <div *ngIf="activeTab === 'cancelled'">
-      <div *ngIf="cartLoadError" class="alert alert-danger text-center">Une erreur est survenue lors du chargement des paniers.</div>
-      <div *ngIf="!cartLoadError && cancelledcarts.length === 0" class="alert alert-info text-center">Aucun panier annulé pour le moment.</div>
+      <div *ngIf="cartLoadError" class="custom-alert-info">Une erreur est survenue lors du chargement des paniers.</div>
+      <div *ngIf="!cartLoadError && cancelledcarts.length === 0" class="custom-alert-info">Aucun panier annulé pour le moment.</div>
 
       <div *ngFor="let cart of cancelledcarts" class="card mb-3 border-danger shadow-sm">
         <div class="card-header bg-light fw-semibold d-flex justify-content-between align-items-center">

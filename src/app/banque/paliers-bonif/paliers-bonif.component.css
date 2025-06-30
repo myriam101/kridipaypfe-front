@@ -1,0 +1,140 @@
+.progress-wrapper {
+  max-width: 920px;
+  margin: auto;
+}
+
+.progress-bar-container {
+  display: flex;
+  height: 60px;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid #d0dbe8;
+  background-color: #f1f6fb;
+}
+
+.palier-segment {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  transition: all 0.3s ease-in-out;
+  padding: 4px;
+  font-size: 13px;
+  position: relative;
+}
+
+.palier-segment:hover {
+  filter: brightness(1.1);
+}
+
+.palier-content {
+  text-align: center;
+  font-weight: 600;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.min-max {
+  font-size: 11px;
+  opacity: 0.9;
+}
+
+.taux {
+  font-size: 14px;
+}
+
+.cursor-indicator {
+  position: absolute;
+  top: -15px;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.cursor-dot {
+  width: 10px;
+  height: 10px;
+  background-color: #216490;
+  border-radius: 50%;
+  margin: 0 auto;
+}
+
+.cursor-label {
+  font-size: 10px;
+  color: #216490;
+  font-weight: bold;
+  margin-top: 2px;
+}
+
+.tooltip-paliers {
+  font-size: 13px;
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+
+.custom-alert-info {
+  background-color: #eaf4fd;
+  padding: 10px;
+  border-left: 4px solid #216490;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  color: #216490;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 1rem;
+}
+
+.custom-alert-info i {
+  font-size: 1.25rem;
+}
+.btn-ajout-palier {
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-weight: 600;
+  color: #216490;
+  border: 1px solid #216490;
+  background-color: white;
+  transition: all 0.2s ease;
+}
+
+.btn-ajout-palier:hover {
+  background-color: #216490;
+  color: white;
+}
+.palier-segment.selected {
+  outline: 3px solid #E59300;
+  box-shadow: 0 0 10px rgba(33, 100, 144, 0.7);
+  position: relative;
+  z-index: 5; 
+}
+
+.palier-segment.selected::after {
+  content: "✓";             
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  font-size: 16px;
+  color: #E59300;
+  font-weight: bold;
+  pointer-events: none;       
+  user-select: none;
+}
+
+.palier-segment {
+  cursor: pointer;
+  transition: box-shadow 0.3s ease;
+}
+
+.btn-primary {
+  background-color: #216490;
+  border-color: #216490;
+  font-weight: 400;
+  letter-spacing: 0.05rem;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #174d70;
+  border-color: #174d70;
+}

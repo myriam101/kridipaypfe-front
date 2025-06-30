@@ -16,55 +16,131 @@
   <!-- Carte + Formulaire -->
   <div class="row g-4" [formGroup]="form">
     <!-- Colonne Formulaire -->
-    <div class="col-md-5">
-      <div class="card shadow-sm border-0 rounded-4 p-4">
-        <h5 class="mb-3 text-primary">Adresse de livraison</h5>
-        <p class="text-muted small mb-4">
-          Cliquez sur la carte à droite pour sélectionner votre adresse de livraison.
-        </p>
+   <div class="col-md-5">
+  <!-- Si pas encore validé (pas de résumé) -->
+  <ng-container *ngIf="!deliverySummary; else showSummary">
+    <div class="card shadow-sm border-0 rounded-4 p-4">
+      <h5 class="mb-3" style="color: #216490;">Adresse de livraison</h5>
+      <p class="text-muted small mb-4">
+        Cliquez sur la carte à droite pour sélectionner votre adresse de livraison.
+      </p>
 
-        <div *ngIf="address" class="alert alert-info p-2 mb-3">
-          <i class="bi bi-geo-alt-fill me-2 text-primary"></i>
+      <div *ngIf="address" class="alert alert-info p-3 mb-3 d-flex align-items-center gap-3">
+        <i class="bi bi-geo-alt-fill fs-4 text-primary"></i>
+        <div>
           <strong>Adresse sélectionnée :</strong><br />{{ address }}
         </div>
-
-        <div class="mb-3">
-          <label for="modeliv" class="form-label fw-semibold text-dark">Mode de livraison</label>
-          <select id="modeliv" class="form-select border-primary" formControlName="modeliv">
-            <option *ngFor="let option of modelivOptions" [value]="option.value">
-              {{ option.label }}
-            </option>
-          </select>
-        </div>
-
-        <button class="btn btn-primary w-100 rounded-3" 
-                [disabled]="form.invalid" 
-                (click)="submitDelivery()">
-          <i class="bi bi-check2-circle me-2"></i>Valider la livraison
-        </button>
-
-        <div *ngIf="error" class="alert alert-danger mt-3 small">{{ error }}</div>
       </div>
 
-      <!-- Résumé -->
-      <div *ngIf="deliverySummary" class="card mt-4 border-0 rounded-4 shadow-sm bg-light">
-        <div class="card-body small">
-          <h6 class="fw-semibold text-success mb-3">
-            <i class="bi bi-truck me-2"></i>Résumé de la livraison
-          </h6>
-          <ul class="list-unstyled mb-0">
-            <li class="mb-2"><strong>Adresse :</strong> {{ deliverySummary.adresse }}</li>
-            <li class="mb-2"><strong>Mode :</strong> {{ deliverySummary.modeLivraison }}</li>
-            <li class="mb-2"><strong>Fournisseur :</strong> {{ deliverySummary.fournisseur }}</li>
-            <li><strong>Distance :</strong> {{ deliverySummary.distance }} km</li>
-          </ul>
-        </div>
+      <!-- Estimation CO2 avec tooltip -->
+     <!-- Loading -->
+<div *ngIf="isLoadingCO2" class="co2-loader p-4 text-center">
+<div class="dots-bounce-loader" aria-label="Chargement CO₂">
+  <span></span><span></span><span></span>
+</div>
+  <div class="small text-muted mt-2">Calcul des émissions en cours...</div>
+</div>
+
+<!-- Résultat -->
+<div *ngIf="!isLoadingCO2 && estimatedCO2 !== null"
+     class="co2-estimate highlight-result p-4 mb-4 text-center"
+     matTooltip="Estimation des émissions de dioxyde de carbone (CO₂) liées à la livraison selon la distance et le poids du panier."
+     matTooltipPosition="above">
+  <div class="d-flex justify-content-center align-items-center mb-3">
+    <i class="bi bi-cloud-fill fs-1 me-2 bounce-icon"></i>
+    <div class="fs-2 fw-bold">{{ estimatedCO2 | number: '1.2-2' }} kg CO₂</div>
+  </div>
+  <div class="small text-muted">Émissions estimées pour cette livraison</div>
+</div>
+
+
+      <!-- Mode livraison -->
+      <div class="mb-3">
+        <label for="modeliv" class="form-label fw-semibold text-dark">Mode de livraison</label>
+        <select id="modeliv" class="form-select border-primary" formControlName="modeliv">
+          <option *ngFor="let option of modelivOptions" [value]="option.value">
+            {{ option.label }}
+          </option>
+        </select>
       </div>
+
+      <!-- Poids total -->
+      <div class="mb-3 text-muted small d-flex align-items-start gap-2"
+     >
+  <i class="bi bi-basket3 fs-5 mt-1"></i>
+  <div>
+    <div class="fw-semibold" matTooltip="Cumul des poids des produits dans votre commande">Poids total</div>
+    <div class="fst-italic text-dark-emphasis">{{ poidsTotal }} kg</div>
+  </div>
+</div>
+
+
+
+      <button class="btn btn-primary w-100 rounded-3"
+              [disabled]="form.invalid"
+              (click)="submitDelivery()">
+        <i class="bi bi-check2-circle me-2"></i>Valider la livraison
+      </button>
+
+      <div *ngIf="error" class="alert alert-danger mt-3 small">{{ error }}</div>
     </div>
+  </ng-container>
 
-    <!-- Carte -->
-    <div class="col-md-7">
-      <div id="map" class="rounded-4 border border-primary-subtle shadow-sm"></div>
+  <!-- Résumé affiché après validation -->
+  <ng-template #showSummary>
+    <div *ngIf="deliverySummary" class="card border-0 rounded-4 shadow-sm p-4 summary-card">
+      <h5 class="fw-semibold  mb-4 d-flex align-items-center" style="color: #216490;">
+        <i class="bi bi-truck me-2 fs-4"></i>Résumé de la livraison
+      </h5>
+
+      <!-- Loading -->
+<div *ngIf="isLoadingCO2" class="co2-loader p-4 text-center">
+  <div class="dots-loader" aria-label="Chargement CO₂"></div>
+  <div class="small text-muted mt-2">Calcul des émissions en cours...</div>
+</div>
+
+<!-- Résultat -->
+<div *ngIf="!isLoadingCO2 && estimatedCO2 !== null"
+     class="co2-estimate highlight-result p-4 mb-4 text-center"
+     matTooltip="Estimation des émissions de dioxyde de carbone (CO₂) liées à la livraison selon la distance et le poids du panier."
+     matTooltipPosition="above">
+  <div class="d-flex justify-content-center align-items-center mb-3">
+    <i class="bi bi-cloud-fill fs-1 me-2 bounce-icon"></i>
+    <div class="fs-2 fw-bold">{{ estimatedCO2 | number: '1.2-2' }} kg CO₂</div>
+  </div>
+  <div class="small text-muted">Émissions estimées pour cette livraison</div>
+</div>
+
+
+      <ul class="list-unstyled ps-1">
+        <li class="mb-3">
+          <i class="bi bi-geo-alt me-2"></i>
+          <strong>Adresse :</strong> {{ deliverySummary.adresse }}
+        </li>
+        <li class="mb-3">
+          <i class="bi bi-box-seam me-2"></i>
+          <strong>Mode :</strong> {{ deliverySummary.modeLivraison }}
+        </li>
+        <li class="mb-3">
+          <i class="bi bi-shop me-2"></i>
+          <strong>Fournisseur :</strong> {{ deliverySummary.fournisseur }}
+        </li>
+        <li>
+          <i class="bi bi-arrows-expand me-2"></i>
+          <strong>Distance :</strong> {{ deliverySummary.distance }} km
+        </li>
+      </ul>
+    </div>
+  </ng-template>
+</div>
+
+
+    <!-- Colonne Carte -->
+    <div class="col-md-7 order-md-last">
+<div id="map"
+     class="rounded-4 border border-primary-subtle shadow-sm position-relative"
+     [class.map-disabled]="deliverySummary">
+</div>
     </div>
   </div>
 </div>

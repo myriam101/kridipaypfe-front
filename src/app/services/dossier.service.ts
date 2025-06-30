@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, switchMap } from 'rxjs';
 
@@ -12,23 +12,31 @@ export class DossierService {
 
   constructor(private http: HttpClient) {}
 
-  getDossiersByAgent(agentId: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/banque/${agentId}`);
-  }  
+ getDossiersEncoursByAgent(agentId: number, badges: string[] = []): Observable<any> {
+  let params = new HttpParams();
+
+  // Ajouter chaque badge comme ?badges[]=...
+  badges.forEach(badge => {
+    params = params.append('badges[]', badge);
+  });
+
+  return this.http.get(`${this.apiUrl}/banque/encours/${agentId}`, { params });
+}
+
+   getDossiersClotureByAgent(agentId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/banque/cloture/${agentId}`);
+  } 
   
- filterDossiersByBadge(payload: { ids: number[], badges: string[] }): Observable<any[]> {
-    return this.http.post<any[]>(`${this.apiUrl}/filtrage-badge`, payload);
-  }
    getProductImpactStats(agentId: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/${agentId}/products-by-impact`);
   }
-  getProductStatsByDossierId(id: number): Observable<any> {
-  return this.http.get<any>(`${this.apiUrl}/${id}/product-stats`);
-}
+ 
+/** methode qui cloture le dossier */ 
 validateDossier(dossierId: number): Observable<any> {
   
     return this.http.put(`${this.apiUrl}/validate/${dossierId}`, {});
 }
+
 /** methode ajout points au client*/ 
  addBonifPoints(dossierId: number): Observable<any> {
     return this.http.post(`${this.apiUrlBonif}/add/${dossierId}`, {});

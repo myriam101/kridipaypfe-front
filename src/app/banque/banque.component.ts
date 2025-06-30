@@ -47,10 +47,14 @@ currentRoute: string = '';
     this.router.navigate(['dashboard'], { relativeTo: this.route });
   }
   
+  
   goToDemandes() {
     this.router.navigate(['demandes'], { relativeTo: this.route });
   }
 
+  goToPalier() {
+    this.router.navigate(['palier'], { relativeTo: this.route });
+  }
    confirmLogout() {
     const dialogRef = this.dialog.open(LogoutModalComponent, {
       width: '400px',

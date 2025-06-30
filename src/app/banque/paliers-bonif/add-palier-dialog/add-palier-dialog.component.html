@@ -1,0 +1,41 @@
+<div class="add-palier-modal shadow-lg rounded-2 p-4">
+  <form [formGroup]="palierForm" (ngSubmit)="submit()">
+    <!-- Points minimum -->
+    <div class="mb-3">
+      <label class="form-label text-muted">Points minimum</label>
+      <input type="number" formControlName="minPoints" class="form-control" placeholder="Ex: 100" />
+      <div class="form-text text-muted smaller" style="font-size: x-small;">Nombre de points minimal nécessaire pour bénéficier de cette remise de taux.</div>
+      <small class="text-danger" *ngIf="palierForm.get('minPoints')?.invalid && palierForm.get('minPoints')?.touched">
+        Champ requis ou invalide
+      </small>
+    </div>
+
+    <!-- Points maximum -->
+    <div class="mb-3">
+      <label class="form-label text-muted">Points maximum</label>
+      <input type="number" formControlName="maxPoints" class="form-control" placeholder="Ex: 200" />
+      <div class="form-text text-muted smaller" style="font-size: x-small;">Nombre de points maximal nécessaire pour bénéficier de cette remise de taux.</div>
+      <small class="text-danger" *ngIf="palierForm.get('maxPoints')?.invalid && palierForm.get('maxPoints')?.touched">
+        Champ requis ou invalide
+      </small>
+    </div>
+
+    <!-- Taux bonifié -->
+    <div class="mb-4">
+      <label class="form-label text-muted">Taux d’intérêt bonifié (%)</label>
+      <input type="number" formControlName="customInterestRate" class="form-control" step="0.01" placeholder="Ex: 1.25" />
+      <div class="form-text text-muted" style="font-size: x-small;">Taux de remise à appliquer pour les clients dans ce palier.</div>
+      <small class="text-danger" *ngIf="palierForm.get('customInterestRate')?.invalid && palierForm.get('customInterestRate')?.touched">
+        Champ requis ou invalide
+      </small>
+    </div>
+
+    <!-- Boutons -->
+    <div class="d-flex justify-content-end">
+      <button type="button" class="btn btn-outline-secondary me-2" (click)="cancel()">Annuler</button>
+      <button type="submit" class="btn btn-ajout-palier" [disabled]="isLoading || palierForm.invalid">
+        {{ isLoading ? 'Ajout en cours...' : 'Ajouter' }}
+      </button>
+    </div>
+  </form>
+</div>

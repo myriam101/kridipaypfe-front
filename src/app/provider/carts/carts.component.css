@@ -18,3 +18,78 @@
   background-color: #216490;
   color: #fff;
 }
+
+.card {
+  border: none;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.card-header {
+  border-bottom: 1px solid #ddd;
+  padding: 0.75rem 1rem;
+}
+
+.card-body {
+  background-color: #fdfdfd;
+  padding: 1rem 1.2rem;
+}
+
+.card-footer {
+  background-color: #f7f7f7;
+  border-top: 1px solid #eee;
+}
+
+.badge-status {
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.4em 0.6em;
+  border-radius: 50px;
+  display: inline-block;
+}
+
+.badge-waiting {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.badge-validated {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.badge-cancelled {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.btn-sm {
+  padding: 0.3rem 0.8rem;
+  font-size: 0.85rem;
+}
+
+.alert-provider-waiting {
+  background-color: #fff3cd;
+  color: #856404;
+  border-left: 5px solid #ffc107;
+  margin: 1rem 1rem 0;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+.custom-alert-info {
+  background-color: #eaf4fd;
+  padding: 10px;
+  border-left: 4px solid #216490;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  color: #216490;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 1rem;
+}
+
+.custom-alert-info i {
+  font-size: 1.25rem;
+}

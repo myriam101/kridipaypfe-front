@@ -74,21 +74,27 @@ getWaitingCarts(clientId: number): Observable<any[]> {
     })
   );
 }
-getAllWaitingCarts(): Observable<any> {
-    return this.http.get<any>(`${this.apiCart}/waiting`);
+getAllWaitingCarts(providerId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiCart}/waiting/${providerId}`);
   }
-  getAllValidatedCarts(): Observable<any> {
-    return this.http.get<any>(`${this.apiCart}/validated`);
+  getAllValidatedCarts(providerId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiCart}/validated/${providerId}`);
   }
-  getAllCancelledCarts(): Observable<any> {
-    return this.http.get<any>(`${this.apiCart}/cancelled`);
+  getAllCancelledCarts(providerId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiCart}/cancelled/${providerId}`);
   }
-  validateCart(cartId: number): Observable<any> {
   
-    return this.http.put(`${this.apiCart}/validate/${cartId}`, {});
+//with id provider
+validateCart(cartId: number, providerId: number) {
+  return this.http.put(`${this.apiCart}/validate/${cartId}`, {
+    provider_id: providerId
+  });
 }
- cancelCart(cartId: number): Observable<any> {
-  return this.http.put(`${this.apiCart}/cancel/${cartId}`, {});
+ cancelCart(cartId: number,providerId: number): Observable<any> {
+  return this.http.put(`${this.apiCart}/cancel/${cartId}`, {
+        provider_id: providerId
+
+  });
 }
 
 validateCartByclient(clientId: number) {
@@ -112,5 +118,10 @@ assignRandomPointsToProvider( selectedProductIds: number[]): Observable<any> {
 updateBonifs(): Observable<any> {
   return this.http.put(`${this.apiProducts}/update-bonifpoints`, {});
 }
+
+ // Vérifie l'état de validation du panier pour un provider donné
+  checkProviderStatus(cartId: number, providerId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiCart}/${cartId}/provider/${providerId}`);
+  }
 
 }

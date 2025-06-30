@@ -1,0 +1,76 @@
+<div class="container">
+  <div class="row align-items-end mb-4 pb-2">
+    <div class="col-md-8">
+      <h3 class="fw-bold" style="color:#216490;">Paliers de bonification</h3>
+      <p class="text-muted mb-0 para-desc">
+        Gérez en toute simplicité vos paliers de bonification avec le taux d'intérêt à soustraire.
+      </p>
+    </div>
+
+    <!-- Bouton Gérer avec menu -->
+    <div class="col-md-4 text-end">
+   <div class="btn-group dropstart">
+      <button 
+        type="button" 
+        class="btn btn-primary dropdown-toggle" 
+        data-bs-toggle="dropdown" 
+        aria-expanded="false"
+      >
+        Gérer les paliers
+      </button>
+      <ul class="dropdown-menu">
+        <li>
+          <button  class="dropdown-item" (click)="openAddPalierModal()">
+            Ajouter
+          </button>
+        </li>
+        <li>
+          <button [disabled]="!selectedPalierId" (click)="openEditPalierModal()" class="dropdown-item btn-success" >
+            Modifier
+          </button>
+        </li>
+         <li>
+          <button class="dropdown-item" [disabled]="!selectedPalierId" (click)="confirmDeletePalier()">
+            Supprimer
+          </button>
+        </li>
+      </ul>
+    </div>
+    </div>
+  
+  </div>
+
+  <!-- Alert si aucun palier -->
+  <div *ngIf="paliers.length === 0" class="custom-alert-info p-3">
+    Aucun palier défini pour cette banque.
+  </div>
+
+  <!-- Affichage des paliers -->
+  <div *ngIf="paliers.length > 0" class="progress-wrapper shadow-sm">
+    <div class="progress-bar-container position-relative">
+      <ng-container *ngFor="let palier of paliers; let i = index">
+        <div
+          class="palier-segment position-relative"
+          [class.selected]="palier.id === selectedPalierId"
+          (click)="selectPalier(palier.id)"
+          [style.width.%]="getPalierWidth(palier, i)"
+          [style.background]="getGradient(i)"
+          matTooltip="De {{ palier.minPoints }} à {{ palier.maxPoints }} points → Taux bonifié : {{ palier.customInterestRate }}%"
+          matTooltipClass="tooltip-paliers"
+          matTooltipPosition="above"
+          [attr.data-palier-id]="palier.id"
+        >
+          <div class="palier-content">
+            <div class="min-max">{{ palier.minPoints }} - {{ palier.maxPoints }}</div>
+            <div class="taux">{{ palier.customInterestRate }}%</div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+
+  
+  </div>
+    <p class="text-center mt-4 text-muted small">
+      Cliquez sur le segment pour pouvoir le supprimer ou le modifier.
+    </p>
+</div>

@@ -133,9 +133,20 @@ export class ShoppingCartComponent implements OnInit {
     .filter(item => item.visible === 1)
     .reduce((total, item) => total + (item.points * item.quantity), 0);
 }
-  openDelivery() {
-    this.router.navigate(['delivery'], { relativeTo: this.route });
-  this.deliveryService.setCartId(this.idcart);  
+ openDelivery() {
+  this.deliveryService.setCartId(this.idcart);
+this.deliveryService.getCartWeight(this.idcart).subscribe({
+    next: (res) => {
+      const poids = res.weight_kg;
+      this.deliveryService.setCartWeight(poids);
 
-  }
+      // Naviguer vers le composant Livraison **après** avoir stocké le poids
+      this.router.navigate(['delivery'], { relativeTo: this.route });
+    },
+    error: () => {
+      this.snackBar.open("Erreur lors du calcul du poids du panier", "Fermer", { duration: 3000 });
+    }
+  });
+}
+
 }

@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ConfirmComponent } from 'src/app/pages/confirm/confirm.component';
 import { ConfirmDialogComponent } from 'src/app/provider/confirm-dialog/confirm-dialog.component';
+import { BonifPalierBanqueService } from 'src/app/services/bonif-palier-banque.service';
 import { DossierService } from 'src/app/services/dossier.service';
 
 @Component({
@@ -25,117 +27,105 @@ export class DemandesComponent implements OnInit {
     high: false
   };
 
-  constructor(private dossierService: DossierService,private snackBar: MatSnackBar,  private dialog: MatDialog) {}
+  constructor(private palierService:BonifPalierBanqueService, private dossierService: DossierService,private snackBar: MatSnackBar,  private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.agentId = Number(localStorage.getItem('agentId'));
     this.loadDossiers(this.agentId);
     
   }
+getBadgeKeys(obj: any): string[] {
+  return Object.keys(obj);
+}
+
  loadDossiers(id: any): void {
-this.dossierService.getDossiersByAgent(id).subscribe({
-      next: (response) => {
-        this.isLoading = false;
+  this.isLoading = true;
+  this.dossierService.getDossiersEncoursByAgent(id).subscribe({
+    next: (response) => {
+      this.isLoading = false;
 
-        if (Array.isArray(response) && response.length > 0) {
-          const formatted = response.map(d => ({
-            ...d,
-            date_creation: new Date(d.date_creation.date)
-          }));
+      if (Array.isArray(response) && response.length > 0) {
+        const formatted = response.map(d => ({
+          ...d,
+          date_creation: new Date(d.date_creation.date)
+        }));
 
-          this.dossiers = formatted;
-          this.originalDossiers = formatted;
-          this.message = '';
+        this.dossiers = formatted;
+        this.originalDossiers = formatted;
+        this.message = '';
 
-          this.dossiers.forEach(dossier => {
-            this.dossierService.getProductStatsByDossierId(dossier.dossierId).subscribe({
-              next: (stats) => {
-                dossier.nbProducts = stats.total_products;
-                dossier.nbLowBadgeProducts = stats.low_impact_count;
-              },
-              error: () => {
-                dossier.nbProducts = 0;
-                dossier.nbLowBadgeProducts = 0;
-              }
-            });
+        // Charger les paliers pour chaque dossier
+        this.dossiers.forEach(dossier => {
+          this.palierService.getPalierForDossier(dossier.dossierId).subscribe({
+            next: palier => {
+              dossier.palier = palier;
+            },
+            error: () => {
+              dossier.palier = null;
+            }
           });
-        } else if (response.message) {
-          this.message = response.message;
-          this.dossiers = [];
-        } else {
-          this.message = "Il n'y a pas encore de dossiers";
-          this.dossiers = [];
-        }
-      },
-      error: (error) => {
-        this.isLoading = false;
-        this.message = error.error?.error || 'Erreur serveur';
+        });
+
+      } else if (response.message) {
+        this.message = response.message;
+        this.dossiers = [];
+      } else {
+        this.message = "Il n'y a pas encore de dossiers";
         this.dossiers = [];
       }
-    });
+    },
+    error: (error) => {
+      this.isLoading = false;
+      this.message = error.error?.error || 'Erreur serveur';
+      this.dossiers = [];
+    }
+  });
+}
 
- }
   toggleFilter(type: 'low' | 'medium' | 'high') {
     this.activeFilters[type] = !this.activeFilters[type];
     this.applyFilters();
   }
 
-  applyFilters() {
-    const selectedBadges: string[] = [];
+ applyFilters() {
+  const selectedBadges: string[] = [];
 
-    if (this.activeFilters.low) selectedBadges.push('1');
-    if (this.activeFilters.medium) selectedBadges.push('2');
-    if (this.activeFilters.high) selectedBadges.push('3');
+  if (this.activeFilters.low) selectedBadges.push('Peu');
+  if (this.activeFilters.medium) selectedBadges.push('Moyen');
+  if (this.activeFilters.high) selectedBadges.push('Élevé');
 
-    if (selectedBadges.length === 0) {
-      this.dossiers = [...this.originalDossiers];
-      return;
-    }
+  this.isLoading = true;
 
-    const dossierIds = this.originalDossiers.map(d => d.dossierId);
-    this.isLoading = true;
+  // Relancer l’appel avec les filtres de badge actifs
+  this.dossierService.getDossiersEncoursByAgent(this.agentId, selectedBadges).subscribe({
+    next: (response) => {
+      this.isLoading = false;
 
-    this.dossierService.filterDossiersByBadge({
-      ids: dossierIds,
-      badges: selectedBadges
-    }).subscribe({
-      next: (filtered) => {
-        this.isLoading = false;
+      if (Array.isArray(response) && response.length > 0) {
+        const formatted = response.map(d => ({
+          ...d,
+          date_creation: new Date(d.date_creation.date)
+        }));
 
-        if (Array.isArray(filtered) && filtered.length > 0) {
-          this.dossiers = filtered.map(d => ({
-            ...d,
-            date_creation: new Date(d.date_creation.date)
-          }));
-
-          this.message = '';
-
-          // Appeler les stats sur les dossiers filtrés
-          this.dossiers.forEach(dossier => {
-            this.dossierService.getProductStatsByDossierId(dossier.dossierId).subscribe({
-              next: (stats) => {
-                dossier.nbProducts = stats.total_products;
-                dossier.nbLowBadgeProducts = stats.low_impact_count;
-              },
-              error: () => {
-                dossier.nbProducts = 0;
-                dossier.nbLowBadgeProducts = 0;
-              }
-            });
-          });
-
-        } else {
-          this.dossiers = [];
-          this.message = 'Aucun dossier ne correspond aux filtres sélectionnés.';
-        }
-      },
-      error: () => {
-        this.isLoading = false;
-        this.message = "Erreur lors du filtrage des dossiers.";
+        this.dossiers = formatted;
+        this.originalDossiers = formatted;
+        this.message = '';
+      } else if (response.message) {
+        this.message = response.message;
+        this.dossiers = [];
+      } else {
+        this.message = "Il n'y a pas encore de dossiers";
         this.dossiers = [];
       }
-    });
-  }
+    },
+    error: (error) => {
+      this.isLoading = false;
+      this.message = error.error?.error || 'Erreur serveur';
+      this.dossiers = [];
+    }
+  });
+}
+
 
   toggleTooltip(dossierId: number) {
     if (this.activeTooltipId === dossierId) {
@@ -149,16 +139,20 @@ this.dossierService.getDossiersByAgent(id).subscribe({
       }, 4000);
     }
   }
-  onValidateDossier(dossierId: number) {
-  const dialogRef = this.dialog.open(ConfirmDialogComponent);
+onValidateDossier(dossierId: number) {
+  const dialogRef = this.dialog.open(ConfirmComponent, {
+    width: '400px',
+    data: {
+      message: 'Souhaitez-vous valider et clôturer ce dossier ? Les points bonifiants seront ajoutés au client.'
+    }
+  });
 
   dialogRef.afterClosed().subscribe(result => {
-    if (result) {
+    if (result === true) {
       this.agentId = Number(localStorage.getItem('agentId'));
 
       this.dossierService.validateAndAddPoints(dossierId).subscribe({
         next: () => {
-                  
           this.snackBar.open('Dossier clôturé avec succès !', 'Fermer', {
             duration: 3000,
             panelClass: ['snackbar-success'],
@@ -169,7 +163,7 @@ this.dossierService.getDossiersByAgent(id).subscribe({
         },
         error: (err) => {
           if (err.status === 403) {
-          this.snackBar.open('Dossier clôturé avec succès !', 'Fermer', {
+            this.snackBar.open('Dossier clôturé avec succès !', 'Fermer', {
               duration: 3000,
               panelClass: ['snackbar-info'],
               horizontalPosition: 'center',
@@ -189,5 +183,6 @@ this.dossierService.getDossiersByAgent(id).subscribe({
     }
   });
 }
+
 
 }

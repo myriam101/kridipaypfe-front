@@ -1,0 +1,35 @@
+.add-palier-modal {
+  
+  background-color: white;
+  border-radius: 1rem;
+  border: 1px solid #dbe7f1;
+}
+
+.btn-ajout-palier {
+  font-size: 13px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-weight: 600;
+  color: #216490;
+  border: 1px solid #216490;
+  background-color: white;
+  transition: all 0.2s ease;
+}
+
+.btn-ajout-palier:hover {
+  background-color: #216490;
+  color: white;
+  box-shadow: 0 4px 12px rgba(33, 100, 144, 0.25);
+}
+
+.form-control {
+  border-radius: 8px;
+  padding: 8px 12px;
+  border: 1px solid #ced4da;
+  font-size: 14px;
+}
+
+.form-control:focus {
+  border-color: #216490;
+  box-shadow: 0 0 0 0.2rem rgba(33, 100, 144, 0.1);
+}

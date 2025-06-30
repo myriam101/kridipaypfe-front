@@ -39,9 +39,19 @@
    
      <li class="nav-item">
       <a class="nav-link" [class.active]="currentRoute.includes('demandes')" (click)="goToDemandes()">
-        <i class="zmdi zmdi-settings me-2"></i> Demandes
+        <i class="zmdi zmdi-settings me-2"></i> Demandes en cours
       </a>
     </li>
+    <li class="nav-item">
+      <a class="nav-link" [class.active]="currentRoute.includes('palier')" (click)="goToPalier()">
+        <i class="zmdi zmdi-star me-2"></i> Paliers de Bonification
+      </a>
+    </li>
+   <!-- <li class="nav-item">
+      <a class="nav-link">
+        <i class="zmdi zmdi-settings me-2"></i> Dossiers cloturés
+      </a>
+    </li> -->
   </ul>
   <div class="sidebar-user-info border-top mt-3 pt-3 px-3">
       <small class="text-muted">Connecté en tant que</small>

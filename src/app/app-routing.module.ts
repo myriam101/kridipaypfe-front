@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ClientComponent } from './client/client.component';
-import { CheckoutComponent } from './client/checkout/checkout.component';
 import { AuthLoginComponent } from './pages/auth-login/auth-login.component';
 import { AuthGuard } from './guards/auth.guard';
 import { AdminboardComponent } from './adminboard/adminboard.component';
@@ -29,19 +28,19 @@ import { UnauthorizedComponent } from './provider/unauthorized/unauthorized.comp
 import { ChatbotComponent } from './chatbot/chatbot.component';
 import { ComparaisonComponent } from './comparaison/comparaison.component';
 import { LivraisonComponent } from './client/livraison/livraison.component';
+import { PaliersBonifComponent } from './banque/paliers-bonif/paliers-bonif.component';
 
 const routes: Routes = [
   {path:'chatbot',component:ChatbotComponent},
   {path:'client',component: ClientComponent,
     children :[  {path:'comparateur',component:ComparaisonComponent},{path:'shopping-cart/delivery',component:LivraisonComponent},
-{path:'profile',component:ProfileComponent},{path:'shopping-cart',component:ShoppingCartComponent} ,{path: 'checkout', component:CheckoutComponent,
-}],
+{path:'profile',component:ProfileComponent},{path:'shopping-cart',component:ShoppingCartComponent}],
     canActivate: [AuthGuard],data: { roles: ['ROLE_CLIENT']}},
 
     {path:'agence',component: BanqueComponent,
     children :[{path: 'dashboard', component:DashboardComponent,
 },{path: 'demandes', component:DemandesComponent,
-}],
+},{path:'palier',component:PaliersBonifComponent}],
     canActivate: [AuthGuard],data: { roles: ['ROLE_AGENT']}},
   {path:'adminboard',component: AdminboardComponent,
     children:[

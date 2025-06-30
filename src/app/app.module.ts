@@ -5,7 +5,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { CheckoutComponent } from './client/checkout/checkout.component';
 import { ProductsComponent } from './client/products/products.component';
 import { FooterComponent } from './footer/footer.component';
 import { MatMenuModule } from '@angular/material/menu';
@@ -20,7 +19,6 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatOptionModule } from '@angular/material/core';
@@ -70,6 +68,11 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { PdfViewerFactureComponent } from './client/profile/pdf-viewer-facture/pdf-viewer-facture.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BonifGamComponent } from './client/profile/bonif-gam/bonif-gam.component';
+import { DemandeClotureComponent } from './banque/demande-cloture/demande-cloture.component';
+import { PaliersBonifComponent } from './banque/paliers-bonif/paliers-bonif.component';
+import { AddPalierDialogComponent } from './banque/paliers-bonif/add-palier-dialog/add-palier-dialog.component';
+import { EditPalierDialogComponent } from './banque/paliers-bonif/edit-palier-dialog/edit-palier-dialog.component';
+import { ConfirmComponent } from './pages/confirm/confirm.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -79,7 +82,6 @@ export function tokenGetter() {
   declarations: [
     AppComponent,
     ClientComponent,
-    CheckoutComponent,
     ProductsComponent,
     FooterComponent,
     AuthLoginComponent,
@@ -98,7 +100,6 @@ export function tokenGetter() {
     ShoppingCartComponent,
     CartsComponent,
     ConsoleComponent,
-    CheckoutComponent,
     ModalfactureComponent,
     ProfileProviderComponent,
     DashboardComponent,
@@ -122,7 +123,12 @@ export function tokenGetter() {
     LivraisonComponent,
     LogoutModalComponent,
     PdfViewerFactureComponent,
-    BonifGamComponent
+    BonifGamComponent,
+    DemandeClotureComponent,
+    PaliersBonifComponent,
+    AddPalierDialogComponent,
+    EditPalierDialogComponent,
+    ConfirmComponent
   ],
   imports: [
     BrowserModule,

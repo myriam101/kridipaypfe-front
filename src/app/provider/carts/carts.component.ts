@@ -17,71 +17,85 @@ cancelledcarts: any[] = [];
   cartLoadError: boolean = false;
   isLoading: boolean = true;
   activeTab: string = 'waiting';
+  providerId: any;
 
 constructor(private cartService: ProductService,private snackBar: MatSnackBar,  private dialog: MatDialog,
 ) {}
 
 
 ngOnInit(): void {
+  this.providerId = Number(localStorage.getItem('providerId'));
   this.getWaintingCarts();
   this.getCancelledCarts();
   this.getvalidatedCarts();
 }
-
 getWaintingCarts(): void {
-  this.cartService.getAllWaitingCarts().subscribe({
-    next: (data) => {
-        this.waitingCarts = data;
-        this.isLoading = false;
-      },
-       error: (err) => {
-    if (err.status === 404) {
-      this.waitingCarts = []; // Aucun panier
-      this.cartLoadError = false;
-    } else {
-      this.cartLoadError = true; // Erreur serveur
-    }
+ this.cartService.getAllWaitingCarts(this.providerId).subscribe({
+  next: (data) => {
+    this.waitingCarts = data;
+    this.isLoading = false;
+
+    // Pour chaque panier : vérifier statut du fournisseur
+    this.waitingCarts.forEach(cart => {
+      this.cartService.checkProviderStatus(cart.cart_id, this.providerId).subscribe({
+        next: (res) => {
+          cart.providerStatus = res.status;      // 'waiting' | 'validated' | 'not_validated'
+          cart.providerMessage = res.message;
+        },
+        error: () => {
+          cart.providerStatus = 'error';
+          cart.providerMessage = "Erreur lors de la vérification du statut";
+        }
+      });
+    });
+  },
+  error: (err) => {
+    this.cartLoadError = err.status !== 404;
+    this.waitingCarts = [];
   }
-  });
+});
+
 }
+
 getvalidatedCarts(): void {
-  this.cartService.getAllValidatedCarts().subscribe({
+  this.cartService.getAllValidatedCarts(this.providerId).subscribe({
     next: (data) => {
         this.validCarts = data;
         this.isLoading = false;
       },
        error: (err) => {
     if (err.status === 404) {
-      this.validCarts = []; // Aucun panier
+      this.validCarts = [];
       this.cartLoadError = false;
     } else {
-      this.cartLoadError = true; // Erreur serveur
+      this.cartLoadError = true; 
     }
   }
   });
 }
 getCancelledCarts(): void {
-  this.cartService.getAllCancelledCarts().subscribe({
+  this.cartService.getAllCancelledCarts(this.providerId).subscribe({
     next: (data) => {
         this.cancelledcarts = data;
         this.isLoading = false;
       },
        error: (err) => {
     if (err.status === 404) {
-      this.cancelledcarts = []; // Aucun panier
+      this.cancelledcarts = [];
       this.cartLoadError = false;
     } else {
-      this.cartLoadError = true; // Erreur serveur
+      this.cartLoadError = true; 
     }
   }
   });
 }
 onValidateCart(cartId: number) {
+  this.providerId = Number(localStorage.getItem('providerId'));
   const dialogRef = this.dialog.open(ConfirmDialogComponent);
 
   dialogRef.afterClosed().subscribe(result => {
     if (result) {
-      this.cartService.validateCart(cartId).subscribe({
+      this.cartService.validateCart(cartId,this.providerId).subscribe({
         next: () => {
           this.snackBar.open('Panier validé avec succès !', 'Fermer', {
             duration: 3000,
@@ -110,7 +124,7 @@ onCancelCart(cartId: number) {
 
   dialogRef.afterClosed().subscribe(result => {
     if (result) {
-      this.cartService.cancelCart(cartId).subscribe({
+      this.cartService.cancelCart(cartId,this.providerId).subscribe({
         next: () => {
           this.snackBar.open('Panier annulé avec succès !', 'Fermer', {
             duration: 3000,
