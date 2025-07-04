@@ -8,7 +8,7 @@ import { SimulationService } from 'src/app/services/simulation.service';
 import { EnergybillService } from 'src/app/services/energybill.service';
 import { ConfirmDialogComponent } from 'src/app/provider/confirm-dialog/confirm-dialog.component';
 import { LivraisonComponent } from '../livraison/livraison.component';
-import { DeliveryService } from 'src/app/services/delivery.service';
+import { DeliveryService, WeightsByProvider } from 'src/app/services/delivery.service';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -23,17 +23,17 @@ export class ShoppingCartComponent implements OnInit {
   currentRoute: string = '';
   idcart:any;
   constructor( private deliveryService:DeliveryService,private route: ActivatedRoute,
-    private simulationService: SimulationService,
     private cartService: ProductService,
     private router: Router,
     private snackBar: MatSnackBar,
-    private dialog: MatDialog,
-    private EnergyBillService: EnergybillService
-  ) {this.router.events.subscribe(event => {
+    private dialog: MatDialog  )
+{
+  this.router.events.subscribe(event => {
         if (event instanceof NavigationEnd) {
           this.currentRoute = event.url;
         }
-      });}
+      });
+    }
 
   ngOnInit(): void {
     this.loadCart();
@@ -135,18 +135,20 @@ export class ShoppingCartComponent implements OnInit {
 }
  openDelivery() {
   this.deliveryService.setCartId(this.idcart);
-this.deliveryService.getCartWeight(this.idcart).subscribe({
-    next: (res) => {
-      const poids = res.weight_kg;
-      this.deliveryService.setCartWeight(poids);
+  this.deliveryService.getCartWeightByProvider(this.idcart).subscribe({
+      next: (res) => {
+        const weightsByProvider: WeightsByProvider = res.weights_by_provider_kg;
+        this.deliveryService.setCartWeightsByProvider(weightsByProvider); 
 
-      // Naviguer vers le composant Livraison **après** avoir stocké le poids
-      this.router.navigate(['delivery'], { relativeTo: this.route });
-    },
-    error: () => {
-      this.snackBar.open("Erreur lors du calcul du poids du panier", "Fermer", { duration: 3000 });
-    }
-  });
-}
+        console.log('Poids par fournisseur reçus et stockés:', weightsByProvider);
+
+       this.router.navigate(['delivery'], { relativeTo: this.route });
+      },
+      error: (err) => {
+        console.error("Erreur lors du calcul du poids du panier par fournisseur", err);
+        this.snackBar.open("Erreur lors du calcul du poids du panier", "Fermer", { duration: 3000 });
+      }
+    });
+  }
 
 }

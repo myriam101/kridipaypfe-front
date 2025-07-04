@@ -7,55 +7,145 @@
     </h4>
   </div>
 
-  <!-- CORPS SCROLLABLE -->
+  <!-- CORPS  -->
   <div class="scrollable-body card-body">
     <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
       <div class="row">
-        <!-- Colonne gauche : Champs de base -->
-        <div class="col-md-6">
-          <div class="mb-3">
-            <input formControlName="name" class="form-control" placeholder="Nom du produit">
-          </div>
-          <div class="mb-3">
-            <input formControlName="brand" class="form-control" placeholder="Entrez la marque">
-          </div>
-          <div class="mb-3">
-            <input formControlName="reference" class="form-control" placeholder="Entrez la référence">
-          </div>
-          <div class="mb-3">
-            <textarea formControlName="short_description" class="form-control" rows="3" placeholder="Brève description..."></textarea>
-          </div>
-          <div class="mb-3">
-            <select class="form-select" formControlName="category_id" (change)="onDesignationChange($event)">
-              <option [ngValue]="null" disabled>Choisissez une catégorie</option>
-              <option *ngFor="let cat of categories" [value]="cat.id">
-                {{ getDesignationName(cat.designation) }}
-              </option>
-            </select>
-          </div>
-        </div>
+     <!-- Colonne gauche : Champs de base -->
+<div class="col-md-6">
+  <!-- Nom -->
+  <div class="mb-3">
+    <input formControlName="name"
+           class="form-control"
+           [ngClass]="{ 'is-invalid': isInvalid('name') }"
+           placeholder="Nom du produit">
+    <div class="invalid-feedback d-block" *ngIf="isInvalid('name')">
+      Le nom du produit est requis.
+    </div>
+  </div>
+
+  <!-- Marque -->
+  <div class="mb-3">
+    <input formControlName="brand"
+           class="form-control"
+           [ngClass]="{ 'is-invalid': isInvalid('brand') }"
+           placeholder="Entrez la marque">
+    <div class="invalid-feedback d-block" *ngIf="isInvalid('brand')">
+      La marque est requise.
+    </div>
+  </div>
+
+  <!-- Référence -->
+  <div class="mb-3">
+    <input formControlName="reference"
+           class="form-control"
+           [ngClass]="{ 'is-invalid': isInvalid('reference') }"
+           placeholder="Entrez la référence">
+    <div class="invalid-feedback d-block" *ngIf="isInvalid('reference')">
+      La référence est requise.
+    </div>
+  </div>
+
+  <!-- Description (facultative) -->
+  <div class="mb-3">
+    <textarea formControlName="short_description"
+              class="form-control"
+              rows="3"
+              placeholder="Brève description...">
+    </textarea>
+  </div>
+
+  <!-- Catégorie -->
+  <div class="mb-3">
+    <select class="form-select"
+            formControlName="category_id"
+            [ngClass]="{ 'is-invalid': isInvalid('category_id') }"
+            (change)="onDesignationChange($event)">
+      <option [ngValue]="null" disabled>Choisissez une catégorie</option>
+      <option *ngFor="let cat of categories" [value]="cat.id">
+        {{ getDesignationName(cat.designation) }}
+      </option>
+    </select>
+    <div class="invalid-feedback d-block" *ngIf="isInvalid('category_id')">
+      La catégorie est requise.
+    </div>
+  </div>
+</div>
+
 
         <!-- Colonne droite : Features (formGroupName) -->
         <div class="col-md-6" formGroupName="features">
           <div class="mb-3">
-            <input type="number" formControlName="weight" class="form-control" placeholder="Poids (kg)">
-          </div>
-          <div class="mb-3">
-            <input type="number" formControlName="power" class="form-control" placeholder="Puissance (W)">
-          </div>
-          <div class="mb-3">
-            <select class="form-select" formControlName="energy_class">
-              <option [ngValue]="null" disabled>Classe énergétique</option>
-              <option *ngFor="let classe of energyClasses" [ngValue]="classe">{{ classe }}</option>
-            </select>
-          </div>
+    <input type="number"
+           formControlName="weight"
+           class="form-control"
+           [ngClass]="{ 'is-invalid': isInvalid('weight', 'features') }"
+           placeholder="Poids (kg)">
+    <div class="invalid-feedback d-block" *ngIf="isInvalid('weight', 'features')">
+      Le poids est requis.
+    </div>
+  </div>
+
+  <!-- Puissance -->
+  <div class="mb-3">
+    <input type="number"
+           formControlName="power"
+           class="form-control"
+           [ngClass]="{ 'is-invalid': isInvalid('power', 'features') }"
+           placeholder="Puissance (W)">
+    <div class="invalid-feedback d-block" *ngIf="isInvalid('power', 'features')">
+      La puissance est requise.
+    </div>
+  </div>
+
+  <!-- Classe énergétique -->
+  <div class="mb-3">
+    <select class="form-select"
+            formControlName="energy_class"
+            [ngClass]="{ 'is-invalid': isInvalid('energy_class', 'features') }">
+      <option [ngValue]="null" disabled>Classe énergétique</option>
+      <option *ngFor="let classe of energyClasses" [ngValue]="classe">{{ classe }}</option>
+    </select>
+    <div class="invalid-feedback d-block" *ngIf="isInvalid('energy_class', 'features')">
+      La classe énergétique est requise.
+    </div>
+  </div>
 
           <!-- Champs spécifiques dynamiques -->
           <ng-container *ngIf="isLaveLinge">
-            <input type="number" class="form-control mb-3" formControlName="cycle_duration" placeholder="Durée du cycle">
-            <input type="number" class="form-control mb-3" formControlName="consumption_liter" placeholder="Consommation L/cycle">
-            <input type="number" class="form-control mb-3" formControlName="consumption_watt" placeholder="Consommation kWh">
-            <input type="number" class="form-control mb-3" formControlName="capacity" placeholder="Capacité">
+<div class="mb-3">
+  <input type="number"
+         formControlName="cycle_duration"
+         class="form-control"
+         [ngClass]="{ 'is-invalid': isInvalid('cycle_duration', 'features') }"
+         placeholder="Durée du cycle">
+  <div class="invalid-feedback d-block" *ngIf="isInvalid('cycle_duration', 'features')">
+    La durée du cycle est requise.
+  </div>
+</div>
+<div class="mb-3">
+  <input type="number"
+         formControlName="consumption_liter"
+         class="form-control"
+         [ngClass]="{ 'is-invalid': isInvalid('consumption_liter', 'features') }"
+         placeholder="Consommation L/cycle">
+  <div class="invalid-feedback d-block" *ngIf="isInvalid('consumption_liter', 'features')">
+    La consommation en litres est requise.
+  </div>
+</div>
+
+<input type="number" class="form-control mb-3" formControlName="consumption_watt" placeholder="Consommation kWh">
+
+<div class="mb-3">
+  <input type="number"
+         class="form-control"
+         formControlName="capacity"
+         [ngClass]="{ 'is-invalid': isInvalid('capacity', 'features') }"
+         placeholder="Capacité">
+  <div class="invalid-feedback d-block" *ngIf="isInvalid('capacity', 'features')">
+    La capacité est requise.
+  </div>
+</div>
           </ng-container>
 
           <ng-container *ngIf="isRefrigerateur">
@@ -65,13 +155,28 @@
             <input type="number" class="form-control mb-3" formControlName="capacity" placeholder="Capacité">
           </ng-container>
 
-          <ng-container *ngIf="isSecheLinge || isLavanteSechante || isLaveVaisselle">
+          <ng-container *ngIf="isSecheLinge || isLavanteSechante">
             <input type="number" class="form-control mb-3" formControlName="noise" placeholder="Bruit (dB)">
             <input type="number" class="form-control mb-3" formControlName="capacity" placeholder="Capacité">
             <input type="number" class="form-control mb-3" formControlName="cycle_duration" placeholder="Durée du cycle">
             <input type="number" class="form-control mb-3" formControlName="consumption_watt" placeholder="Consommation WATT">
-            <input *ngIf="isLavanteSechante || isLaveVaisselle" type="number" class="form-control mb-3" formControlName="consumption_liter" placeholder="Consommation LITRES">
-            <input *ngIf="isLaveVaisselle" type="number" class="form-control mb-3" formControlName="nbr_couvert" placeholder="Nombre de couverts">
+            <input *ngIf="isLavanteSechante" type="number" class="form-control mb-3" formControlName="consumption_liter" placeholder="Consommation LITRES">
+          </ng-container>
+
+           <ng-container *ngIf="isLaveVaisselle">
+            <input type="number" class="form-control mb-3" formControlName="noise" placeholder="Bruit (dB)">
+            <input type="number" class="form-control mb-3" formControlName="consumption_watt" placeholder="Consommation WATT">
+            <input type="number" class="form-control mb-3" formControlName="consumption_liter" placeholder="Consommation LITRES">
+<div class="mb-3">
+  <input type="number"
+         formControlName="nbr_couvert"
+         class="form-control"
+         [ngClass]="{ 'is-invalid': isInvalid('nbr_couvert', 'features') }"
+         placeholder="Nombre de couverts">
+  <div class="invalid-feedback d-block" *ngIf="isInvalid('nbr_couvert', 'features')">
+    Le nombre de couverts est requis.
+  </div>
+</div>
           </ng-container>
 
           <ng-container *ngIf="isFour || isClimatiseur || isHotte || isTableCuisson">
@@ -109,13 +214,6 @@
             <input type="number" class="form-control mb-3" formControlName="debit" placeholder="Débit">
           </ng-container>
 
-          <ng-container *ngIf="isTv">
-            <input type="number" class="form-control mb-3" formControlName="consumption_watt" placeholder="Consommation WATT">
-            <input type="number" class="form-control mb-3" formControlName="hdr_consumption" placeholder="Conso mode HDR">
-            <input type="number" class="form-control mb-3" formControlName="sdr_consumption" placeholder="Conso mode SDR">
-            <input type="number" class="form-control mb-3" formControlName="diagonal" placeholder="Diagonale (pouces)">
-            <input type="number" class="form-control mb-3" formControlName="resolution" placeholder="Résolution (px)">
-          </ng-container>
         </div>
       </div>
 
@@ -124,8 +222,15 @@
       </div>
 
       <div class="d-grid">
-        <button type="submit" class="btn btn-primary">Ajouter le produit</button>
-      </div>
+  <button type="submit" class="btn btn-primary" [disabled]="isSubmitting">
+    <span *ngIf="!isSubmitting">Ajouter le produit</span>
+    <span *ngIf="isSubmitting">
+      <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+      En cours...
+    </span>
+  </button>
+</div>
+
     </form>
   </div>
 </div>

@@ -167,12 +167,13 @@
       </button>
       <ul class="dropdown-menu">
         <li>
-          <button class="dropdown-item" (click)="checkElectricityPriceCombinations()" matTooltip="Permet de vérifier l'existance de doublons ou de tarifs STEG manquants.">
+          <button class="dropdown-item" (click)="checkElectricityPriceCombinations()" matTooltip="Permet de vérifier l'existance de doublons ou de tarifs STEG manquants."   matTooltipClass="custom-tooltip">
             Vérifier
           </button>
         </li>
         <li>
-          <button (click)="onUpdateTarifs()" class="dropdown-item btn-success" matTooltip="Ajout ou mise à jour de la totalité des tarifs de la STEG.">
+          <button (click)="onUpdateTarifs()" class="dropdown-item btn-success" matTooltip="Ajout ou mise à jour de la totalité des tarifs de la STEG."   matTooltipClass="custom-tooltip"
+>
             M.à.j STEG
           </button>
         </li>
@@ -271,7 +272,8 @@
     <h5 class="fw-semibold mb-0" style="color:#216490;">
       <i class="bi bi-droplet-fill me-2"></i>Tarifs Eau enregistrés
     </h5>
-    <button class="btn btn-primary" (click)="checkTranchesEau()" matTooltip="Permet de vérifier l'existance de doublons ou de tarifs SONEDE manquants.">
+    <button class="btn btn-primary" (click)="checkTranchesEau()" matTooltip="Permet de vérifier l'existance de doublons ou de tarifs SONEDE manquants."   matTooltipClass="custom-tooltip"
+>
       Vérifier
     </button>
   </div>

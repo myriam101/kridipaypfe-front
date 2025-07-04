@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Inject, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { Category } from 'src/app/models/category';
 import { Designation } from 'src/app/models/enum/designation';
@@ -44,11 +45,11 @@ export class AjoutproductComponent {
   isChauffeEau = false;
   isChaudiere = false;
   isTv = false;
-
+  isSubmitting = false;
   energyClasses = Object.values(EnergyClass);
   typefeatures = Object.values(Typefeature);
 
-  constructor(private carbonServie:CarbonService,  public dialogRef: MatDialogRef<AjoutproductComponent>,
+  constructor(private snackBar: MatSnackBar,private carbonServie:CarbonService,  public dialogRef: MatDialogRef<AjoutproductComponent>,
       @Inject(MAT_DIALOG_DATA) public data: { CatalogId: any,Catalogname:any },
     private fb: FormBuilder,
     private productService: ProductService,
@@ -90,10 +91,7 @@ export class AjoutproductComponent {
         power: [],
         consumption_liter: [],
         consumption_watt: [],
-        hdr_consumption: [],
-        sdr_consumption: [],
         capacity: [],
-        dimension: [],
         volume_refrigeration: [],
         volume_freezer: [],
         volume_collect: [],
@@ -103,13 +101,7 @@ export class AjoutproductComponent {
         cycle_duration: [],
         nbr_couvert: [],
         nb_bottle: [],
-        resolution: [],
-        diagonal: [],
         condens_perform: [],
-        spindry_class: [],
-        steam_class: [],
-        light_class: [],
-        filtre_class: [],
         type: [],
         debit: []
       })
@@ -122,34 +114,21 @@ export class AjoutproductComponent {
     console.log("selected catalog", id);
   }
 
- onSubmit(): void {
+onSubmit(): void {
   if (this.productForm.valid) {
+    this.isSubmitting = true;
+
     const formValue = this.productForm.value;
     this.productService.addProduct(this.providerId, formValue).subscribe({
       next: (response: any) => {
-        console.log('Produit + Feature ajoutés', response);
-        this.successMessage = 'Produit ajouté avec succès !';
+        const newProductId = response.product_id;
 
-        // Appel au service Carbon après ajout du produit
-        const newProductId = response.product_id; 
         if (newProductId) {
           this.carbonServie.addCarbonImpact(newProductId, true).subscribe({
-            next: (res) => {
-              console.log('Impact carbone ajouté:', res);
-              this.carbonServie.recalculateCarbonBadges().subscribe({
-                            next: (res) => {
-                                            console.log('recalcul termine', res);
-
-                            },
-            error: (err) => {
-              console.error('Erreur recalcul', err);
-            }
-
-              });
+            next: () => {
+              this.carbonServie.recalculateCarbonBadges().subscribe();
             },
-            error: (err) => {
-              console.error('Erreur ajout impact carbone:', err);
-            }
+            error: (err) => console.error('Erreur ajout impact carbone:', err)
           });
         }
 
@@ -159,19 +138,29 @@ export class AjoutproductComponent {
           bonifvisible: true,
           bonifpoint: 0
         });
-
         this.resetFlags();
 
-        setTimeout(() => {
-          this.successMessage = '';
-        }, 3000);
+        this.snackBar.open('Produit ajouté avec succès !', 'Fermer', {
+          duration: 3000,
+          panelClass: ['snackbar-success']
+        });
+
+        this.productAdded.emit(response); 
+        this.dialogRef.close(); 
+        this.isSubmitting = false;
       },
       error: (err) => {
         console.error('Erreur ajout', err);
+        this.isSubmitting = false;
+        this.snackBar.open('Erreur lors de l’ajout du produit.', 'Fermer', {
+          duration: 3000,
+          panelClass: ['snackbar-error']
+        });
       }
     });
   }
 }
+
 
 
   getDesignationName(value: number): string {
@@ -194,8 +183,120 @@ export class AjoutproductComponent {
     this.isChauffage = false;
     this.isChauffeEau = false;
     this.isChaudiere = false;
-    this.isTv = false;
   }
+private setFeatureValidatorsByDesignation(designation: string) {
+  const featuresGroup = this.productForm.get('features') as FormGroup;
+
+  // On reset d'abord tous les validators
+  Object.keys(featuresGroup.controls).forEach(key => {
+    featuresGroup.get(key)?.clearValidators();
+    featuresGroup.get(key)?.updateValueAndValidity();
+  });
+
+  // Champs obligatoires de base pour toutes les catégories
+  this.productForm.get('name')?.setValidators(Validators.required);
+  this.productForm.get('brand')?.setValidators(Validators.required);
+  this.productForm.get('reference')?.setValidators(Validators.required);
+  this.productForm.get('category_id')?.setValidators(Validators.required);
+  this.productForm.get('name')?.updateValueAndValidity();
+  this.productForm.get('brand')?.updateValueAndValidity();
+  this.productForm.get('reference')?.updateValueAndValidity();
+  this.productForm.get('category_id')?.updateValueAndValidity();
+
+  // Ajout des validators spécifiques par catégorie
+  const required = Validators.required;
+  const add = (key: string) => featuresGroup.get(key)?.setValidators(required);
+
+  switch (designation) {
+
+    case 'LAVE_VAISSELLE':
+      add('consumption_watt');
+      add('energy_class');
+      add('nbr_couvert');
+      add('noise');
+      add('weight');
+      break;
+
+    case 'LAVE_LINGE':
+    case 'LAVANTE_SECHANTE':
+      add('capacity');
+      add('cycle_duration');
+      add('consumption_watt');
+      add('energy_class');
+      add('noise');
+      add('weight');
+
+      break;
+
+    case 'REFRIGERATEUR':
+    case 'CONGELATEUR':
+      add('volume_freezer');
+      add('consumption_watt');
+      add('energy_class');
+      add('weight');
+
+      break;
+
+    case 'SECHE_LINGE':
+      add('noise');
+      add('capacity');
+      add('cycle_duration');
+      add('consumption_watt');
+      add('energy_class');
+      add('weight');
+
+      break;
+
+    case 'CLIMATISEUR':
+      add('consumption_watt');
+      add('type');
+      add('energy_class');
+      add('weight');
+
+      break;
+
+    case 'FOUR':
+    case 'HOTTE':
+    case 'TABLE_CUISSON':
+      add('consumption_watt');
+      add('type');
+      add('energy_class');
+      add('weight');
+
+      break;
+
+    case 'CAVE_A_VIN':
+      add('nb_bottle');
+      add('noise');
+      add('energy_class');
+      add('weight');
+
+      break;
+
+    case 'ASPIRATEUR':
+      add('consumption_watt');
+      add('volume_collect');
+      add('energy_class');
+      add('weight');
+
+      break;
+
+    case 'CHAUFFAGE':
+    case 'CHAUFFE_EAU':
+    case 'CHAUDIERE':
+      add('consumption_watt');
+      add('debit');
+      add('energy_class');
+      add('weight');
+
+      break;
+     }
+
+  // On met à jour tous les champs après ajout des validators
+  Object.keys(featuresGroup.controls).forEach(key => {
+    featuresGroup.get(key)?.updateValueAndValidity();
+  });
+}
 
   onDesignationChange(event: Event): void {
     this.resetFlags();
@@ -250,14 +351,21 @@ export class AjoutproductComponent {
           this.isChauffeEau = true;
           break;
         case 'CHAUDIERE':
-          this.isChaudiere = true;
-          break;
-        case 'TV':
-          this.isTv = true;
+          this.isChaudiere = true;      
           break;
         default:
           break;
       }
+          this.setFeatureValidatorsByDesignation(designationText);
+
     }
   }
+  isInvalid(controlName: string, groupName: string = ''): boolean {
+  const control = groupName
+    ? (this.productForm.get(groupName) as FormGroup).get(controlName)
+    : this.productForm.get(controlName);
+
+  return !!(control && control.invalid && (control.dirty || control.touched));
+}
+
 }

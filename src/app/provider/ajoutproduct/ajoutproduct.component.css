@@ -28,3 +28,12 @@ body {
   border-color: #b0c4d8;
   color: #163e5c;
 }
+.snackbar-success {
+  background-color: #198754 !important;
+  color: white;
+}
+
+.snackbar-error {
+  background-color: #dc3545 !important;
+  color: white;
+}

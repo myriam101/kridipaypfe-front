@@ -2,6 +2,15 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
+export interface WeightsByProvider {
+  [providerName: string]: number; 
+}
+
+export interface CartWeightByProviderResponse {
+  cart_id: number;
+  weights_by_provider_kg: WeightsByProvider;
+
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -11,6 +20,8 @@ export class DeliveryService {
 
 private baseUrl = 'http://localhost:8000/Delivery/';
   private cartWeight: number | null = null;
+    private cartWeightsByProvider: WeightsByProvider | null = null;
+
 
   constructor(private http: HttpClient) {}
     geocode(address: string): Observable<any> {
@@ -51,10 +62,32 @@ private currentCartId: number | null = null;
     cart_id: cartId
   });
 }
+// --- Nouvelle logique pour le poids par fournisseur ---
+
+  setCartWeightsByProvider(weights: WeightsByProvider) {
+    this.cartWeightsByProvider = weights;
+  }
+
+  getCartWeightsByProviderStored(): WeightsByProvider | null {
+    return this.cartWeightsByProvider;
+  }
+
+  getCartWeightByProvider(cartId: number): Observable<CartWeightByProviderResponse> {
+    return this.http.post<CartWeightByProviderResponse>(`${this.baseUrl}cart-weight-by-provider`, {
+      cart_id: cartId
+    });
+  }
+  
 estimateCO2(weightKg: number, distanceKm: number) {
   return this.http.post<any>(`${this.urlAPI}/api/co2-estimate`, {
     weight: weightKg,
     distance: distanceKm
   });
 }
+getTotalCO2ByCart(cart_id: number) {
+  return this.http.get<{ cart_id: number, total_co2_kg: number }>(
+    `${this.baseUrl}total-co2/${cart_id}`
+  );
+}
+
 }

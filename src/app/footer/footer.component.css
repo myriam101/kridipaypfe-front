@@ -1,8 +1,42 @@
 .footer {
   background-color: #216490;
+  box-shadow:
+    inset 0 5px 10px rgba(0,0,0,0.3),  /* ombre intérieure pour profondeur */
+    0 8px 15px rgba(0,0,0,0.3);        /* ombre portée pour surélévation */
+  position: relative;
+  overflow: hidden;
+  z-index: 0;
+  perspective: 1000px; /* active le rendu 3D pour enfants */
 }
 
+.footer::before {
+  content: "";
+  position: absolute;
+  top: -30%;
+  left: -30%;
+  width: 160%;
+  height: 160%;
+  background: linear-gradient(135deg, #2a78b5 0%, #1a456b 70%);
+  transform: rotateX(20deg) translateZ(-30px);
+  filter: brightness(0.9);
+  border-radius: 30% / 10%;
+  z-index: -1;
+  opacity: 0.8;
+  box-shadow: 0 0 30px 5px rgba(33,100,144,0.4);
+}
 
 .footer p {
   color: #e0e0e0;
+  font-weight: 500;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+  letter-spacing: 0.03em;
+  transform-style: preserve-3d;
+  transform: translateZ(20px);
+  transition: color 0.3s ease;
 }
+
+.footer p strong {
+  color: #a9d1ff;
+  text-shadow: 0 1px 2px rgba(169,209,255,0.9);
+}
+

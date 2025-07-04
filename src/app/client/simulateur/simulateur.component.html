@@ -36,7 +36,7 @@
       <label class="form-label fw-semibold text-dark">Durée d’utilisation quotidienne</label>
       <div class="d-flex align-items-center gap-3">
         <input type="range" class="form-range flex-grow-1" min="1" max="60" [(ngModel)]="duration_use" />
-        <span class="badge bg-primary-subtle text-primary px-3 py-2">{{ duration_use }} min</span>
+        <span class="badge bg-primary-subtle text-custom-blue px-3 py-2">{{ duration_use }} min</span>
       </div>
     </div>
 
@@ -45,7 +45,7 @@
       <label class="form-label fw-semibold text-dark">Nombre d’utilisations par jour</label>
       <div class="d-flex align-items-center gap-3">
         <input type="range" class="form-range flex-grow-1" min="1" max="10" [(ngModel)]="nbr_use" />
-        <span class="badge bg-primary-subtle text-primary px-3 py-2">{{ nbr_use }} fois</span>
+        <span class="badge bg-primary-subtle text-custom-blue  px-3 py-2">{{ nbr_use }} fois</span>
       </div>
     </div>
   </div>
@@ -122,7 +122,7 @@
 
   <ng-container *ngIf="showResultsOnly; else formButtons">
     <button class="btn btn-outline-secondary" (click)="results()" aria-label="Retour">
-      <i class="bi bi-arrow-left me-2"></i> Retour
+       Retour
     </button>
   </ng-container>
 

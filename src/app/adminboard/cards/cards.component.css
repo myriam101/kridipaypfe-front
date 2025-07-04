@@ -43,6 +43,7 @@
 
 .border-primary {
   border-left: 5px solid #216490 !important;
+  border-color: #216490 !important;
 }
 
 .bg-primary {

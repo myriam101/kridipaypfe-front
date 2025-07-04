@@ -42,8 +42,8 @@
               <td class="text-end">
                 <button class="btn btn-sm btn-outline-secondary"
                         (click)="toggleVisibility(product)"
-                        title="Afficher/Masquer">
-                  <i class="fa" [ngClass]="product.bonifvisible ? 'fa-eye' : 'fa-eye-slash'"></i>
+                        matTooltip="Afficher/Masquer les points sur le produit"   matTooltipClass="custom-tooltip">
+                  <i class="bi" [ngClass]="product.bonifvisible ? 'bi-eye' : 'bi-eye-slash'"></i>
                 </button>
               </td>
             </tr>

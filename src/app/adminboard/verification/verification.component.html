@@ -1,0 +1,54 @@
+<div class="mismatch-dialog p-4">
+  <!-- TITRE AVEC ICÔNE -->
+  <h2 class="text-center mb-2 d-flex align-items-center justify-content-center gap-2">
+    Détails de l’anomalie
+  </h2>
+
+  <!-- DATE CENTRÉE -->
+  <p class="text-center text-muted small mb-4">
+    Analyse faite le
+    {{ data.verification?.createdAt | date: 'medium' }}
+  </p>
+
+  <!-- CONTENU -->
+  <div mat-dialog-content class="dialog-body mb-4">
+  
+    <div class="info-row mb-3">
+      <strong class="label">Classe déclarée par le fournisseur:</strong>
+      <span class="badge rounded-pill bg-info text-dark px-3 py-1">
+        {{ data.verification?.declaredClass || 'N/A' }}
+      </span>
+    </div>
+
+    <div class="info-row mb-3">
+      <strong class="label">Classe prédite par le modele:</strong>
+      <span class="badge rounded-pill bg-warning text-dark px-3 py-1">
+        {{ data.verification?.predictedClass || 'N/A' }}
+      </span>
+    </div>
+
+    <!-- SCORE EN BARRE DE PROGRÈS -->
+    <div class="info-row mb-3 flex-column align-items-start">
+      <strong class="label mb-1">Score :</strong>
+      <div class="progress w-100" style="height: 1rem;" matTooltip="Ceci est le score de confiance du modele de prédiction de la classe énergétique."   matTooltipClass="custom-tooltip">
+        <div
+          class="progress-bar"
+          role="progressbar"
+          [ngClass]="{
+            'bg-success': data.verification?.score >= 0.9,
+            'bg-warning': data.verification?.score >= 0.7 && data.verification?.score < 0.9,
+            'bg-danger': data.verification?.score < 0.7
+          }"
+          [style.width.%]="(data.verification?.score || 0) * 100"
+        >
+          {{ data.verification?.score }}%
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOUTON -->
+  <div mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close color="warn">Fermer</button>
+  </div>
+</div>

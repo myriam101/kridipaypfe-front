@@ -30,7 +30,13 @@
     <ng-container  *ngIf="products.length > 0; else noProducts">
       <div class="row clearfix gy-3">
     <div *ngFor="let product of products" class="col-lg-3 col-md-4 col-sm-12">
-          <div class="card product_item position-relative shadow-hover">
+          <div class="card product_item position-relative shadow-hover" [ngClass]="{'border border-danger border-2': product.verificationStatus === 'mismatch'}"
+     
+     style="cursor: pointer;">
+<!-- Badge Suspect -->
+<span *ngIf="product.verificationStatus === 'mismatch'" class="badge-suspect" (click)="openMismatchDialog(product)">
+  Suspect
+</span>
 
            <!-- Badge Carbone -->
 <div 

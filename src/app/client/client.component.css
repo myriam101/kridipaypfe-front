@@ -1,20 +1,19 @@
-.masthead {
-  height: 45vh;
-  background-color: #216490;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #fff;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+.text-main-blue {
+  color: #154c79;
 }
 
-.mt-navbar {
-  margin-top: 70px;
+.navbar {
+  font-size: 0.95rem;
 }
 
-.navbar .nav-link:hover {
+.navbar .nav-link {
+  color: #495057;
+  transition: color 0.2s ease-in-out;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link:focus {
   color: #216490 !important;
-  transition: color 0.3s ease-in-out;
 }
 
 .navbar .nav-link i {
@@ -22,6 +21,47 @@
 }
 
 .badge-notification {
-  font-size: 0.75rem;
-  padding: 0.4em 0.6em;
+  position: absolute;
+  top: 0.3rem;
+  right: -0.5rem;
+  font-size: 0.60rem;
+  padding: 0.35em 0.75em;
+  border-radius: 50rem;
+  color: #fff;
+  transform: translate(50%, -50%);
+  box-shadow: 0 0 0 2px #fff;
+}
+
+.masthead {
+  height: 40vh;
+  background: linear-gradient(135deg, #216490 0%, #154c79 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  padding: 1rem;
+}
+#masthead-3d {
+  perspective: 1000px;
+  will-change: transform;
+}
+
+.masthead-inner {
+  transition: transform 0.3s ease-out;
+  transform-style: preserve-3d;
+}
+
+.mt-navbar {
+  margin-top: 64px;
+}
+
+section {
+  background-color: #f9fbfc;
+}
+
+.lead {
+  font-weight: 400;
 }

@@ -29,6 +29,7 @@ import { ChatbotComponent } from './chatbot/chatbot.component';
 import { ComparaisonComponent } from './comparaison/comparaison.component';
 import { LivraisonComponent } from './client/livraison/livraison.component';
 import { PaliersBonifComponent } from './banque/paliers-bonif/paliers-bonif.component';
+import { VerificationComponent } from './adminboard/verification/verification.component';
 
 const routes: Routes = [
   {path:'chatbot',component:ChatbotComponent},
@@ -44,6 +45,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],data: { roles: ['ROLE_AGENT']}},
   {path:'adminboard',component: AdminboardComponent,
     children:[
+      {path:'verification',component:VerificationComponent},
       {path:'console',component:ConsoleComponent},
       {path:'catalogues',component:CatalogsCornerComponent},
       {path:'home',component:HomeCornerComponent},

@@ -1,22 +1,5 @@
-body {
-  margin-top: 20px;
-  background: #f8f9fa; 
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #333;
-}
-
-.h3, h3 {
-  font-size: 1.3rem;
-  font-weight: 600;
-  line-height: 1.3;
-  margin: 0;
-}
-
-a {
-  text-decoration: none;
-  color: inherit;
-  cursor: pointer;
-  transition: color 0.3s ease;
+.text-main-blue {
+  color: #154c79;
 }
 
 .container {
@@ -24,62 +7,104 @@ a {
   margin: 0 auto;
 }
 
+h2 {
+  font-size: 1.5rem;
+}
+
 .catalog-card {
   background: #ffffff;
   text-align: center;
-  padding: 28px 20px;
-  box-shadow: 0 4px 8px rgba(33, 52, 87, 0.1);
+  padding: 20px 16px;
+  box-shadow: 0 3px 8px rgba(33, 52, 87, 0.08);
   border-radius: 12px;
   cursor: pointer;
-  transition: 
-    background-color 0.3s ease, 
-    color 0.3s ease, 
-    box-shadow 0.3s ease,
-    transform 0.2s ease;
-  user-select: none;
+  transition: all 0.25s ease;
   border: none;
   width: 100%;
+  position: relative;
 }
 
-.catalog-card:hover, 
+.catalog-card:hover,
 .catalog-card:focus {
   background-color: #216490;
   color: #fff;
-  box-shadow: 0 8px 20px rgba(33, 52, 87, 0.2);
+  box-shadow: 0 6px 16px rgba(33, 52, 87, 0.2);
   transform: translateY(-4px);
   outline: none;
 }
 
-.catalog-card:focus-visible {
-  outline: 3px solid #4caf50;
-  outline-offset: 3px;
-}
-
 .catalog-title {
+  font-size: 1rem;
+  font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  font-weight: 700;
-  color: inherit;
+  gap: 6px;
+  margin-bottom: 0;
 }
 
-.selected-icon {
-  color: #82ccde; 
-  font-size: 1.2rem;
+.catalog-description {
+  font-size: 0.8rem;
+  color: inherit;
+  opacity: 0.75;
+  margin: 0;
+}
+
+.catalog-icon {
+  font-size: 1.8rem;
+  color: #216490;
+}
+.catalog-card:hover .catalog-icon,
+.catalog-card:focus .catalog-icon {
+  color: #ffffff !important;
+}
+.selected .catalog-icon {
+  color: #fff;
 }
 
 .selected {
   background-color: #216490;
   color: #fff;
-  box-shadow: 0 8px 24px rgba(33, 52, 87, 0.25);
-  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(33, 52, 87, 0.25);
 }
 
 .selected a {
   color: #fff;
 }
 
-.gy-4 {
-  row-gap: 1.5rem !important;
+.badge {
+  font-size: 0.7rem;
+  padding: 0.25em 0.5em;
+  border-radius: 0.4rem;
+}
+
+.gy-3 {
+  row-gap: 1rem !important;
+}
+.section-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #154c79;
+  margin-bottom: 0.3rem;
+}
+
+.section-subtitle {
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+/* (optionnel) petite animation d’apparition */
+.fade-in {
+  animation: fadeInUp 0.6s ease-in-out;
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

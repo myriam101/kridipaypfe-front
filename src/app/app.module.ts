@@ -73,6 +73,8 @@ import { PaliersBonifComponent } from './banque/paliers-bonif/paliers-bonif.comp
 import { AddPalierDialogComponent } from './banque/paliers-bonif/add-palier-dialog/add-palier-dialog.component';
 import { EditPalierDialogComponent } from './banque/paliers-bonif/edit-palier-dialog/edit-palier-dialog.component';
 import { ConfirmComponent } from './pages/confirm/confirm.component';
+import { VerificationComponent } from './adminboard/verification/verification.component';
+import { ListproductsAdminComponent } from './adminboard/listproducts-admin/listproducts-admin.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -90,6 +92,7 @@ export function tokenGetter() {
     ProviderComponent,
     AjoutproductComponent,
     ListproductsComponent,
+    ListproductsAdminComponent,
     ProfileComponent,
     CardsComponent,
     SimulateurComponent,
@@ -128,8 +131,8 @@ export function tokenGetter() {
     PaliersBonifComponent,
     AddPalierDialogComponent,
     EditPalierDialogComponent,
-    ConfirmComponent
-  ],
+    ConfirmComponent,
+    VerificationComponent  ],
   imports: [
     BrowserModule,
     PdfViewerModule,
@@ -163,8 +166,7 @@ export function tokenGetter() {
     MatSnackBarModule,
     MatInputModule,
     NgChartsModule,
-    MatProgressSpinnerModule,
-    
+    MatProgressSpinnerModule    
        ],
   providers: [],
   bootstrap: [AppComponent]

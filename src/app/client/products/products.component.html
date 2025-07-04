@@ -1,46 +1,47 @@
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 <div class="container">
-  <div class="row clearfix"> 
+  <div class="row clearfix">
     <div class="loader-container" *ngIf="isLoading">
       <div class="loader"></div>
     </div>
 
     <ng-container *ngIf="!isLoading && products.length > 0; else noProducts">
-
-      <div class="row clearfix">
+      <div class="row clearfix gy-3">
         <div *ngFor="let product of products" class="col-lg-3 col-md-4 col-sm-12">
-          <div class="card product_item position-relative">
+          <div class="card product_item position-relative shadow-hover">
 
             <!-- Badge Carbone -->
-          <div
-  class="carbon-icon"
-  [ngClass]="carbonBadges[product.id]"
-  (click)="toggleCarbonTooltip(product.id, $event)"
-  [title]="getCarbonBadgeText(carbonBadges[product.id])"
-  tabindex="0"
-  role="button">
-  <i class="zmdi zmdi-globe"></i>
-</div>
-
+            <div 
+              class="carbon-icon"
+              [ngClass]="carbonBadges[product.id]"
+              matTooltip="{{ getCarbonBadgeText(carbonBadges[product.id]) }}"
+              matTooltipPosition="right"
+              matTooltipClass="custom-tooltip"
+              aria-label="Empreinte carbone"
+              role="img"
+              >
+<i class="zmdi zmdi-globe"></i> 
+          </div>
 
             <div class="cp_img" data-bs-toggle="tooltip" data-bs-placement="top">
-              <img [src]="product.imageUrl || 'assets/imagenotavailble.png'" alt="{{ product.name }}" class="img-fluid">
+              <img [src]="product.imageUrl || 'assets/imagenotavailble.png'" alt="{{ product.name }}" class="img-fluid product-img">
               <div class="hover">
-                <a (click)="openSimulateur(product)" class="btn btn-custom-blue mb-2" title="Simulez votre consommation énergétique">
-                  <i class="zmdi zmdi-flash"></i>
-                </a>
-                <a (click)="addToCart(product.id)" class="btn btn-custom-blue mb-2" title="Ajouter au panier">
-                  <i class="zmdi zmdi-shopping-cart"></i>
-                </a>
+                <button (click)="openSimulateur(product)" class="btn btn-custom-blue mb-2" title="Simulez votre consommation énergétique">
+<i class="bi bi-lightning-charge"></i>                </button>
+                <button (click)="addToCart(product.id)" class="btn btn-custom-blue mb-2" title="Ajouter au panier">
+<i class="bi bi-cart-plus-fill"></i>                </button>
               </div>
             </div>
 
-            <div class="product_details">
-              <h5><a (click)="openProductDetailDialog(product)" style="color:#216490 ; font-weight: 700;">{{ product.name }}</a></h5>
-             <em style="font-size: smaller;">{{ product.category }}</em>
+            <div class="product_details text-center">
+              <h5 class="product-title">
+                <a (click)="openProductDetailDialog(product)">{{ product.name }}</a>
+              </h5>
+              <em class="product-category">{{ product.category }}</em>
               <p class="product-brand">{{ product.brand }}</p>
 
               <div *ngIf="product.bonifvisible === 1" class="mt-2">
-                <span class="bonif-badge"> {{ product.bonifpoint }} pts bonus</span>
+                <span class="bonif-badge">{{ product.bonifpoint }} pts bonus</span>
               </div>
             </div>
 
@@ -56,21 +57,5 @@
       </div>
     </ng-template>
 
-  </div>
-
-  <!-- Tooltip flottant hors carte produit -->
-  <div
-    *ngIf="activeCarbonTooltipId !== null"
-    class="custom-tooltip fixed-tooltip"
-    [style.top.px]="tooltipPosition.top"
-    [style.left.px]="tooltipPosition.left"
-    (click)="closeCarbonTooltip()"
-    role="tooltip"
-    aria-live="polite"
-  >
-    <div class="tooltip-arrow"></div>
-    <div class="tooltip-content p-2 small">
-      {{ getCarbonBadgeText(carbonBadges[activeCarbonTooltipId]) }}
-    </div>
   </div>
 </div>

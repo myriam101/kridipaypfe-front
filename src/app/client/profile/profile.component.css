@@ -1,4 +1,3 @@
-/* Conteneur principal */
 .user-profile {
   display: flex;
   flex-wrap: wrap;
@@ -9,7 +8,6 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Colonne gauche : carte utilisateur */
 .left-profile-card {
   flex: 1 1 250px;
   max-width: 300px;
@@ -39,7 +37,6 @@
   font-size: 0.95rem;
 }
 
-/* Colonne droite : infos perso + onglets */
 .right-profile-card {
   flex: 2 1 500px;
   background-color: #ffffff;
@@ -48,7 +45,6 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-/* Informations personnelles */
 .personal-info h4 {
   margin-bottom: 1rem;
   font-size: 1.1rem;
@@ -164,4 +160,26 @@
 .timeline-item:hover .timeline-content {
   border-color: #216490;
   box-shadow: 0 4px 20px rgba(33, 100, 144, 0.1);
+}
+.app-breadcrumb {
+  background-color: #ffffff;
+  border-radius: .5rem; 
+  padding: .6rem 1rem; 
+  box-shadow: var(--shadow-sm);
+  font-size: 0.85rem; 
+}
+.app-breadcrumb .breadcrumb-item a {
+  color: var(--app-blue);
+  align-items: center;
+}
+.app-breadcrumb .breadcrumb-item a:hover {
+  color: var(--app-blue-hover);
+  text-decoration: none;
+}
+.app-breadcrumb .breadcrumb-item.active {
+  color: var(--text-dark);
+  align-items: center;
+}
+.app-breadcrumb .breadcrumb-item i {
+  font-size: 0.9rem; 
 }

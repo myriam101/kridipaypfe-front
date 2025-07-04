@@ -8,8 +8,8 @@ body {
   }
 
   .navbar .zmdi {
-  font-size: 1.5rem; /* Augmente la taille des icônes */
-  color: #216490 !important; /* Applique la couleur */
+  font-size: 1.5rem; 
+  color: #216490 !important;
 }
 /*loader*/
 .loader-container {
@@ -36,3 +36,9 @@ body {
  z-index: 2000 !important; 
   top: 60px
 }
+.mdc-tooltip.custom-tooltip {
+   .mdc-tooltip__surface {
+       background-color: #216490;
+       color: white;
+   }
+ }

@@ -1,146 +1,150 @@
-<div class="container py-4">
-  <!-- Fil d’Ariane -->
-  <div class="row mb-4">
-    <div class="col-12">
-      <nav aria-label="breadcrumb" class="bg-white rounded-3 shadow-sm px-3 py-2">
+<div class="container py-4"> <div class="row mb-4"> <div class="col-12">
+      <nav aria-label="breadcrumb" class="app-breadcrumb">
         <ol class="breadcrumb mb-0">
           <li class="breadcrumb-item" style="cursor: pointer;">
-            <a (click)="revenirPanier()" class="fw-medium text-primary">Panier</a>
+            <a (click)="revenirPanier()" class="fw-medium text-app-blue"> <i class="bi bi-cart me-1"></i> Panier
+            </a>
           </li>
-          <li class="breadcrumb-item active text-dark" aria-current="page">Livraison</li>
+          <li class="breadcrumb-item active text-dark" aria-current="page">
+            <i class="bi bi-truck me-1"></i> Livraison
+          </li>
         </ol>
       </nav>
     </div>
   </div>
 
-  <!-- Carte + Formulaire -->
-  <div class="row g-4" [formGroup]="form">
-    <!-- Colonne Formulaire -->
-   <div class="col-md-5">
-  <!-- Si pas encore validé (pas de résumé) -->
-  <ng-container *ngIf="!deliverySummary; else showSummary">
-    <div class="card shadow-sm border-0 rounded-4 p-4">
-      <h5 class="mb-3" style="color: #216490;">Adresse de livraison</h5>
-      <p class="text-muted small mb-4">
-        Cliquez sur la carte à droite pour sélectionner votre adresse de livraison.
-      </p>
+  <div class="row g-4" [formGroup]="form"> <div class="col-lg-5 order-lg-1">
+<ng-container *ngIf="deliverySummaries.length === 0; else showSummary">
+        <div class="app-card form-card shadow-lg border-0 rounded-4 p-4"> <h5 class="mb-3 text-app-blue fw-bold d-flex align-items-center"> <i class="bi bi-geo-alt-fill me-2 fs-5"></i> Adresse de livraison </h5>
+          <p class="text-muted small mb-3"> Veuillez cliquer sur la carte à droite pour sélectionner votre adresse de livraison.
+          </p>
 
-      <div *ngIf="address" class="alert alert-info p-3 mb-3 d-flex align-items-center gap-3">
-        <i class="bi bi-geo-alt-fill fs-4 text-primary"></i>
-        <div>
-          <strong>Adresse sélectionnée :</strong><br />{{ address }}
-        </div>
-      </div>
+          <div *ngIf="address" class="app-alert app-alert-info p-3 mb-3 d-flex align-items-center gap-3"> <i class="bi bi-check-circle-fill fs-5 text-app-blue"></i> <div>
+              <strong>Adresse sélectionnée :</strong><br />{{ address }}
+            </div>
+          </div>
+          <div *ngIf="!address && form.touched && form.controls['adresse'].invalid" class="alert alert-warning p-3 mb-3 d-flex align-items-center gap-3">
+              <i class="bi bi-exclamation-triangle-fill fs-5 text-warning"></i> <div>
+                  Veuillez sélectionner une adresse sur la carte.
+              </div>
+          </div>
 
-      <!-- Estimation CO2 avec tooltip -->
-     <!-- Loading -->
-<div *ngIf="isLoadingCO2" class="co2-loader p-4 text-center">
-<div class="dots-bounce-loader" aria-label="Chargement CO₂">
-  <span></span><span></span><span></span>
-</div>
-  <div class="small text-muted mt-2">Calcul des émissions en cours...</div>
-</div>
+          <div *ngIf="isLoadingCO2" class="co2-loader text-center mb-3"> <div class="dots-bounce-loader" aria-label="Chargement CO₂">
+              <span></span><span></span><span></span>
+            </div>
+            <div class="small text-muted mt-2">Calcul des émissions en cours...</div>
+          </div>
 
-<!-- Résultat -->
-<div *ngIf="!isLoadingCO2 && estimatedCO2 !== null"
-     class="co2-estimate highlight-result p-4 mb-4 text-center"
-     matTooltip="Estimation des émissions de dioxyde de carbone (CO₂) liées à la livraison selon la distance et le poids du panier."
-     matTooltipPosition="above">
-  <div class="d-flex justify-content-center align-items-center mb-3">
-    <i class="bi bi-cloud-fill fs-1 me-2 bounce-icon"></i>
-    <div class="fs-2 fw-bold">{{ estimatedCO2 | number: '1.2-2' }} kg CO₂</div>
-  </div>
-  <div class="small text-muted">Émissions estimées pour cette livraison</div>
-</div>
+          <div *ngIf="!isLoadingCO2 && estimatedCO2 !== null"
+               class="app-highlight-box highlight-result p-3 mb-3 text-center" matTooltip="Estimation des émissions de dioxyde de carbone (CO₂) liées à la livraison selon la distance et le poids du panier."
+               matTooltipPosition="above" matTooltipClass="custom-tooltip">
+            <div class="d-flex justify-content-center align-items-center mb-2"> <i class="bi bi-cloud-fill fs-3 me-2 bounce-icon"></i> <div class="fs-4 fw-bold text-app-blue">{{ estimatedCO2 | number: '1.2-2' }} kg CO₂</div> </div>
+            <div class="small text-muted">Émissions estimées pour cette livraison</div>
+          </div>
 
+          <div class="mb-3"> <label for="modeliv" class="form-label fw-semibold text-dark small">Mode de livraison</label> <select id="modeliv" class="form-select app-input form-select-sm" formControlName="modeliv"> <option value="" disabled selected>Sélectionnez un mode de livraison</option>
+              <option *ngFor="let option of modelivOptions" [value]="option.value">
+                {{ option.label }}
+              </option>
+            </select>
+            <div *ngIf="form.controls['modeliv'].invalid && (form.controls['modeliv'].dirty || form.controls['modeliv'].touched)" class="text-danger small mt-1">
+                Veuillez sélectionner un mode de livraison.
+            </div>
+          </div>
 
-      <!-- Mode livraison -->
-      <div class="mb-3">
-        <label for="modeliv" class="form-label fw-semibold text-dark">Mode de livraison</label>
-        <select id="modeliv" class="form-select border-primary" formControlName="modeliv">
-          <option *ngFor="let option of modelivOptions" [value]="option.value">
-            {{ option.label }}
-          </option>
-        </select>
-      </div>
+          <div class="app-weight-summary p-3 mb-3 rounded-3 bg-app-lighter-blue"> <div class="d-flex align-items-center mb-2">
+              <i class="bi bi-box-seam fs-5 me-2 text-app-blue"></i> <h6 class="fw-bold mb-0 text-dark small">Poids du panier par fournisseur</h6> <i class="bi bi-info-circle-fill ms-auto text-muted small"
+                 matTooltip="Répartition du poids total des produits dans votre panier, groupé par chaque fournisseur."
+                 matTooltipPosition="above" matTooltipClass="custom-tooltip"></i>
+            </div>
+            <div *ngIf="weightsByProvider && getProviderNames().length > 0">
+              <ul class="list-unstyled mb-0 small"> <li *ngFor="let providerName of getProviderNames()" class="d-flex justify-content-between align-items-center py-1 border-bottom-light">
+                  <span class="fw-semibold text-dark">{{ weightsByProvider[providerName] | number:'1.2-2' }} kg</span>
+                </li>
+              </ul>
+            </div>
+            <div *ngIf="!weightsByProvider || getProviderNames().length === 0" class="text-muted small">
+              Aucun poids de produit disponible.
+            </div>
+          </div>
 
-      <!-- Poids total -->
-      <div class="mb-3 text-muted small d-flex align-items-start gap-2"
-     >
-  <i class="bi bi-basket3 fs-5 mt-1"></i>
-  <div>
-    <div class="fw-semibold" matTooltip="Cumul des poids des produits dans votre commande">Poids total</div>
-    <div class="fst-italic text-dark-emphasis">{{ poidsTotal }} kg</div>
-  </div>
-</div>
+          <button class="btn btn-app-blue w-100 rounded-pill py-2 fw-bold fs-6" [disabled]="form.invalid || !address"
+                  (click)="submitDelivery()">
+            <i class="bi bi-check-circle-fill me-2"></i>Valider la livraison
+          </button>
 
+          <div *ngIf="error" class="alert alert-danger mt-3 small text-center">{{ error }}</div> </div>
+      </ng-container>
 
+     <ng-template #showSummary>
+  <div *ngIf="deliverySummaries.length > 0" class="app-card summary-card shadow-lg border-0 rounded-4 p-4">
+    <h5 class="fw-bold mb-3 text-app-blue d-flex align-items-center">
+      <i class="bi bi-receipt-cutoff me-2 fs-5"></i> Résumé
+    </h5>
+    <p *ngIf="deliverySummaries.length > 1"class="text-muted small mb-3">Votre commande a été répartie entre plusieurs fournisseurs.</p>
 
-      <button class="btn btn-primary w-100 rounded-3"
-              [disabled]="form.invalid"
-              (click)="submitDelivery()">
-        <i class="bi bi-check2-circle me-2"></i>Valider la livraison
-      </button>
-
-      <div *ngIf="error" class="alert alert-danger mt-3 small">{{ error }}</div>
-    </div>
-  </ng-container>
-
-  <!-- Résumé affiché après validation -->
-  <ng-template #showSummary>
-    <div *ngIf="deliverySummary" class="card border-0 rounded-4 shadow-sm p-4 summary-card">
-      <h5 class="fw-semibold  mb-4 d-flex align-items-center" style="color: #216490;">
-        <i class="bi bi-truck me-2 fs-4"></i>Résumé de la livraison
-      </h5>
-
-      <!-- Loading -->
-<div *ngIf="isLoadingCO2" class="co2-loader p-4 text-center">
-  <div class="dots-loader" aria-label="Chargement CO₂"></div>
-  <div class="small text-muted mt-2">Calcul des émissions en cours...</div>
-</div>
-
-<!-- Résultat -->
-<div *ngIf="!isLoadingCO2 && estimatedCO2 !== null"
-     class="co2-estimate highlight-result p-4 mb-4 text-center"
-     matTooltip="Estimation des émissions de dioxyde de carbone (CO₂) liées à la livraison selon la distance et le poids du panier."
-     matTooltipPosition="above">
-  <div class="d-flex justify-content-center align-items-center mb-3">
-    <i class="bi bi-cloud-fill fs-1 me-2 bounce-icon"></i>
-    <div class="fs-2 fw-bold">{{ estimatedCO2 | number: '1.2-2' }} kg CO₂</div>
-  </div>
-  <div class="small text-muted">Émissions estimées pour cette livraison</div>
-</div>
-
-
-      <ul class="list-unstyled ps-1">
-        <li class="mb-3">
-          <i class="bi bi-geo-alt me-2"></i>
-          <strong>Adresse :</strong> {{ deliverySummary.adresse }}
+    <div *ngFor="let summary of deliverySummaries" class="mb-4 border-bottom pb-3">
+      <ul class="list-unstyled app-summary-list ps-1 small">
+        <li class="mb-2 d-flex align-items-center">
+          <i class="bi bi-geo-alt-fill me-2 fs-5 text-app-blue"></i>
+          <div>
+            <strong class="text-dark">Adresse :</strong><br> {{ summary.adresse }}
+          </div>
         </li>
-        <li class="mb-3">
-          <i class="bi bi-box-seam me-2"></i>
-          <strong>Mode :</strong> {{ deliverySummary.modeLivraison }}
+        <li class="mb-2 d-flex align-items-center">
+          <i class="bi bi-box-seam-fill me-2 fs-5 text-app-blue"></i>
+          <div>
+            <strong class="text-dark">Mode :</strong><br> {{ summary.modeLivraison }}
+          </div>
         </li>
-        <li class="mb-3">
-          <i class="bi bi-shop me-2"></i>
-          <strong>Fournisseur :</strong> {{ deliverySummary.fournisseur }}
+        <li class="mb-2 d-flex align-items-center">
+          <i class="bi bi-shop-fill me-2 fs-5 text-app-blue"></i>
+          <div>
+            <strong class="text-dark">Fournisseur :</strong><br> {{ summary.fournisseur }}
+          </div>
         </li>
-        <li>
-          <i class="bi bi-arrows-expand me-2"></i>
-          <strong>Distance :</strong> {{ deliverySummary.distance }} km
+        <li class="mb-2 d-flex align-items-center">
+          <i class="bi bi-arrows-fullscreen me-2 fs-5 text-app-blue"></i>
+          <div>
+            <strong class="text-dark">Distance :</strong><br> {{ summary.distance }} km
+          </div>
+        </li>
+        <li class="mb-2 d-flex align-items-center">
+          <i class="bi bi-weight me-2 fs-5 text-app-blue"></i>
+          <div>
+            <strong class="text-dark">Poids :</strong><br> {{ summary.poids }}
+          </div>
+        </li>
+        <li class="mb-2 d-flex align-items-center">
+          <i class="bi bi-cloud-fill me-2 fs-5 text-app-blue"></i>
+          <div>
+            <strong class="text-dark">CO₂ estimé :</strong><br> {{ summary.co2Kg }}
+          </div>
         </li>
       </ul>
     </div>
-  </ng-template>
+    <div class="mt-4 p-3 rounded-3 bg-light border border-app-blue shadow-sm">
+  <div class="d-flex align-items-center">
+    <i class="bi bi-cloud-haze2-fill fs-4 me-3 text-app-blue"></i>
+    <div>
+      <div class="fw-bold text-dark">Émissions CO₂ totales</div>
+      <div class="text-muted small">Somme de toutes les livraisons</div>
+    </div>
+    <div class="ms-auto fs-5 fw-bold text-app-blue">
+      {{ totalCO2Cart | number: '1.2-2' }} kg
+    </div>
+  </div>
 </div>
 
+  </div>
+</ng-template>
 
-    <!-- Colonne Carte -->
-    <div class="col-md-7 order-md-last">
-<div id="map"
-     class="rounded-4 border border-primary-subtle shadow-sm position-relative"
-     [class.map-disabled]="deliverySummary">
-</div>
+    </div>
+
+    <div class="col-lg-7 order-lg-2">
+      <div id="map"
+           class="rounded-4 border border-app-blue-light shadow-lg position-relative" [class.map-disabled]="deliverySummaries.length > 0">
+      </div>
     </div>
   </div>
 </div>

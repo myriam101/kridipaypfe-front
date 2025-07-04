@@ -1,13 +1,16 @@
 import { ChangeDetectorRef, Component, HostListener, Input, OnChanges, OnInit } from '@angular/core';
 import { CarbonService } from 'src/app/services/carbon.service';
 import { ProductService } from 'src/app/services/product.service';
+import { VerificationComponent } from '../verification/verification.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-listproducts',
-  templateUrl: './listproducts.component.html',
-  styleUrls: ['./listproducts.component.css']
+  selector: 'app-listproducts-admin',
+  templateUrl: './listproducts-admin.component.html',
+  styleUrls: ['./listproducts-admin.component.css']
 })
-export class ListproductsComponent implements OnInit, OnChanges {
+export class ListproductsAdminComponent implements OnInit, OnChanges {
+  
   @Input() catalogId!: number;
   products: any[] = [];
   carbonBadges: { [key: number]: string } = {};
@@ -19,9 +22,10 @@ export class ListproductsComponent implements OnInit, OnChanges {
 
   constructor(
     private productService: ProductService,
-    private carbonService: CarbonService,  private cdr: ChangeDetectorRef
+    private carbonService: CarbonService,  private cdr: ChangeDetectorRef,private dialog:MatDialog
 
-  ) {}ngAfterViewInit(): void {
+  ) {}
+  ngAfterViewInit(): void {
   const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
   tooltipTriggerList.map((tooltipTriggerEl) => new this.bootstrap.Tooltip(tooltipTriggerEl));
 }
@@ -68,9 +72,10 @@ export class ListproductsComponent implements OnInit, OnChanges {
   
     this.isLoading = true; 
   
-    this.productService.getProductsByCatalog(this.catalogId).subscribe({
+    this.productService.AdmingetProductsByCatalog(this.catalogId).subscribe({
       next: (products) => {
         this.products = products;
+        
         this.carbonBadges = {};
   
         if (products.length === 0) {
@@ -127,7 +132,7 @@ export class ListproductsComponent implements OnInit, OnChanges {
   }
 
 toggleTooltip(productId: number, event: MouseEvent): void {
-  event.stopPropagation(); // prevent clicks from bubbling
+  event.stopPropagation(); 
   this.activeTooltipId = this.activeTooltipId === productId ? null : productId;
 }
 
@@ -151,4 +156,27 @@ if (val === 'low') {
 }
 
 }
+openMismatchDialog(product: any): void {
+  const verificationId = product.verification?.id;
+  if (!verificationId) {
+    console.warn('Pas d’ID de vérification disponible pour ce produit');
+    return;
+  }
+
+  this.productService.markAsSeen(verificationId).subscribe({
+    next: () => {
+      console.log('Vérification marquée comme vue ');
+      product.verification.seen = true; 
+    },
+    error: err => {
+      console.error('Erreur lors de la mise à jour de "seen" ', err);
+    }
+  });
+
+  this.dialog.open(VerificationComponent, {
+    width: '500px',
+    data: product
+  });
+}
+
 }

@@ -1,15 +1,15 @@
-/* TITRE DU MODAL */
 h2[mat-dialog-title] {
   font-size: 1.5rem;
   color: #216490;
   border-bottom: 2px solid #e3eef8;
 }
 
-/* BOUTONS */
 .btn-outline-primary {
   border-radius: 20px;
   padding: 0.4rem 1.2rem;
   font-weight: 500;
+  color: #216490;
+  border-color: #216490;
 }
 
 .btn-check:checked + .btn-outline-primary {
@@ -46,7 +46,6 @@ input[type='range']::-webkit-slider-thumb {
   background: #216490;
 }
 
-/* BADGES */
 .badge {
   font-size: 0.85rem;
   font-weight: 500;
@@ -58,7 +57,6 @@ input[type='range']::-webkit-slider-thumb {
   transform: scale(1.05);
 }
 
-/* TOOLTIPS PERSONNALISÉS */
 .fixed-tooltip {
   position: fixed;
   z-index: 1050;
@@ -110,14 +108,12 @@ input[type='range']::-webkit-slider-thumb {
   }
 }
 
-/* CONTENEUR DIALOG */
 .mat-dialog-container {
   overflow: visible !important;
   position: relative;
   z-index: 999;
 }
 
-/* RÉSULTATS */
 .result-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -171,13 +167,11 @@ input[type='range']::-webkit-slider-thumb {
   margin: 0;
 }
 
-/* COULEURS PAR TYPE */
 .bg-electric { background: #4b92d4; }
 .bg-water { background: #58b4c9; }
 .bg-money { background: #73b47b; }
 .bg-carbon { background: #616d9e; }
 
-/* ANIMATIONS */
 .animate-zoom {
   animation: zoomIn 0.5s ease-in-out;
 }
@@ -196,7 +190,6 @@ input[type='range']::-webkit-slider-thumb {
   to { opacity: 1; }
 }
 
-/* CHARGEMENT */
 .loading-dots span {
   animation: blink 1.4s infinite;
   font-weight: bold;
@@ -211,7 +204,6 @@ input[type='range']::-webkit-slider-thumb {
   20% { opacity: 1; }
 }
 
-/* TEXTE ET FORM */
 .text-custom-blue { color: #216490; }
 
 .form-hint-invalid {

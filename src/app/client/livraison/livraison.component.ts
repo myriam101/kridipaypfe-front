@@ -1,5 +1,5 @@
 import {  Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { DeliveryService } from 'src/app/services/delivery.service';
+import { DeliveryService, WeightsByProvider } from 'src/app/services/delivery.service';
 import { LocationiqService } from 'src/app/services/locationiq.service';
 import * as L from 'leaflet';
 import { Router } from '@angular/router';
@@ -8,12 +8,16 @@ import { ProductService } from 'src/app/services/product.service';
 import { ConfirmDialogComponent } from 'src/app/provider/confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { forkJoin, of } from 'rxjs';
+import { switchMap, tap, catchError } from 'rxjs/operators';
+
 const customIcon = L.icon({
   iconUrl: 'assets/marker.svg',
   iconSize: [50, 60],
   iconAnchor: [15, 40], 
   popupAnchor: [0, -35] 
 });
+
 @Component({
   selector: 'app-livraison',
   templateUrl: './livraison.component.html',
@@ -22,6 +26,7 @@ const customIcon = L.icon({
 
 })
 export class LivraisonComponent implements OnInit {
+  totalCO2Cart: number | null = null;
 
   isLoadingCO2 = false;
   poidsTotal = this.api.getCartWeightStored() || 0;
@@ -42,7 +47,7 @@ export class LivraisonComponent implements OnInit {
   everydayRide = false;
   idcart: any;
   form!: FormGroup;
-  deliverySummary: any = null;
+  deliverySummaries: any[] = [];
 
   modelivOptions = [
   { value: 'point_relais', label: 'Point relais' },
@@ -50,14 +55,16 @@ export class LivraisonComponent implements OnInit {
   { value: 'collecte', label: 'Collecte' }
 ];
   modeliv: any;
+  weightsByProvider: WeightsByProvider | null = null;
 
-  constructor(    private snackBar: MatSnackBar,
+  constructor( private snackBar: MatSnackBar,
   private dialog: MatDialog,
    private cartService: ProductService,  private fb: FormBuilder
-,private router: Router,private locationIQ: LocationiqService,private api: DeliveryService) {}
+  ,private router: Router,private locationIQ: LocationiqService,private api: DeliveryService) {}
 
 
 ngOnInit() {
+
   this.clientId = Number(localStorage.getItem('clientId'));
   this.idcart = this.api.getCartId(); 
 
@@ -96,68 +103,61 @@ ngOnInit() {
       }
 
       // Récupérer les fournisseurs du panier
-      this.api.getProvidersForCart(this.idcart).subscribe({
-            next: (providers) => {
-              if (providers.length > 0) {
-                const firstProvider = providers[0];
+    this.api.getProvidersForCart(this.idcart).subscribe({
+  next: (providers) => {
+    if (providers.length > 0) {
+      providers.forEach((provider, index) => {
+        this.api.geocode(provider.adress).subscribe({
+          next: (providerGeo) => {
+            const latlngs: [number, number][] = [
+              [this.selectedLat!, this.selectedLng!],
+              [parseFloat(providerGeo.lat), parseFloat(providerGeo.lon)],
+            ];
 
-                this.api.geocode(firstProvider.adress).subscribe({
-                  next: (providerGeo) => {
-                    const latlngs: [number, number][] = [
-                      [this.selectedLat!, this.selectedLng!],
-                      [parseFloat(providerGeo.lat), parseFloat(providerGeo.lon)],
-                    ];
+            const line = L.polyline(latlngs, {
+              color: '#216490',
+              weight: 4,
+              opacity: 0.7,
+            }).addTo(this.map);
 
-                    this.deliveryLine = L.polyline(latlngs, {
-                      color: '#216490',
-                      weight: 4,
-                      opacity: 0.7,
-                    }).addTo(this.map);
-                    this.map.fitBounds(this.deliveryLine.getBounds(), { padding: [50, 50] });
+            // Ajuster la vue uniquement à la première ligne
+            if (index === 0) {
+              this.map.fitBounds(line.getBounds(), { padding: [50, 50] });
+            }
 
-                    // Calcul distance
-                    this.api
-                      .getDistance(
-                        this.selectedLat!,
-                        this.selectedLng!,
-                        parseFloat(providerGeo.lat),
-                        parseFloat(providerGeo.lon)
-                      )
-                      .subscribe({
-                        next: (route) => {
-                          this.isLoadingCO2 = true;
-                          this.estimatedCO2 = null;
-                          // Appel estimation CO2 avec poidsTotal et distance
-                          this.api.estimateCO2(this.poidsTotal, route.distance_km).subscribe({
-                            next: (co2Res) => {
-                              this.estimatedCO2 = co2Res.co2_kg;
-                              this.isLoadingCO2 = false;
-                            },
-                            error: () => {
-                              this.estimatedCO2 = null;
-                              this.isLoadingCO2 = false;
-                            },
-                          });
-                        },
-                        error: () => {
-                          this.estimatedCO2 = null;
-                        },
-                      });
+            // Distance + CO₂ pour ce fournisseur
+            const providerId = provider.id_provider;
+            const providerWeight = this.weightsByProvider?.[String(providerId)] || 0;
+
+            this.api.getDistance(
+              this.selectedLat!, this.selectedLng!,
+              parseFloat(providerGeo.lat), parseFloat(providerGeo.lon)
+            ).subscribe({
+              next: (route) => {
+                this.api.estimateCO2(providerWeight, route.distance_km).subscribe({
+                  next: (co2Res) => {
+                    console.log(`→ ${provider.adress} | ${route.distance_km}km | ${co2Res.co2_kg}kg CO2`);
+                    // Tu peux ici stocker dans un tableau les résumés si besoin
                   },
-                  error: () => {
-                    this.error = 'Erreur géocodage fournisseur';
-                    this.estimatedCO2 = null;
-                  },
+                  error: () => console.warn(`Erreur estimation CO₂ fournisseur ${providerId}`),
                 });
-              } else {
-                this.estimatedCO2 = null;
-              }
-            },
-            error: () => {
-              this.error = 'Erreur récupération fournisseurs';
-              this.estimatedCO2 = null;
-            },
-          });
+              },
+              error: () => console.warn(`Erreur OSRM fournisseur ${providerId}`),
+            });
+          },
+          error: () => console.warn(`Erreur géocodage fournisseur ${provider.id_provider}`),
+        });
+      });
+    } else {
+      this.estimatedCO2 = null;
+    }
+  },
+  error: () => {
+    this.error = 'Erreur récupération fournisseurs';
+    this.estimatedCO2 = null;
+  },
+});
+
         },
         error: () => {
           this.address = 'Erreur reverse geocoding';
@@ -171,9 +171,23 @@ ngOnInit() {
       address: ['', Validators.required],
     });
   
+// Récupère les poids par fournisseur stockés dans le service
+    this.weightsByProvider = this.api.getCartWeightsByProviderStored();
 
+    if (this.weightsByProvider) {
+      console.log("Poids par fournisseur récupérés:", this.weightsByProvider);
+   
+      const totalGlobal = Object.values(this.weightsByProvider).reduce((sum, weight) => sum + weight, 0);
+      console.log("Poids total global (somme des poids par fournisseur):", totalGlobal);
+
+    } else {
+      console.warn("Aucun poids par fournisseur n'est actuellement stocké dans le service.");
+      
+    }
 }
-
+getProviderNames(): string[] {
+    return this.weightsByProvider ? Object.keys(this.weightsByProvider) : [];
+  }
   calculateRoute() {
     this.result = null;
     this.error = '';
@@ -208,82 +222,85 @@ ngOnInit() {
 revenirPanier() {
   this.router.navigate(['/client/shopping-cart']);
 }
-
 createDeliveries(clientId: number, cartId: number, modeliv: string, clientRide: string, everydayRide: boolean) {
   if (this.selectedLat === null || this.selectedLng === null) {
     this.error = "Adresse non sélectionnée.";
-    return;
+    return of(null); 
   }
 
-  this.api.getProvidersForCart(cartId).subscribe({
-    next: (providers) => {
-      providers.forEach((provider: any) => {
-        this.api.geocode(provider.adress).subscribe({
-          next: (providerGeo) => {
-            // Supprimer ancienne ligne
-            if (this.deliveryLine) {
-              this.map.removeLayer(this.deliveryLine);
-            }
-            // Tracer ligne
+  return this.api.getProvidersForCart(cartId).pipe(
+    switchMap(providers => {
+      if (providers.length === 0) {
+        return of([]); // Pas de fournisseurs, rien à faire
+      }
+
+      const deliveries$ = providers.map(provider => {
+        const providerId = provider.id_provider;
+        const providerWeight = this.weightsByProvider?.[String(providerId)] || 0;
+
+        return this.api.geocode(provider.adress).pipe(
+          switchMap(providerGeo => {
+            // Tracer ligne sur la map
             const latlngs: [number, number][] = [
               [this.selectedLat!, this.selectedLng!],
               [parseFloat(providerGeo.lat), parseFloat(providerGeo.lon)]
             ];
-            this.deliveryLine = L.polyline(latlngs, { color: '#216490', weight: 4, opacity: 0.7 }).addTo(this.map);
-            this.map.fitBounds(this.deliveryLine.getBounds(), { padding: [50, 50] });
+            const line = L.polyline(latlngs, { color: '#216490', weight: 4, opacity: 0.7 }).addTo(this.map);
+            this.map.fitBounds(line.getBounds(), { padding: [50, 50] });
 
-            // Calcul distance
-            const coords = {
-              lat1: this.selectedLat!,
-              lon1: this.selectedLng!,
-              lat2: parseFloat(providerGeo.lat),
-              lon2: parseFloat(providerGeo.lon)
-            };
+            return this.api.getDistance(this.selectedLat!, this.selectedLng!, parseFloat(providerGeo.lat), parseFloat(providerGeo.lon)).pipe(
+              switchMap(route => this.api.estimateCO2(providerWeight, route.distance_km).pipe(
+                switchMap(co2Res => {
+                  const payload = {
+                    adress_client: this.address,
+                    distance: route.distance_km,
+                    carbon_footprint: co2Res.co2_kg,
+                    everyday_ride: everydayRide,
+                    modeliv: modeliv,
+                    client_ride: clientRide,
+                    client_id: clientId,
+                    provider_id: providerId,
+                    adress_provider: provider.adress,
+                    total_weight: providerWeight,
+                    cart_id: cartId
+                  };
 
-            this.api.getDistance(coords.lat1, coords.lon1, coords.lat2, coords.lon2).subscribe({
-              next: (route) => {
-                // Ici on appelle estimateCO2 avec poidsTotal et distance
-                this.api.estimateCO2(this.poidsTotal, route.distance_km).subscribe({
-                  next: (co2Res) => {
-                    const payload = {
-                      adress_client: this.address,
-                      distance: route.distance_km,
-                      carbon_footprint: co2Res.co2_kg,  // résultat CO2 estimé
-                      everyday_ride: everydayRide,
-                      modeliv: modeliv,
-                      client_ride: clientRide,
-                      client_id: clientId,
-                      provider_id: provider.id_provider,
-                      adress_provider: provider.adress,
-                      total_weight: this.poidsTotal
-                    };
-
-                    this.api.createDelivery(payload).subscribe({
-                      next: () => {
-                        this.deliverySummary = {
-                          adresse: payload.adress_client,
-                          modeLivraison: payload.modeliv,
-                          fournisseur: payload.adress_provider,
-                          distance: payload.distance,
-                          everydayRide: payload.everyday_ride ? 'Oui' : 'Non',
-                          co2Kg: payload.carbon_footprint.toFixed(2) + ' kg'
-                        };
-                      },
-                      error: () => this.error = "Erreur lors de la création de la livraison"
-                    });
-                  },
-                  error: () => this.error = "Erreur lors de l'estimation CO2"
-                });
-              },
-              error: () => this.error = "Erreur OSRM"
-            });
-          },
-          error: () => this.error = "Erreur géocodage provider"
-        });
+                  return this.api.createDelivery(payload).pipe(
+                    tap(() => {
+                      this.deliverySummaries.push({
+                        adresse: payload.adress_client,
+                        modeLivraison: payload.modeliv,
+                        fournisseur: payload.adress_provider,
+                        distance: payload.distance,
+                        poids: providerWeight + ' kg',
+                        co2Kg: payload.carbon_footprint.toFixed(2) + ' kg'
+                      });
+                      console.log('Livraison créée pour fournisseur:', providerId);
+                    }),
+                    catchError(err => {
+                      console.error('Erreur lors de la création de la livraison fournisseur', providerId, err);
+                      return of(null); // On continue même en cas d’erreur
+                    })
+                  );
+                })
+              ))
+            );
+          }),
+          catchError(err => {
+            console.error('Erreur géocodage fournisseur', providerId, err);
+            return of(null);
+          })
+        );
       });
-    },
-    error: () => this.error = "Erreur récupération des providers"
-  });
+
+      // Attendre que toutes les créations finissent
+      return forkJoin(deliveries$);
+    }),
+    catchError(err => {
+      console.error('Erreur récupération fournisseurs', err);
+      return of(null);
+    })
+  );
 }
 
 
@@ -294,35 +311,51 @@ submitDelivery() {
   this.modeliv = modeliv;
   this.address = address;
 
-  // Ouvre la boîte de dialogue de confirmation
   const dialogRef = this.dialog.open(ConfirmDialogComponent);
 
   dialogRef.afterClosed().subscribe(result => {
     if (result) {
-      //  Si l’utilisateur a confirmé :
       this.createDeliveries(
         this.clientId,
         this.idcart,
         modeliv,
         this.clientRide,
         this.everydayRide
-      );
+      ).subscribe({
+        next: () => {
+          // Ici on est sûr que TOUTES les livraisons ont été créées (ou tentées)
+          this.cartService.validateCartByclient(this.clientId).subscribe({
+            next: () => {
+              this.snackBar.open('Commande validée avec succès.', 'Fermer', { duration: 4000 });
+              this.cartService.refreshCartCount(this.clientId);
+
+              this.api.getTotalCO2ByCart(this.idcart).subscribe({
+                next: (res) => {
+                  this.totalCO2Cart = res.total_co2_kg;
+                  console.log('Total CO₂ pour le panier :', this.totalCO2Cart, 'kg');
+                },
+                error: () => {
+                  console.warn("Erreur lors de la récupération du total CO₂.");
+                  this.totalCO2Cart = null;
+                }
+              });
+            },
+            error: () => {
+              this.snackBar.open('Erreur lors de la validation.', 'Fermer', { duration: 4000 });
+            }
+          });
+        },
+        error: () => {
+          this.snackBar.open('Erreur lors de la création des livraisons.', 'Fermer', { duration: 4000 });
+        }
+      });
 
       this.form.reset();
       this.selectedMarker = null;
-
-      //valider le panier si tout est bon
-      this.cartService.validateCartByclient(this.clientId).subscribe({
-        next: () => {
-          this.snackBar.open('Commande validée avec succès.', 'Fermer', { duration: 4000 });
-        },
-        error: () => {
-          this.snackBar.open('Erreur lors de la validation.', 'Fermer', { duration: 4000 });
-        }
-      });
     }
   });
 }
+
 
 
 }

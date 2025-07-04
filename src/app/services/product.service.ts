@@ -10,7 +10,7 @@ export class ProductService {
 
    private cartItemCount = new BehaviorSubject<number>(0);
   cartItemCount$ = this.cartItemCount.asObservable();
-  
+  private apiPredict='http://localhost:8000/verif'
   private apiProducts = 'http://localhost:8000/Product';
   private apiCatelogs = 'http://localhost:8000/api/catalog/all';
 private apiCart = 'http://localhost:8000/Cart'
@@ -24,7 +24,10 @@ private apiCart = 'http://localhost:8000/Cart'
     return this.http.get<Product[]>(`/catalog/${this.apiProducts}?category=${categoryId}`);
   }
   getProductsByCatalog(catalogId: number): Observable<any> {
-    return this.http.get(`http://localhost:8000/Product/catalog/${catalogId}/all`);
+    return this.http.get(`${this.apiProducts}/catalog/${catalogId}/all`);
+  }
+  AdmingetProductsByCatalog(catalogId: number): Observable<any> {
+    return this.http.get(`${this.apiProducts}/admin/catalog/${catalogId}/all`);
   }
   
   getCatalogs(): Observable<any[]> {
@@ -50,7 +53,7 @@ refreshCartCount(clientId: number): void {
 getCartCount(clientId: number): Observable<number> {
   return this.http.get<{ count: number }>(`${this.apiCart}/count/${clientId}`).pipe(
     map(response => response.count),
-    tap(count => this.cartItemCount.next(count)) // met à jour le compteur
+    tap(count => this.cartItemCount.next(count)) 
   );
 }
 
@@ -123,5 +126,17 @@ updateBonifs(): Observable<any> {
   checkProviderStatus(cartId: number, providerId: number): Observable<any> {
     return this.http.get<any>(`${this.apiCart}/${cartId}/provider/${providerId}`);
   }
-
+ getVerifications(status?: string): Observable<any> {
+    let url = 'http://localhost:8000/verif/all';
+    if (status) {
+      url += `?status=${encodeURIComponent(status)}`;
+    }
+    return this.http.get<any>(url);
+  }
+   getMismatchCount() {
+    return this.http.get<{ mismatchCount: number }>('http://localhost:8000/verif/mismatch');
+  }
+  markAsSeen(id: number): Observable<any> {
+    return this.http.post(`${this.apiPredict}/${id}/seen`, {});
+  }
 }

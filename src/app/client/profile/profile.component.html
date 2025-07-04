@@ -1,10 +1,15 @@
 <div class="container py-4">
   <div class="row mb-4">
     <div class="col-12">
-      <nav aria-label="breadcrumb" class="bg-white rounded-3 shadow-sm px-3 py-2">
+       <nav aria-label="breadcrumb" class="app-breadcrumb">
         <ol class="breadcrumb mb-0">
-          <li class="breadcrumb-item" style="cursor: pointer;"><a (click)="closeProfile()">Accueil</a></li>
-          <li class="breadcrumb-item active" aria-current="page">Votre profil</li>
+          <li class="breadcrumb-item" style="cursor: pointer;">
+            <a (click)="closeProfile()" class="fw-medium text-app-blue"> <i class="bi bi-app me-1"></i> Accueil
+            </a>
+          </li>
+          <li class="breadcrumb-item active text-dark" aria-current="page">
+            <i class="bi bi-person me-1"></i> Votre profil
+          </li>
         </ol>
       </nav>
     </div>

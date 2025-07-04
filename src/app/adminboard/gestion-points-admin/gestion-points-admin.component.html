@@ -38,17 +38,14 @@
   <div class="btn-group" role="group">
     <button
       class="btn btn-sm btn-outline-secondary"
-      title="Afficher/Masquer"
+      matTooltip="Afficher/Masquer ce module chez les fournisseurs"   matTooltipClass="custom-tooltip"
       (click)="toggleVisibility(provider)">
-      <i class="fa" [ngClass]="provider.points_visible ? 'fa-eye' : 'fa-eye-slash'"></i>
+      <i class="bi" [ngClass]="provider.points_visible ? 'bi-eye' : 'bi-eye-slash'"></i>
     </button>
     
-    <button
-          class="btn btn-sm btn-outline-secondary"
-
-      title="Voir"
-      (click)="voirProvider(provider.id)">
-<i class="zmdi zmdi-zoom-in"></i>
+    <button class="btn btn-sm btn-outline-secondary"
+matTooltip="Voir details"   matTooltipClass="custom-tooltip"      (click)="voirProvider(provider.id)">
+<i class="bi bi-zoom-in"></i>
     </button>
   </div>
 </td>

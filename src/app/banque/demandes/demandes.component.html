@@ -20,7 +20,7 @@
           type="button"
           class="btn filter-btn me-2"
           [ngClass]="{ 'selected': activeFilters.low }"
-          (click)="toggleFilter('low')" matTooltip="les dossiers qui contiennent des produits à impact environnemental faible."
+          (click)="toggleFilter('low')" matTooltip="les dossiers qui contiennent des produits à impact environnemental faible." matTooltipClass="custom-tooltip"
         >
           Faible impact
         </button>
@@ -28,7 +28,7 @@
           type="button"
           class="btn filter-btn me-2"
           [ngClass]="{ 'selected': activeFilters.medium }"
-          (click)="toggleFilter('medium')" matTooltip="les dossiers qui contiennent des produits à impact environnemental moyen."
+          (click)="toggleFilter('medium')" matTooltip="les dossiers qui contiennent des produits à impact environnemental moyen." matTooltipClass="custom-tooltip"
         >
           Impact moyen
         </button>
@@ -36,7 +36,7 @@
           type="button"
           class="btn filter-btn"
           [ngClass]="{ 'selected': activeFilters.high }"
-          (click)="toggleFilter('high')" matTooltip="les dossiers qui contiennent des produits à impact environnemental Elevés."
+          (click)="toggleFilter('high')" matTooltip="les dossiers qui contiennent des produits à impact environnemental Elevés." matTooltipClass="custom-tooltip" 
         >
           Fort impact
         </button>
@@ -94,7 +94,7 @@
           <!-- Produits -->
           <div
             class="bg-light p-3 rounded mb-3 border border-primary-subtle"
-            matTooltip="Ici sont affichés le nombre total de produits dans le dossier, Peu: impact faible, etc."
+            matTooltip="Ici sont affichés le nombre total de produits dans le dossier, Peu: impact faible, etc." matTooltipClass="custom-tooltip" matTooltipPosition="right"
           >
             <p class="mb-2 fw-semibold text-primary-emphasis">
               <i class="fa fa-cube me-1"></i> Total produits : {{ dossier.total_produits }}
@@ -116,7 +116,7 @@
               </ng-container>
             </div>
           </div>
-   <p *ngIf="dossier.palier" class="palier-info mb-2" matTooltip="Ce dossier appartient au palier que vous avez défini, le client pourra donc bénéficier de la remise.">
+   <p *ngIf="dossier.palier" class="palier-info mb-2" matTooltip="Ce dossier appartient au palier que vous avez défini, le client pourra donc bénéficier de la remise." matTooltipClass="custom-tooltip" matTooltipPosition="right">
   <i class="fa fa-percent me-1"></i>
   <strong>Palier :</strong>
   <span class="palier-range">{{ dossier.palier.minPoints }} - {{ dossier.palier.maxPoints }} pts</span>
