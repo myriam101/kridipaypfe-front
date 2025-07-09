@@ -1,5 +1,9 @@
 import { ChangeDetectorRef, Component, HostListener, Input, OnChanges, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ConfirmComponent } from 'src/app/pages/confirm/confirm.component';
 import { CarbonService } from 'src/app/services/carbon.service';
+import { CatalogService } from 'src/app/services/catalog.service';
 import { ProductService } from 'src/app/services/product.service';
 
 @Component({
@@ -16,12 +20,16 @@ export class ListproductsComponent implements OnInit, OnChanges {
   isLoading :boolean= false;
   bootstrap: any;
   activeTooltipId: number | null = null;
+feedbackMessage: string | null = null;
+feedbackType: 'success' | 'error' | null = null;
+productsWithImages: any[] = [];
 
-  constructor(
+  constructor(private dialog:MatDialog, private catalogervice: CatalogService,
     private productService: ProductService,
-    private carbonService: CarbonService,  private cdr: ChangeDetectorRef
+    private carbonService: CarbonService,  private cdr: ChangeDetectorRef,  private snackBar: MatSnackBar
 
-  ) {}ngAfterViewInit(): void {
+  ) {}
+  ngAfterViewInit(): void {
   const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
   tooltipTriggerList.map((tooltipTriggerEl) => new this.bootstrap.Tooltip(tooltipTriggerEl));
 }
@@ -36,7 +44,7 @@ export class ListproductsComponent implements OnInit, OnChanges {
   }
 
   loadCatalogs(): void {
-    this.productService.getCatalogs().subscribe({
+    this.catalogervice.getCatalogs().subscribe({
       next: (response) => {
 
         this.catalogs = response;
@@ -63,54 +71,82 @@ export class ListproductsComponent implements OnInit, OnChanges {
       });
     }
   }
-  loadProducts(): void {
-    if (!this.catalogId) return;
-  
-    this.isLoading = true; 
-  
-    this.productService.getProductsByCatalog(this.catalogId).subscribe({
-      next: (products) => {
-        this.products = products;
-        this.carbonBadges = {};
-  
-        if (products.length === 0) {
-          this.isLoading = false; 
-          return;
-        }
-  
-        let loadedCount = 0;
-        for (let product of products) {
-          this.carbonService.getCarbonScore(product.id).subscribe({
-           next: (res) => {
-  const badgeEnum = res?.badge;
+loadProducts(): void {
+  if (!this.catalogId) return;
 
-  this.carbonBadges[product.id] =
-   badgeEnum === 0 ? 'undefined' :
-  badgeEnum === 1 ? 'low' :
-  badgeEnum === 2 ? 'medium' : 'high';
-  
-              loadedCount++;
-              if (loadedCount === products.length) {
-                this.isLoading = false; 
-              }
-            },
-            error: (err) => {
-              console.error(`Erreur score carbone produit ${product.id}`, err);
-              loadedCount++;
-              if (loadedCount === products.length) {
-                this.isLoading = false;
-              }
-            }
-          });
-        }
-      },
-      error: (err) => {
-        console.error('Erreur de chargement des produits', err);
-        this.isLoading = false; 
+  this.isLoading = true;
+
+  this.productService.getProductsByCatalog(this.catalogId).subscribe({
+    next: (products) => {
+this.products = products.map((p: any) => ({ ...p, currentImageIndex: 0, images: [] }));
+      this.carbonBadges = {};
+
+      if (products.length === 0) {
+        this.isLoading = false;
+        return;
       }
-    });
-  }
-  
+
+      let loadedCount = 0;
+
+      for (let product of this.products) {
+        // Charger les images du produit
+        this.productService.getProductImages(product.id).subscribe({
+          next: (res) => {
+product.images = res.images.map((img: any) => 'http://localhost:8000' + img.fileSrc.replace(/^\/?uploads?/, '/uploads/'));
+            loadedCount++;
+            if (loadedCount === products.length) {
+              this.isLoading = false;
+            }
+          },
+          error: () => {
+            product.images = [];
+            loadedCount++;
+            if (loadedCount === products.length) {
+              this.isLoading = false;
+            }
+          }
+        });
+
+        // Charger le badge carbone
+        this.carbonService.getCarbonScore(product.id).subscribe({
+          next: (res) => {
+            const badgeEnum = res?.badge;
+            this.carbonBadges[product.id] =
+              badgeEnum === 0 ? 'undefined' :
+              badgeEnum === 1 ? 'low' :
+              badgeEnum === 2 ? 'medium' : 'high';
+          },
+          error: (err) => {
+            console.error(`Erreur score carbone produit ${product.id}`, err);
+          }
+        });
+      }
+    },
+    error: (err) => {
+      console.error('Erreur de chargement des produits', err);
+      this.isLoading = false;
+    }
+  });
+}
+prevImage(product: any, event: MouseEvent): void {
+  event.stopPropagation();
+  console.log('prevImage clicked for product', product.id);
+  if (!product.images || product.images.length <= 1) return;
+
+  product.currentImageIndex =
+    (product.currentImageIndex - 1 + product.images.length) % product.images.length;
+}
+
+nextImage(product: any, event: MouseEvent): void {
+  event.stopPropagation();
+  console.log('nextImage clicked for product', product.id);
+  if (!product.images || product.images.length <= 1) return;
+
+  product.currentImageIndex =
+    (product.currentImageIndex + 1) % product.images.length;
+}
+
+
 
   toggleCarbonVisibility(): void {
     if (!this.catalogId) return;
@@ -151,4 +187,48 @@ if (val === 'low') {
 }
 
 }
+deleteProduct(id: number): void {
+  const dialogRef = this.dialog.open(ConfirmComponent, {
+    width: '350px',
+    data: {
+      message: 'Voulez-vous vraiment supprimer définitivement ce produit ?'
+    }
+  });
+
+  dialogRef.afterClosed().subscribe(result => {
+    if (!result) return; // utilisateur a annulé
+
+    this.productService.deleteProduct(id).subscribe({
+      next: (res) => {
+        this.carbonService.recalculateCarbonBadges().subscribe({
+          next: () => {
+            this.snackBar.open(res.message + ' - Badges carbone mis à jour.', 'Fermer', {
+              duration: 4000,
+              panelClass: ['snackbar-success']
+            });
+            this.loadProducts();
+          },
+          error: () => {
+            this.snackBar.open(res.message + ' - Recalcul des badges échoué.', 'Fermer', {
+              duration: 5000,
+              panelClass: ['snackbar-error']
+            });
+            this.loadProducts();
+          }
+        });
+      },
+      error: (err) => {
+        const errorMessage = err.error?.error || 'Erreur lors de la suppression.';
+        this.snackBar.open(errorMessage, 'Fermer', {
+          duration: 5000,
+          panelClass: ['snackbar-error']
+        });
+      }
+    });
+  });
+}
+
+
+
+
 }

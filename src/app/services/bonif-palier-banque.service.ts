@@ -26,5 +26,11 @@ updateBonifPalier(id: number, data: any): Observable<any> {
   getPalierForDossier(dossierId: number) {
   return this.http.get<any>(`${this.apiUrl}/dossier/${dossierId}/palier`);
 }
+AssignPalierForClient(dossierId: number) {
+  return this.http.get<any>(`${this.apiUrl}/dossier/${dossierId}/assign-palier`);
+}
+usePalierPoints(dossierId: number) {
+  return this.http.post<any>(`${this.apiUrl}/dossier/${dossierId}/use-palier-points`, {});
+}
 
 }

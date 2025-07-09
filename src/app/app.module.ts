@@ -41,10 +41,8 @@ import { MatInputModule } from '@angular/material/input';
 import { CartsComponent } from './provider/carts/carts.component';
 import { ConsoleComponent } from './adminboard/console/console.component';
 import { ModalfactureComponent } from './client/modalfacture/modalfacture.component';
-import { ProfileProviderComponent } from './provider/profile-provider/profile-provider.component';
 import { DashboardComponent } from './banque/dashboard/dashboard.component';
 import { ListproduitsComponent } from './banque/listproduits/listproduits.component';
-import { ConfirmDialogComponent } from './provider/confirm-dialog/confirm-dialog.component';
 import { NgChartsModule } from 'ng2-charts';
 import { ReglagesComponent } from './adminboard/reglages/reglages.component';
 import { BanqueComponent } from './banque/banque.component';
@@ -104,10 +102,8 @@ export function tokenGetter() {
     CartsComponent,
     ConsoleComponent,
     ModalfactureComponent,
-    ProfileProviderComponent,
     DashboardComponent,
     ListproduitsComponent,
-    ConfirmDialogComponent,
     ReglagesComponent,
     BanqueComponent,
     DemandesComponent,

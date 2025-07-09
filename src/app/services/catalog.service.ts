@@ -9,11 +9,11 @@ import { Catalog } from '../models/Catalog';
 export class CatalogService {
 
   constructor(private http: HttpClient) { }
-  private catalogurl = 'http://localhost:8000/api/catalog';
+  private catalogurl = 'http://localhost:8000/catalog';
 
-getDesignationsByCatalog(catalogId: number): Observable<string[]> {
-  return this.http.get<string[]>(`/${catalogId}/categories`);
-}
+  getCatalogs(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.catalogurl}/all`);
+  }
 getCatalogsByProvider(providerId: number): Observable<Catalog[]> {
   return this.http.get<Catalog[]>(`${this.catalogurl}/provider/${providerId}/catalogs`);
 }

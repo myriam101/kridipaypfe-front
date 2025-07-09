@@ -13,6 +13,8 @@
       <div class="row">
      <!-- Colonne gauche : Champs de base -->
 <div class="col-md-6">
+
+
   <!-- Nom -->
   <div class="mb-3">
     <input formControlName="name"
@@ -86,18 +88,6 @@
     </div>
   </div>
 
-  <!-- Puissance -->
-  <div class="mb-3">
-    <input type="number"
-           formControlName="power"
-           class="form-control"
-           [ngClass]="{ 'is-invalid': isInvalid('power', 'features') }"
-           placeholder="Puissance (W)">
-    <div class="invalid-feedback d-block" *ngIf="isInvalid('power', 'features')">
-      La puissance est requise.
-    </div>
-  </div>
-
   <!-- Classe énergétique -->
   <div class="mb-3">
     <select class="form-select"
@@ -113,39 +103,11 @@
 
           <!-- Champs spécifiques dynamiques -->
           <ng-container *ngIf="isLaveLinge">
-<div class="mb-3">
-  <input type="number"
-         formControlName="cycle_duration"
-         class="form-control"
-         [ngClass]="{ 'is-invalid': isInvalid('cycle_duration', 'features') }"
-         placeholder="Durée du cycle">
-  <div class="invalid-feedback d-block" *ngIf="isInvalid('cycle_duration', 'features')">
-    La durée du cycle est requise.
-  </div>
-</div>
-<div class="mb-3">
-  <input type="number"
-         formControlName="consumption_liter"
-         class="form-control"
-         [ngClass]="{ 'is-invalid': isInvalid('consumption_liter', 'features') }"
-         placeholder="Consommation L/cycle">
-  <div class="invalid-feedback d-block" *ngIf="isInvalid('consumption_liter', 'features')">
-    La consommation en litres est requise.
-  </div>
-</div>
-
-<input type="number" class="form-control mb-3" formControlName="consumption_watt" placeholder="Consommation kWh">
-
-<div class="mb-3">
-  <input type="number"
-         class="form-control"
-         formControlName="capacity"
-         [ngClass]="{ 'is-invalid': isInvalid('capacity', 'features') }"
-         placeholder="Capacité">
-  <div class="invalid-feedback d-block" *ngIf="isInvalid('capacity', 'features')">
-    La capacité est requise.
-  </div>
-</div>
+            <input type="number" class="form-control mb-3" formControlName="noise" placeholder="Bruit (dB)">
+            <input type="number" class="form-control mb-3" formControlName="capacity" placeholder="Capacité">
+            <input type="number" class="form-control mb-3" formControlName="cycle_duration" placeholder="Durée du cycle">
+            <input type="number" class="form-control mb-3" formControlName="consumption_watt" placeholder="Consommation WATT">
+            <input type="number" class="form-control mb-3" formControlName="consumption_liter" placeholder="Consommation LITRES">
           </ng-container>
 
           <ng-container *ngIf="isRefrigerateur">
@@ -213,12 +175,32 @@
             <input type="number" class="form-control mb-3" formControlName="consumption_watt" placeholder="Consommation WATT">
             <input type="number" class="form-control mb-3" formControlName="debit" placeholder="Débit">
           </ng-container>
+<!-- Upload image -->
+<div class="mb-3">
 
+  <div class="upload-box border rounded-3 p-3 text-center bg-light" (click)="fileInput.click()">
+    <i class="zmdi zmdi-upload fs-2 text-primary"></i>
+    <p class="mb-1">Cliquez ou déposez des fichiers ici</p>
+    <small class="text-muted">Formats acceptés : JPG, PNG, WebP</small>
+    <input type="file" id="fileInput" #fileInput (change)="onFileSelected($event)" multiple accept="image/*" hidden>
+  </div>
+
+  <!-- Preview -->
+  <div *ngIf="imageUrls?.length > 0" class="preview-container mt-3 d-flex flex-wrap gap-2">
+    <div *ngFor="let url of imageUrls; let i = index" class="position-relative">
+      <img [src]="url" class="preview-img border rounded" alt="Aperçu image">
+      <button type="button"
+  class="position-absolute top-0 end-0 rounded-circle custom-close-btn d-flex justify-content-center align-items-center"
+  (click)="removeImage(i)"
+  aria-label="Supprimer">
+  <span class="close-icon">&times;</span>
+</button>
+
+
+    </div>
+  </div>
+</div>
         </div>
-      </div>
-
-      <div *ngIf="successMessage" class="alert alert-success mt-3">
-        {{ successMessage }}
       </div>
 
       <div class="d-grid">

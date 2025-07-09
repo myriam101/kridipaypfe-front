@@ -12,17 +12,10 @@ export class ProductService {
   cartItemCount$ = this.cartItemCount.asObservable();
   private apiPredict='http://localhost:8000/verif'
   private apiProducts = 'http://localhost:8000/Product';
-  private apiCatelogs = 'http://localhost:8000/api/catalog/all';
 private apiCart = 'http://localhost:8000/Cart'
   constructor(private http: HttpClient) {}
 
-  getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.apiProducts);
-  }
-
-  getProductsByCategory(categoryId: number): Observable<Product[]> {
-    return this.http.get<Product[]>(`/catalog/${this.apiProducts}?category=${categoryId}`);
-  }
+  
   getProductsByCatalog(catalogId: number): Observable<any> {
     return this.http.get(`${this.apiProducts}/catalog/${catalogId}/all`);
   }
@@ -30,13 +23,9 @@ private apiCart = 'http://localhost:8000/Cart'
     return this.http.get(`${this.apiProducts}/admin/catalog/${catalogId}/all`);
   }
   
-  getCatalogs(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiCatelogs);
-  }
+  
 
-getProductsByCatalogAndCategory(catalogId: number, categoryId: number): Observable<Product[]> {
-  return this.http.get<Product[]>(`http://localhost:8000/Product/catalog/${catalogId}/category/${categoryId}/all`);
-}
+
 addProduct(providerId: number, productData: any) {
   return this.http.post(`${this.apiProducts}/provider/${providerId}/add-product`, productData);
 }
@@ -121,22 +110,39 @@ assignRandomPointsToProvider( selectedProductIds: number[]): Observable<any> {
 updateBonifs(): Observable<any> {
   return this.http.put(`${this.apiProducts}/update-bonifpoints`, {});
 }
+deleteProduct(id: number) {
+  return this.http.delete<{ message: string }>(`${this.apiProducts}/delete/${id}`);
+}
+uploadProductImages(productId: number, files: File[]): Observable<any> {
+  const formData = new FormData();
+  
+  files.forEach(file => {
+    formData.append('images[]', file); // IMPORTANT : bien garder 'images[]'
+  });
+
+  return this.http.post(
+    `${this.apiProducts}/${productId}/upload-images`,
+    formData
+  );
+}
+getProductImages(productId: number) {
+  return this.http.get<{ images: { id: number, fileSrc: string }[] }>(`${this.apiProducts}/${productId}/images`);
+}
+
+
 
  // Vérifie l'état de validation du panier pour un provider donné
   checkProviderStatus(cartId: number, providerId: number): Observable<any> {
     return this.http.get<any>(`${this.apiCart}/${cartId}/provider/${providerId}`);
   }
- getVerifications(status?: string): Observable<any> {
-    let url = 'http://localhost:8000/verif/all';
-    if (status) {
-      url += `?status=${encodeURIComponent(status)}`;
-    }
-    return this.http.get<any>(url);
-  }
    getMismatchCount() {
-    return this.http.get<{ mismatchCount: number }>('http://localhost:8000/verif/mismatch');
+    return this.http.get<{ mismatchCount: number }>(`${this.apiPredict}/mismatch`);
   }
   markAsSeen(id: number): Observable<any> {
     return this.http.post(`${this.apiPredict}/${id}/seen`, {});
   }
+  getMismatchSentences() {
+    return this.http.get<any[]>(`${this.apiPredict}/products`);
+  }
+  
 }

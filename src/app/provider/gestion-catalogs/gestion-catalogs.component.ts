@@ -3,10 +3,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Catalog } from 'src/app/models/Catalog';
 import { CatalogService } from 'src/app/services/catalog.service';
-import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { AjoutproductComponent } from '../ajoutproduct/ajoutproduct.component';
+import { ConfirmComponent } from 'src/app/pages/confirm/confirm.component';
 
 @Component({
   selector: 'app-gestion-catalogs',
@@ -84,8 +84,12 @@ toggleForm() {
   this.showForm = !this.showForm;
 }
 deleteCatalog(id: number) {
- const dialogRef = this.dialog.open(ConfirmDialogComponent);
-
+const dialogRef = this.dialog.open(ConfirmComponent, {
+    width: '350px',
+    data: {
+      message: 'Voulez-vous vraiment supprimer ce catalogue?'
+    }
+  });
   dialogRef.afterClosed().subscribe(result => {
     if (result) {
       this.catalogService.deleteCatalog(id).subscribe({

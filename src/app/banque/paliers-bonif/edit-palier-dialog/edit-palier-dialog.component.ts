@@ -1,6 +1,7 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmComponent } from 'src/app/pages/confirm/confirm.component';
 import { BonifPalierBanqueService } from 'src/app/services/bonif-palier-banque.service';
 
@@ -18,7 +19,7 @@ export class EditPalierDialogComponent {
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<EditPalierDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { palier: any; agentId: number },
-    private palierService: BonifPalierBanqueService
+    private palierService: BonifPalierBanqueService, private snackbar: MatSnackBar
   ) {
     this.palierForm = this.fb.group({
       minPoints: [data.palier.minPoints, [Validators.required, Validators.min(0)]],
@@ -46,9 +47,16 @@ submit(): void {
       this.isLoading = true;
 
       this.palierService.updateBonifPalier(this.data.palier.id, this.palierForm.value).subscribe({
-        next: () => this.dialogRef.close('refresh'),
-        error: () => this.isLoading = false
-      });
+        next: () => {
+        this.snackbar.open('Palier modifé avec succès !', 'Fermer', { duration: 3000 });
+        this.dialogRef.close('refresh')
+        
+      },
+error: (err) => {
+        this.isLoading = false;
+        const message = err.error?.error || 'Erreur serveur lors de l\'ajout.';
+        this.snackbar.open(message, 'Fermer', { duration: 4000 });
+      }      });
     }
   });
 }

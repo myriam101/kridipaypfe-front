@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CatalogService } from 'src/app/services/catalog.service';
 import { ProductService } from 'src/app/services/product.service';
 
 @Component({
@@ -16,10 +17,10 @@ export class CatalogDisplayComponent {
 
   @Output() catalogSelected = new EventEmitter<number>();
 
-  constructor(private productService: ProductService,private router: Router, private route: ActivatedRoute) {}
+  constructor(private catalogervice: CatalogService,private productService: ProductService,private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.productService.getCatalogs().subscribe((data) => {
+    this.catalogervice.getCatalogs().subscribe((data) => {
       console.log("Catalogs reçus :", data);
       this.catalogs = data;
     });

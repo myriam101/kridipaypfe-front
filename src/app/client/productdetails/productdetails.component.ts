@@ -23,7 +23,20 @@ export class ProductdetailsComponent implements OnInit {
     if (productId) {
       this.productService.getProductDetails(productId).subscribe({
         next: (response) => {
-          this.product = response;
+          this.product = { ...response, images: [], currentImageIndex: 0 };
+
+          // Charger les images du produit
+          this.productService.getProductImages(productId).subscribe({
+            next: (res) => {
+              this.product.images = res.images.map((img: any) =>
+                'http://localhost:8000' + img.fileSrc.replace(/^\/?uploads?/, '/uploads/')
+              );
+            },
+            error: (err) => {
+              console.error('Erreur chargement images', err);
+              this.product.images = [];
+            }
+          });
         },
         error: (error) => {
           console.error('Erreur : ', error);
@@ -71,7 +84,24 @@ export class ProductdetailsComponent implements OnInit {
     }
   }
 
- // Méthode pour obtenir les clés de l'objet features
+  // Navigation image précédente
+  prevImage(event: MouseEvent): void {
+    event.stopPropagation();
+    if (!this.product?.images || this.product.images.length <= 1) return;
+
+    this.product.currentImageIndex =
+      (this.product.currentImageIndex - 1 + this.product.images.length) % this.product.images.length;
+  }
+
+  // Navigation image suivante
+  nextImage(event: MouseEvent): void {
+    event.stopPropagation();
+    if (!this.product?.images || this.product.images.length <= 1) return;
+
+    this.product.currentImageIndex =
+      (this.product.currentImageIndex + 1) % this.product.images.length;
+  }
+
   objectKeys(obj: any): string[] {
     return Object.keys(obj);
   }

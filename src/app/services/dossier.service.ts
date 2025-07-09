@@ -1,13 +1,14 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, switchMap } from 'rxjs';
+import { EcoFinancedStats, rabais } from '../banque/dashboard/dashboard.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DossierService {
 
- private apiUrl = 'http://localhost:8000/dossier';
+ private apiDossier = 'http://localhost:8000/dossier';
  private apiUrlBonif = 'http://localhost:8000/BonifPoint';
 
   constructor(private http: HttpClient) {}
@@ -20,21 +21,21 @@ export class DossierService {
     params = params.append('badges[]', badge);
   });
 
-  return this.http.get(`${this.apiUrl}/banque/encours/${agentId}`, { params });
+  return this.http.get(`${this.apiDossier}/banque/encours/${agentId}`, { params });
 }
 
-   getDossiersClotureByAgent(agentId: number): Observable<any> {
+ /*  getDossiersClotureByAgent(agentId: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/banque/cloture/${agentId}`);
-  } 
+  } */
   
    getProductImpactStats(agentId: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/${agentId}/products-by-impact`);
+    return this.http.get(`${this.apiDossier}/${agentId}/products-by-impact`);
   }
  
 /** methode qui cloture le dossier */ 
 validateDossier(dossierId: number): Observable<any> {
   
-    return this.http.put(`${this.apiUrl}/validate/${dossierId}`, {});
+    return this.http.put(`${this.apiDossier}/validate/${dossierId}`, {});
 }
 
 /** methode ajout points au client*/ 
@@ -47,5 +48,11 @@ validateDossier(dossierId: number): Observable<any> {
     return this.validateDossier(dossierId).pipe(
       switchMap(() => this.addBonifPoints(dossierId))
     );
+  } 
+  getEcoFinancedStats(agentId: number): Observable<EcoFinancedStats> {
+    return this.http.get<EcoFinancedStats>(`${this.apiDossier}/${agentId}/eco-financed-stats`);
+  }
+   getRabaispourcentage(agentId: number): Observable<rabais> {
+    return this.http.get<rabais>(`${this.apiDossier}/${agentId}/rabais-pourcentage`);
   }
 }

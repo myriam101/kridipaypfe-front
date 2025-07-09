@@ -10,9 +10,8 @@ export class CategoryService {
 
   private apiUrl = 'http://localhost:8000/category';
 
-  constructor(private http: HttpClient) {}  getCategories(): Observable<Category[]> {
-    return this.http.get<Category[]>(this.apiUrl);
-  }
+  constructor(private http: HttpClient) {}  
+ 
   getDesignations() {
     return this.http.get<any[]>(`${this.apiUrl}/all`);
   }

@@ -37,3 +37,46 @@ body {
   background-color: #dc3545 !important;
   color: white;
 }
+.upload-box {
+  cursor: pointer;
+  transition: border 0.3s ease;
+}
+.upload-box:hover {
+  border-color: #0d6efd;
+  background-color: #e9f2ff;
+}
+
+.preview-container {
+  gap: 10px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.preview-img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+.custom-close-btn {
+  background-color: #216490; /* Fond bleu */
+  color: white; /* Couleur du X */
+  border: none;
+  width: 1.8rem;
+  height: 1.8rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  opacity: 1;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease;
+}
+
+.custom-close-btn:hover {
+  background-color: #1a4f76;
+  transform: scale(1.05);
+}
+
+.close-icon {
+  line-height: 1;
+}

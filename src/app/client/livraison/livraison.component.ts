@@ -5,11 +5,11 @@ import * as L from 'leaflet';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProductService } from 'src/app/services/product.service';
-import { ConfirmDialogComponent } from 'src/app/provider/confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { forkJoin, of } from 'rxjs';
 import { switchMap, tap, catchError } from 'rxjs/operators';
+import { ConfirmComponent } from 'src/app/pages/confirm/confirm.component';
 
 const customIcon = L.icon({
   iconUrl: 'assets/marker.svg',
@@ -311,8 +311,12 @@ submitDelivery() {
   this.modeliv = modeliv;
   this.address = address;
 
-  const dialogRef = this.dialog.open(ConfirmDialogComponent);
-
+const dialogRef = this.dialog.open(ConfirmComponent, {
+    width: '350px',
+    data: {
+      message: 'Voulez-vous vraiment valider cette commande?'
+    }
+  });
   dialogRef.afterClosed().subscribe(result => {
     if (result) {
       this.createDeliveries(

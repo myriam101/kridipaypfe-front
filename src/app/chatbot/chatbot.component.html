@@ -1,5 +1,7 @@
 <!-- Bulle flottante -->
-<div class="chatbot-bubble" *ngIf="!isOpen" (click)="toggleChat()" aria-label="Ouvrir le chat"><i class="zmdi zmdi-comments"></i></div>
+<div class="chatbot-bubble" *ngIf="!isOpen" (click)="toggleChat()" aria-label="Ouvrir le chat">
+  <i class="zmdi zmdi-comments"></i>
+</div>
 
 <!-- Fenêtre chat ouverte -->
 <div class="chatbot-panel" *ngIf="isOpen" role="dialog" aria-modal="true" aria-labelledby="chatbotTitle">
@@ -10,16 +12,58 @@
 
   <div class="chatbot-body">
     <div class="messages-container" #messagesContainer aria-live="polite" aria-atomic="false">
-      <div *ngFor="let msg of messages"
-           [ngClass]="{'user-message': msg.from === 'user', 'bot-message': msg.from === 'bot'}"
-           class="message">
-        {{ msg.text }}
+
+      <div *ngFor="let msg of messages" [ngClass]="{
+           'user-message': msg.type === 'user',
+            'typing-message': msg.type === 'typing',
+           'bot-message': msg.type === 'bot',
+           'error-message bot-message': msg.type === 'error'
+         }" class="message">
+
+        <!-- Message simple ou erreur -->
+        <ng-container *ngIf="!msg.response">
+          {{ msg.text }}
+        </ng-container>
+
+        <!-- Message de comparaison -->
+        <ng-container *ngIf="msg.response?.type === 'comparaison'">
+          <div class="comparison-grid">
+            <div *ngFor="let p of msg.response?.products" class="product-card">
+              <div class="product-header">
+                <strong class="product-name">{{ p.name }}</strong>
+                <small class="text-muted d-block">{{ p.brand }}</small>
+              </div>
+              <div class="product-metrics">
+                <div class="metric">
+                  <span class="metric-icon"><i class="zmdi zmdi-globe" style="color: #216490;"></i></span>
+                  <span class="metric-label">CO₂</span>
+                  <span class="metric-value">{{ p.carbon }} kg</span>
+                </div>
+                <div class="metric">
+                  <span class="metric-icon"><i class="fa fa-tint" style="color: #216490;"></i></span>
+                  <span class="metric-label">Eau</span>
+                  <span class="metric-value">{{ p.water }} L</span>
+                </div>
+                <div class="metric">
+                  <span class="metric-icon"><i class="zmdi zmdi-lamp" style="color: #216490;"></i></span>
+                  <span class="metric-label">Électricité</span>
+                  <span class="metric-value">{{ p.electricity }} W</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="fst-italic text-muted mt-4 text-center">{{ msg.response?.comparison }}</p>
+        </ng-container>
+
+        <!-- Catégorie mismatch -->
+        <ng-container *ngIf="msg.response?.type === 'categorie_mismatch'">
+          <p class="text-muted">{{ msg.response?.message }}</p>
+        </ng-container>
       </div>
 
-   <div *ngIf="isTyping" class="message bot-message typing-indicator" aria-live="assertive">
-  En train d'écrire<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
-</div>
-
+      <div *ngIf="isTyping" class="message bot-message typing-indicator" aria-live="assertive">
+        En train d'écrire<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
+      </div>
     </div>
 
     <div class="input-group">

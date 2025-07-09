@@ -20,4 +20,8 @@ export class SeuilBonifService {
   saveSeuilBonif(seuil: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/add-or-update`, seuil);
   }
+  assignSeuilToProduct(productId: number) {
+  return this.http.post<any>(`${this.apiUrl}/product/${productId}/assign-seuil`, {});
+}
+
 }

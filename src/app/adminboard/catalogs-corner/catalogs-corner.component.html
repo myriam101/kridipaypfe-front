@@ -1,38 +1,63 @@
-<!-- Introduction -->
-
-<div class="d-flex align-items-center mb-4" style="background-color: #eaf4fd; padding: 10px; border-left: 4px solid #2196f3; border-radius: 6px; font-size: 0.95rem;">
-  <i class="zmdi zmdi-info-outline me-2 fs-5 text-primary"></i>
-    Consultez les catalogues de vos fournisseurs et gérez facilement la visibilité de l’impact environnemental de leurs produits électroménagers.
+<div class="container py-4">
+  <div class="text-center mb-5">
+    <h3 class="fw-bold" style="color:#216490;">
+      <i class="bi bi-gear-fill me-2"></i>Catalogues des fournisseurs 
+    </h3>
+    <p class="text-secondary fst-italic">  Consultez les catalogues de vos fournisseurs et gérez facilement la visibilité de l’impact environnemental.</p>
+  </div>
+  <div *ngIf="isLoading" class="text-center text-muted">
+  Chargement des alertes...
 </div>
 
-<!-- Sélection Fournisseur & Catalogue -->
-<div class="row g-3 mb-4">
-  <!-- Select Provider -->
-  <div class="col-md-6">
-    <label for="providerSelect" class="form-label">Fournisseur</label>
-    <select id="providerSelect" class="form-select"
-            [ngModel]="selectedProviderId"
-            (ngModelChange)="onProviderSelect($event)">
-      <option [ngValue]="null" disabled selected>Choisissez un fournisseur</option>
-      <option *ngFor="let provider of providers" [ngValue]="provider.id">
-        {{ provider.name }}
-      </option>
-    </select>
-  </div>
-
-  <!-- Select Catalog -->
-  <div class="col-md-6" *ngIf="catalogs.length > 0">
-    <label for="catalogSelect" class="form-label">Catalogue</label>
-    <select id="catalogSelect" class="form-select"
-            [ngModel]="selectedCatalogId"
-            (ngModelChange)="onSelectCatalog($event)">
-      <option [ngValue]="null" disabled selected>Choisissez un catalogue</option>
-      <option *ngFor="let catalog of catalogs" [value]="catalog.id">
-        {{ catalog.name }}
-      </option>
-    </select>
+<div *ngIf="!isLoading && mismatches.length > 0">
+  <div *ngFor="let item of mismatches" class="alert alert-warning shadow-sm mb-3">
+    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+    {{ item.sentence }}
   </div>
 </div>
+
+
+
+<!-- 🔽 Sélecteurs centrés, compacts, largeur réduite -->
+<div class="d-flex justify-content-center mb-4">
+  <div class="card border-0 shadow-sm rounded-4 p-3" style="max-width: 300px; width: 80%;">
+    <div class="row g-3">
+      <!-- Fournisseur -->
+      <div class="col-12">
+        <label for="providerSelect" class="form-label mb-1 fw-semibold text-dark">
+          <i class="bi bi-person-badge me-1" style="color: #216490;"></i>Fournisseur
+        </label>
+        <select id="providerSelect" class="form-select form-select-sm rounded-3"
+                [ngModel]="selectedProviderId"
+                (ngModelChange)="onProviderSelect($event)">
+          <option [ngValue]="null" disabled selected>Choisissez un fournisseur</option>
+          <option *ngFor="let provider of providers" [ngValue]="provider.id">
+            {{ provider.name }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Catalogue -->
+      <div class="col-12" *ngIf="catalogs.length > 0">
+        <label for="catalogSelect" class="form-label mb-1 fw-semibold text-dark">
+          <i class="bi bi-journals  me-1" style="color: #216490;"></i>Catalogue
+        </label>
+        <select id="catalogSelect" class="form-select form-select-sm rounded-3"
+                [ngModel]="selectedCatalogId"
+                (ngModelChange)="onSelectCatalog($event)">
+          <option [ngValue]="null" disabled selected>Choisissez un catalogue</option>
+          <option *ngFor="let catalog of catalogs" [value]="catalog.id">
+            {{ catalog.name }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
 
 <!-- Liste des produits -->
 <app-listproducts-admin [catalogId]="selectedCatalogId"></app-listproducts-admin>
+</div>

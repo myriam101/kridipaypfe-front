@@ -7,6 +7,7 @@ import { SimulateurComponent } from '../simulateur/simulateur.component';
 import { ClientService } from 'src/app/services/client.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SimulatorUsageService } from 'src/app/services/simulator-usage.service';
+import { CatalogService } from 'src/app/services/catalog.service';
 
 @Component({
   selector: 'app-products',
@@ -40,10 +41,32 @@ tooltipPosition = { top: 0, left: 0 };
 
     this.productService.getProductsByCatalog(this.catalogId).subscribe({
       next: (products) => {
-        this.products = products;
-        this.isLoading = false;
+        this.products = products.map((p: any) => ({ ...p, currentImageIndex: 0, images: [] }));
+        this.carbonBadges = {};
 
-        for (let product of products) {
+      if (products.length === 0) {
+        this.isLoading = false;
+        return;
+      }
+      let loadedCount = 0;
+
+        for (let product of this.products) {
+           this.productService.getProductImages(product.id).subscribe({
+          next: (res) => {
+product.images = res.images.map((img: any) => 'http://localhost:8000' + img.fileSrc.replace(/^\/?uploads?/, '/uploads/'));
+            loadedCount++;
+            if (loadedCount === products.length) {
+              this.isLoading = false;
+            }
+          },
+          error: () => {
+            product.images = [];
+            loadedCount++;
+            if (loadedCount === products.length) {
+              this.isLoading = false;
+            }
+          }
+        });
           this.carbonService.getCarbonScore(product.id).subscribe(res => {
             const badgeEnum = res.badge;
            this.carbonBadges[product.id] =
@@ -186,6 +209,22 @@ if (val === 'low') {
   return "L'impact environnemental de ce produit n'est pas défini en raison d'un manque de données.";
 }
 
+}
+
+prevImage(product: any, event: MouseEvent): void {
+  event.stopPropagation();
+  if (!product.images || product.images.length <= 1) return;
+
+  product.currentImageIndex =
+    (product.currentImageIndex - 1 + product.images.length) % product.images.length;
+}
+
+nextImage(product: any, event: MouseEvent): void {
+  event.stopPropagation();
+  if (!product.images || product.images.length <= 1) return;
+
+  product.currentImageIndex =
+    (product.currentImageIndex + 1) % product.images.length;
 }
 
 }

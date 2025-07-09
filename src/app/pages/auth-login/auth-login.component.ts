@@ -213,7 +213,7 @@ if (formValue.role === 'agent') {
           this.banqueService.getAgentByEmail(userEmail).subscribe({
             next: (res) => {
               localStorage.setItem('agentId', res.id);
-              this.router.navigate(['/agence']);
+              this.router.navigate(['/agence/dashboard']);
               this.isLoading = false;
             },
             error: () => {

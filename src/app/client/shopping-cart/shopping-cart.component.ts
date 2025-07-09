@@ -6,7 +6,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { ModalfactureComponent } from '../modalfacture/modalfacture.component';
 import { SimulationService } from 'src/app/services/simulation.service';
 import { EnergybillService } from 'src/app/services/energybill.service';
-import { ConfirmDialogComponent } from 'src/app/provider/confirm-dialog/confirm-dialog.component';
 import { LivraisonComponent } from '../livraison/livraison.component';
 import { DeliveryService, WeightsByProvider } from 'src/app/services/delivery.service';
 
@@ -52,15 +51,45 @@ export class ShoppingCartComponent implements OnInit {
   this.cartService.getCartDetails(clientId).subscribe({
     next: (data: any) => {
       if (data && Array.isArray(data.products)) {
-        this.cartItems = data.products;
-        this.idcart = data.cart_id; 
-        console.log("id cart",this.idcart)
+        this.idcart = data.cart_id;
+
+        let loadedCount = 0;
+        const total = data.products.length;
+
+        this.cartItems = data.products.map((p: any) => ({
+          ...p,
+          image: 'assets/imagenotavailble.png' // valeur par défaut
+        }));
+
+        for (let i = 0; i < this.cartItems.length; i++) {
+          const product = this.cartItems[i];
+          this.cartService.getProductImages(product.product_id).subscribe({
+            next: (res) => {
+              if (res.images?.length > 0) {
+                // Prend la première image seulement
+                this.cartItems[i].image = 'http://localhost:8000' + res.images[0].fileSrc.replace(/^\/?uploads?/, '/uploads/');
+              }
+              loadedCount++;
+              if (loadedCount === total) {
+                this.loading = false;
+              }
+            },
+            error: () => {
+              loadedCount++;
+              if (loadedCount === total) {
+                this.loading = false;
+              }
+            }
+          });
+        }
+
+        if (total === 0) this.loading = false;
         this.emptyCartMessage = null;
       } else if (data.message) {
         this.cartItems = [];
         this.emptyCartMessage = data.message;
+        this.loading = false;
       }
-      this.loading = false;
     },
     error: (err) => {
       this.cartItems = [];
@@ -70,7 +99,6 @@ export class ShoppingCartComponent implements OnInit {
     }
   });
 }
-
 
  removeItem(index: number): void {
   const clientId = Number(localStorage.getItem('clientId'));

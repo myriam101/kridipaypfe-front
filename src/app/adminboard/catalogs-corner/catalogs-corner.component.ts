@@ -17,14 +17,29 @@ catalogs: any[] = [];
   isSidebarOpen = false;
   providers: any[] = [];
 selectedProviderId: number | null = null;
+ mismatches: any[] = [];
+  isLoading = true;
 
   constructor(private productService: ProductService,private router: Router, private route: ActivatedRoute,private providerservice: ProviderService,private catalogservice: CatalogService) {}
 
   ngOnInit(): void {
     this.loadProviders();
+    this.loadinfo();
+     
   }
 
-
+loadinfo() :void{
+this.productService.getMismatchSentences().subscribe({
+      next: data => {
+        this.mismatches = data;
+        this.isLoading = false;
+      },
+      error: err => {
+        console.error('Erreur chargement mismatches', err);
+        this.isLoading = false;
+      }
+    });
+}
 
 loadProviders(): void {
   this.providerservice.getAllProviders().subscribe({

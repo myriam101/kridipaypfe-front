@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmComponent } from 'src/app/pages/confirm/confirm.component';
-import { ConfirmDialogComponent } from 'src/app/provider/confirm-dialog/confirm-dialog.component';
 import { BonifPalierBanqueService } from 'src/app/services/bonif-palier-banque.service';
 import { DossierService } from 'src/app/services/dossier.service';
 
@@ -96,7 +95,6 @@ getBadgeKeys(obj: any): string[] {
 
   this.isLoading = true;
 
-  // Relancer l’appel avec les filtres de badge actifs
   this.dossierService.getDossiersEncoursByAgent(this.agentId, selectedBadges).subscribe({
     next: (response) => {
       this.isLoading = false;
@@ -139,6 +137,7 @@ getBadgeKeys(obj: any): string[] {
       }, 4000);
     }
   }
+
 onValidateDossier(dossierId: number) {
   const dialogRef = this.dialog.open(ConfirmComponent, {
     width: '400px',
@@ -151,27 +150,64 @@ onValidateDossier(dossierId: number) {
     if (result === true) {
       this.agentId = Number(localStorage.getItem('agentId'));
 
+      // Étape 1 : Clôturer et ajouter les points
       this.dossierService.validateAndAddPoints(dossierId).subscribe({
         next: () => {
-          this.snackBar.open('Dossier clôturé avec succès !', 'Fermer', {
-            duration: 3000,
-            panelClass: ['snackbar-success'],
-            horizontalPosition: 'center',
-            verticalPosition: 'top'
-          });
-          this.loadDossiers(this.agentId);
+          // Étape 2 : Appeler usePointsFromPalier si un palier est défini
+          const dossier = this.dossiers.find(d => d.dossierId === dossierId);
+          if (dossier?.palier) {
+            this.palierService.usePalierPoints(dossierId).subscribe({
+              next: (res) => {
+                this.snackBar.open(
+                  ` Dossier clôturé. ${res.usedPoints} points utilisés. Taux appliqué : ${res.palierRate}%`,
+                  'Fermer',
+                  {
+                    duration: 5000,
+                    panelClass: ['snackbar-success'],
+                    horizontalPosition: 'center',
+                    verticalPosition: 'top'
+                  }
+                );
+                this.loadDossiers(this.agentId); 
+              },
+              error: () => {
+                this.snackBar.open(
+                  `Dossier clôturé mais impossible d’utiliser les points.`,
+                  'Fermer',
+                  {
+                    duration: 4000,
+                    panelClass: ['snackbar-warning'],
+                    horizontalPosition: 'center',
+                    verticalPosition: 'top'
+                  }
+                );
+                this.loadDossiers(this.agentId);
+              }
+            });
+          } else {
+            this.snackBar.open(
+              ' Dossier clôturé sans palier bonifié.',
+              'Fermer',
+              {
+                duration: 4000,
+                panelClass: ['snackbar-info'],
+                horizontalPosition: 'center',
+                verticalPosition: 'top'
+              }
+            );
+            this.loadDossiers(this.agentId);
+          }
         },
         error: (err) => {
           if (err.status === 403) {
-            this.snackBar.open('Dossier clôturé avec succès !', 'Fermer', {
+            this.snackBar.open(' Dossier déjà clôturé.', 'Fermer', {
               duration: 3000,
               panelClass: ['snackbar-info'],
               horizontalPosition: 'center',
               verticalPosition: 'top'
             });
-            this.loadDossiers(this.agentId);
           } else {
-            this.snackBar.open('Erreur lors de la clôture ou de l\'ajout des points.', 'Fermer', {
+            this.snackBar.open('Erreur lors de la clôture.', 'Fermer', {
               duration: 3000,
               panelClass: ['snackbar-error'],
               horizontalPosition: 'center',
@@ -180,6 +216,35 @@ onValidateDossier(dossierId: number) {
           }
         }
       });
+    }
+  });
+}
+usePointsFromPalier(dossierId: number): void {
+  this.palierService.usePalierPoints(dossierId).subscribe({
+    next: (res) => {
+      this.snackBar.open(
+        ` ${res.usedPoints} points utilisés. Taux appliqué : ${res.palierRate}%`,
+        'Fermer',
+        {
+          duration: 4000,
+          panelClass: ['snackbar-success'],
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        }
+      );
+      this.loadDossiers(this.agentId); 
+    },
+    error: (err) => {
+      this.snackBar.open(
+        err?.error?.message || " Impossible d'utiliser les points.",
+        'Fermer',
+        {
+          duration: 4000,
+          panelClass: ['snackbar-error'],
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        }
+      );
     }
   });
 }

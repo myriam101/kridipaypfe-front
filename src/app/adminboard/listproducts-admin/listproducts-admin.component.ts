@@ -3,6 +3,7 @@ import { CarbonService } from 'src/app/services/carbon.service';
 import { ProductService } from 'src/app/services/product.service';
 import { VerificationComponent } from '../verification/verification.component';
 import { MatDialog } from '@angular/material/dialog';
+import { CatalogService } from 'src/app/services/catalog.service';
 
 @Component({
   selector: 'app-listproducts-admin',
@@ -13,6 +14,8 @@ export class ListproductsAdminComponent implements OnInit, OnChanges {
   
   @Input() catalogId!: number;
   products: any[] = [];
+   mismatches: any[] = [];
+
   carbonBadges: { [key: number]: string } = {};
   carbonVisible: boolean = true;
   catalogs: any[] = []; 
@@ -20,7 +23,7 @@ export class ListproductsAdminComponent implements OnInit, OnChanges {
   bootstrap: any;
   activeTooltipId: number | null = null;
 
-  constructor(
+  constructor(private catalogervice: CatalogService,
     private productService: ProductService,
     private carbonService: CarbonService,  private cdr: ChangeDetectorRef,private dialog:MatDialog
 
@@ -40,7 +43,7 @@ export class ListproductsAdminComponent implements OnInit, OnChanges {
   }
 
   loadCatalogs(): void {
-    this.productService.getCatalogs().subscribe({
+    this.catalogervice.getCatalogs().subscribe({
       next: (response) => {
 
         this.catalogs = response;
@@ -167,6 +170,9 @@ openMismatchDialog(product: any): void {
     next: () => {
       console.log('Vérification marquée comme vue ');
       product.verification.seen = true; 
+      
+
+
     },
     error: err => {
       console.error('Erreur lors de la mise à jour de "seen" ', err);

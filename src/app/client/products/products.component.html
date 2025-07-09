@@ -24,8 +24,35 @@
           </div>
 
             <div class="cp_img" data-bs-toggle="tooltip" data-bs-placement="top">
-              <img [src]="product.imageUrl || 'assets/imagenotavailble.png'" alt="{{ product.name }}" class="img-fluid product-img">
-              <div class="hover">
+<!-- Image courante -->
+      <img 
+        [src]="product.images && product.images.length > 0 
+              ? product.images[product.currentImageIndex] 
+              : 'assets/imagenotavailble.png'" 
+        alt="{{ product.name }}" 
+        class="img-fluid product-img"
+      >
+
+      <!-- Flèches de navigation -->
+      <button 
+        *ngIf="product.images && product.images.length > 1" 
+        class="btn btn-sm btn-outline-secondary position-absolute start-0 top-50 translate-middle-y"
+        style="z-index: 10;"
+        (click)="prevImage(product, $event)"
+        aria-label="Image précédente"
+      >
+        ‹
+      </button>
+
+      <button 
+        *ngIf="product.images && product.images.length > 1" 
+        class="btn btn-sm btn-outline-secondary position-absolute end-0 top-50 translate-middle-y"
+        style="z-index: 10;"
+        (click)="nextImage(product, $event)"
+        aria-label="Image suivante"
+      >
+        ›
+      </button>                <div class="hover">
                 <button (click)="openSimulateur(product)" class="btn btn-custom-blue mb-2" title="Simulez votre consommation énergétique">
 <i class="bi bi-lightning-charge"></i>                </button>
                 <button (click)="addToCart(product.id)" class="btn btn-custom-blue mb-2" title="Ajouter au panier">

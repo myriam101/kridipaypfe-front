@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProductService } from 'src/app/services/product.service';
-import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { ConfirmComponent } from 'src/app/pages/confirm/confirm.component';
 
 @Component({
   selector: 'app-carts',
@@ -91,8 +91,12 @@ getCancelledCarts(): void {
 }
 onValidateCart(cartId: number) {
   this.providerId = Number(localStorage.getItem('providerId'));
-  const dialogRef = this.dialog.open(ConfirmDialogComponent);
-
+ const dialogRef = this.dialog.open(ConfirmComponent, {
+    width: '350px',
+    data: {
+      message: 'Voulez-vous vraiment valider cette commande?'
+    }
+  });
   dialogRef.afterClosed().subscribe(result => {
     if (result) {
       this.cartService.validateCart(cartId,this.providerId).subscribe({
@@ -120,8 +124,12 @@ onValidateCart(cartId: number) {
   });
 }
 onCancelCart(cartId: number) {
-  const dialogRef = this.dialog.open(ConfirmDialogComponent);
-
+const dialogRef = this.dialog.open(ConfirmComponent, {
+    width: '350px',
+    data: {
+      message: 'Voulez-vous vraiment annuler cette commande?'
+    }
+  });
   dialogRef.afterClosed().subscribe(result => {
     if (result) {
       this.cartService.cancelCart(cartId,this.providerId).subscribe({

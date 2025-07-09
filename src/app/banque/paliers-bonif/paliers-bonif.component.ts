@@ -90,6 +90,7 @@ confirmDeletePalier(): void {
   });
 }
   deletePalier(id: number): void {
+    
     this.isLoading = true;
     this.palierService.deleteBonifPalier(id).subscribe({
       next: () => {

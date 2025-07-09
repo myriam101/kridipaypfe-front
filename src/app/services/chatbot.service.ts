@@ -20,6 +20,7 @@ export interface ProductInfo {
 }
 
 export interface ComparaisonResponse {
+  answer: string;
   type: 'comparaison' | 'optimisation'|'categorie_mismatch';
   products?: ProductInfo[];
   comparison?: string;

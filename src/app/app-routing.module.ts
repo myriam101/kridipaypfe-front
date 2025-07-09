@@ -15,7 +15,6 @@ import { ProductsComponent } from './client/products/products.component';
 import { ShoppingCartComponent } from './client/shopping-cart/shopping-cart.component';
 import { CartsComponent } from './provider/carts/carts.component';
 import { ConsoleComponent } from './adminboard/console/console.component';
-import { ProfileProviderComponent } from './provider/profile-provider/profile-provider.component';
 import { ReglagesComponent } from './adminboard/reglages/reglages.component';
 import { BanqueComponent } from './banque/banque.component';
 import { DashboardComponent } from './banque/dashboard/dashboard.component';
@@ -75,10 +74,6 @@ component:GestionCatalogsComponent
       {
         path: 'addproduct',
         component: AjoutproductComponent
-      },
-      
-      {
-        path:'profile',component:ProfileProviderComponent
       },
       {path:'commandes',component:CartsComponent},
     {path:'unauthorized', component:UnauthorizedComponent}],

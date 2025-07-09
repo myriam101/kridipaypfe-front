@@ -5,6 +5,7 @@ import { ClientService } from '../services/client.service';
 import { ComparaisonComponent } from '../comparaison/comparaison.component';
 import { MatDialog } from '@angular/material/dialog';
 import { LogoutModalComponent } from '../pages/logout-modal/logout-modal.component';
+import { CatalogService } from '../services/catalog.service';
 
 @Component({
   selector: 'app-client',
@@ -22,7 +23,7 @@ export class ClientComponent {
   
   @Output() catalogSelected = new EventEmitter<number>();
 
-  constructor(private dialog: MatDialog,private modalService: MatDialog,private productService: ProductService,private router: Router, private route: ActivatedRoute,private clientservice : ClientService) {
+  constructor(private catalogervice: CatalogService,private dialog: MatDialog,private modalService: MatDialog,private productService: ProductService,private router: Router, private route: ActivatedRoute,private clientservice : ClientService) {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.currentRoute = event.url;
@@ -35,7 +36,7 @@ export class ClientComponent {
   this.productService.getCartCount(clientId).subscribe(count => {
     this.cartItemCount = count;
   });
-    this.productService.getCatalogs().subscribe((data) => {
+    this.catalogervice.getCatalogs().subscribe((data) => {
       console.log("Catalogs reçus :", data);
       this.catalogs = data;
     });
@@ -77,10 +78,5 @@ export class ClientComponent {
     }
   });
 }
-   openComparaisonDialog() {
-    this.modalService.open(ComparaisonComponent, {
-      width: '800px',
-      data: {} 
-    });
-  }
+   
 }

@@ -4,6 +4,26 @@ import { ChartConfiguration } from 'chart.js';
 import { BanqueService } from 'src/app/services/banque.service';
 import { DossierService } from 'src/app/services/dossier.service';
 
+export interface MonthlyEcoStat {
+  total: number;
+  eco_financed: number;
+  percentage: number;
+}
+
+export interface EcoFinancedStats {
+  monthly: Record<string, MonthlyEcoStat>;
+  total: {
+    total: number;
+    eco_financed: number;
+    percentage: number;
+  };
+}
+export interface rabais {
+   totalClients : number,
+    clientsAvecRabais: number,
+    pourcentage : number
+}
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -14,24 +34,11 @@ export class DashboardComponent implements OnInit {
   agentId: any;
   isLoading = true;
   error: string | null = null;
-
-radarChartLabels: string[] = ['Non défini', 'Faible', 'Moyen', 'Élevé'];
-  radarChartData: ChartConfiguration<'radar'>['data'] = {
-    labels: this.radarChartLabels,
-    datasets: [
-      {
-        backgroundColor: 'rgba(33, 100, 144, 0.4)',
-        borderColor: '#216490',
-        borderWidth: 2,
-        pointBackgroundColor: '#216490',
-        data: [0, 0, 0, 0],
-        label: 'Produits financés'
-      }
-    ]
-  };
-  radarChartOptions: ChartConfiguration<'radar'>['options'] = {
-    responsive: true
-  };
+  ecoStats: EcoFinancedStats | null = null;
+  currentMonthStats: MonthlyEcoStat | null = null;
+rabaisstats :rabais | undefined;
+  loading = true;
+currentMonthKey = new Date().toISOString().slice(0, 7); // ex: "2025-07"
 
   constructor(
     private agentService: BanqueService,
@@ -43,7 +50,29 @@ radarChartLabels: string[] = ['Non défini', 'Faible', 'Moyen', 'Élevé'];
     this.agentId = Number(localStorage.getItem('agentId'));
     this.loadAgentDetails();
     this.loadRadarChartData();
+    this.dossierService.getEcoFinancedStats(this.agentId).subscribe({
+    next: (res) => {
+      this.ecoStats = res;
+      this.currentMonthStats = this.ecoStats?.monthly[this.currentMonthKey] || null;
+
+    },
+    error: () => {
+      console.error('Erreur lors de la récupération des stats');
+    }
+  });
+    this.dossierService.getRabaispourcentage(this.agentId).subscribe({
+    next: (res) => {
+      this.rabaisstats = res;
+
+    },
+    error: () => {
+      console.error('Erreur lors de la récupération des stats');
+    }
+  });
+  
   }
+  
+  keepDescendingOrder = (a: any, b: any) => b.key.localeCompare(a.key);
 
   private loadAgentDetails(): void {
     this.isLoading = true;
@@ -72,8 +101,6 @@ const peu = data['peu'] || 0;
 const moyen = data['moyen'] || 0;
 const eleve = data['eleve'] || 0;
 
-this.radarChartData.datasets[0].data = [nonDefini, peu, moyen, eleve];
-this.radarChartData = { ...this.radarChartData }; 
 
       },
       error: (err) => {

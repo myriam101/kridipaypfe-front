@@ -11,6 +11,7 @@ import { CarbonService } from 'src/app/services/carbon.service';
 import { CatalogService } from 'src/app/services/catalog.service';
 import { CategoryService } from 'src/app/services/category.service';
 import { ProductService } from 'src/app/services/product.service';
+import { SeuilBonifService } from 'src/app/services/seuil-bonif.service';
 
 @Component({
   selector: 'app-ajoutproduct',
@@ -48,6 +49,8 @@ export class AjoutproductComponent {
   isSubmitting = false;
   energyClasses = Object.values(EnergyClass);
   typefeatures = Object.values(Typefeature);
+  imageUrls: any;
+  selectedFiles: any;
 
   constructor(private snackBar: MatSnackBar,private carbonServie:CarbonService,  public dialogRef: MatDialogRef<AjoutproductComponent>,
       @Inject(MAT_DIALOG_DATA) public data: { CatalogId: any,Catalogname:any },
@@ -55,7 +58,8 @@ export class AjoutproductComponent {
     private productService: ProductService,
     private route: ActivatedRoute,
     private categoryservice: CategoryService,
-    private catalogService: CatalogService
+    private catalogService: CatalogService,
+    private seuilbonif:SeuilBonifService
   ) {}
 
   ngOnInit(): void {
@@ -113,25 +117,54 @@ export class AjoutproductComponent {
     this.productForm.patchValue({ id_catalog: id });
     console.log("selected catalog", id);
   }
-
 onSubmit(): void {
   if (this.productForm.valid) {
     this.isSubmitting = true;
 
     const formValue = this.productForm.value;
+
     this.productService.addProduct(this.providerId, formValue).subscribe({
       next: (response: any) => {
         const newProductId = response.product_id;
 
         if (newProductId) {
-          this.carbonServie.addCarbonImpact(newProductId, true).subscribe({
-            next: () => {
-              this.carbonServie.recalculateCarbonBadges().subscribe();
-            },
-            error: (err) => console.error('Erreur ajout impact carbone:', err)
-          });
+          // 1. Ajout impact carbone
+         // 1. Ajout impact carbone
+this.carbonServie.addCarbonImpact(newProductId, true).subscribe({
+  next: () => {
+    this.carbonServie.recalculateCarbonBadges().subscribe({
+      next: () => {
+        //  Appel assign-seuil après recalcul des badges
+        this.seuilbonif.assignSeuilToProduct(newProductId).subscribe({
+          next: (seuilRes) => {
+            console.log('Seuil assigné automatiquement:', seuilRes);
+          },
+          error: (err) => {
+            console.error('Erreur assignation seuil:', err);
+          }
+        });
+      },
+      error: (err) => console.error('Erreur recalcul badges:', err)
+    });
+  },
+  error: (err) => console.error('Erreur ajout impact carbone:', err)
+});
+
+          // 2. Upload des images
+          if (this.selectedFiles && this.selectedFiles.length > 0) {
+            this.productService.uploadProductImages(newProductId, this.selectedFiles).subscribe({
+              next: res => {
+                this.imageUrls = res.paths;
+                console.log('Images uploadées :', res.paths);
+              },
+              error: err => {
+                console.error('Erreur upload images :', err);
+              }
+            });
+          }
         }
 
+        // 3. Reset et feedback UI
         this.productForm.reset({
           id_provider: this.providerId,
           id_catalog: this.selectedCatalogId,
@@ -150,7 +183,7 @@ onSubmit(): void {
         this.isSubmitting = false;
       },
       error: (err) => {
-        console.error('Erreur ajout', err);
+        console.error('Erreur ajout produit', err);
         this.isSubmitting = false;
         this.snackBar.open('Erreur lors de l’ajout du produit.', 'Fermer', {
           duration: 3000,
@@ -160,6 +193,7 @@ onSubmit(): void {
     });
   }
 }
+
 
 
 
@@ -366,6 +400,26 @@ private setFeatureValidatorsByDesignation(designation: string) {
     : this.productForm.get(controlName);
 
   return !!(control && control.invalid && (control.dirty || control.touched));
+}
+onFileSelected(event: Event): void {
+  const input = event.target as HTMLInputElement;
+  if (!input.files) return;
+
+  this.imageUrls = [];
+  this.selectedFiles = Array.from(input.files);
+
+  for (let file of this.selectedFiles) {
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.imageUrls.push(e.target.result);
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+removeImage(index: number): void {
+  this.imageUrls.splice(index, 1);
+  this.selectedFiles.splice(index, 1);
 }
 
 }

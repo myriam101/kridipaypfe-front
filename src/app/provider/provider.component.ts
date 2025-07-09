@@ -64,10 +64,6 @@ provider:any;
     this.router.navigate(['catalogues'], { relativeTo: this.route });
   }
 
-  goToProfile() {
-    this.router.navigate(['profile'], { relativeTo: this.route });
-  }
-
   goToCarts() {
     this.router.navigate(['commandes'], { relativeTo: this.route });
   }
