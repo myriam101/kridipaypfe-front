@@ -12,13 +12,13 @@
 <div *ngIf="!isLoading && mismatches.length > 0">
   <div *ngFor="let item of mismatches" class="alert alert-warning shadow-sm mb-3">
     <i class="bi bi-exclamation-triangle-fill me-2"></i>
-    {{ item.sentence }}
+  Alerte suspect :  {{ item.sentence }}
   </div>
 </div>
 
 
 
-<!-- 🔽 Sélecteurs centrés, compacts, largeur réduite -->
+<!--  Sélecteurs centrés, compacts, largeur réduite -->
 <div class="d-flex justify-content-center mb-4">
   <div class="card border-0 shadow-sm rounded-4 p-3" style="max-width: 300px; width: 80%;">
     <div class="row g-3">

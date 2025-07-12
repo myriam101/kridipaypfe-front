@@ -137,6 +137,53 @@ getBadgeKeys(obj: any): string[] {
       }, 4000);
     }
   }
+private handleUsePalier(dossierId: number): void {
+  const dossier = this.dossiers.find(d => d.dossierId === dossierId);
+
+  if (!dossier?.palier) {
+    this.snackBar.open(
+      'Dossier clôturé sans palier bonifié.',
+      'Fermer',
+      {
+        duration: 4000,
+        panelClass: ['snackbar-info'],
+        horizontalPosition: 'center',
+        verticalPosition: 'top'
+      }
+    );
+    this.loadDossiers(this.agentId);
+    return;
+  }
+
+  this.palierService.usePalierPoints(dossierId).subscribe({
+    next: (res) => {
+      this.snackBar.open(
+        `Dossier clôturé. ${res.usedPoints} points utilisés. Taux appliqué : ${res.palierRate}%`,
+        'Fermer',
+        {
+          duration: 5000,
+          panelClass: ['snackbar-success'],
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        }
+      );
+      this.loadDossiers(this.agentId);
+    },
+    error: () => {
+      this.snackBar.open(
+        'Dossier clôturé mais impossible d’utiliser les points du palier.',
+        'Fermer',
+        {
+          duration: 4000,
+          panelClass: ['snackbar-warning'],
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        }
+      );
+      this.loadDossiers(this.agentId);
+    }
+  });
+}
 
 onValidateDossier(dossierId: number) {
   const dialogRef = this.dialog.open(ConfirmComponent, {
@@ -147,78 +194,67 @@ onValidateDossier(dossierId: number) {
   });
 
   dialogRef.afterClosed().subscribe(result => {
-    if (result === true) {
-      this.agentId = Number(localStorage.getItem('agentId'));
+    if (!result) return;
 
-      // Étape 1 : Clôturer et ajouter les points
-      this.dossierService.validateAndAddPoints(dossierId).subscribe({
-        next: () => {
-          // Étape 2 : Appeler usePointsFromPalier si un palier est défini
-          const dossier = this.dossiers.find(d => d.dossierId === dossierId);
-          if (dossier?.palier) {
-            this.palierService.usePalierPoints(dossierId).subscribe({
-              next: (res) => {
-                this.snackBar.open(
-                  ` Dossier clôturé. ${res.usedPoints} points utilisés. Taux appliqué : ${res.palierRate}%`,
-                  'Fermer',
-                  {
-                    duration: 5000,
-                    panelClass: ['snackbar-success'],
-                    horizontalPosition: 'center',
-                    verticalPosition: 'top'
-                  }
-                );
-                this.loadDossiers(this.agentId); 
-              },
-              error: () => {
-                this.snackBar.open(
-                  `Dossier clôturé mais impossible d’utiliser les points.`,
-                  'Fermer',
-                  {
-                    duration: 4000,
-                    panelClass: ['snackbar-warning'],
-                    horizontalPosition: 'center',
-                    verticalPosition: 'top'
-                  }
-                );
-                this.loadDossiers(this.agentId);
-              }
-            });
-          } else {
-            this.snackBar.open(
-              ' Dossier clôturé sans palier bonifié.',
-              'Fermer',
-              {
-                duration: 4000,
+    this.agentId = Number(localStorage.getItem('agentId'));
+
+    this.dossierService.validateAndAddPoints(dossierId).subscribe({
+      next: () => {
+        this.handleUsePalier(dossierId);
+      },
+      error: (err) => {
+        const errorType = err?.error?.error;
+        const errorMessage = err?.error?.message || 'Erreur lors de la clôture.';
+
+        if (err.status === 403) {
+          switch (errorType) {
+            case 'DossierAlreadyClosed':
+              this.snackBar.open('Dossier déjà clôturé.', 'Fermer', {
+                duration: 3000,
                 panelClass: ['snackbar-info'],
                 horizontalPosition: 'center',
                 verticalPosition: 'top'
-              }
-            );
-            this.loadDossiers(this.agentId);
+              });
+              break;
+
+            case 'NoEligibleBonifProducts':
+              this.snackBar.open(
+                'Dossier clôturé, mais aucun produit bonifiable trouvé.',
+                'Fermer',
+                {
+                  duration: 4000,
+                  panelClass: ['snackbar-warning'],
+                  horizontalPosition: 'center',
+                  verticalPosition: 'top'
+                }
+              );
+              break;
+
+            default:
+              this.snackBar.open(errorMessage, 'Fermer', {
+                duration: 4000,
+                panelClass: ['snackbar-error'],
+                horizontalPosition: 'center',
+                verticalPosition: 'top'
+              });
+              break;
           }
-        },
-        error: (err) => {
-          if (err.status === 403) {
-            this.snackBar.open(' Dossier déjà clôturé.', 'Fermer', {
-              duration: 3000,
-              panelClass: ['snackbar-info'],
-              horizontalPosition: 'center',
-              verticalPosition: 'top'
-            });
-          } else {
-            this.snackBar.open('Erreur lors de la clôture.', 'Fermer', {
-              duration: 3000,
-              panelClass: ['snackbar-error'],
-              horizontalPosition: 'center',
-              verticalPosition: 'top'
-            });
-          }
+        } else {
+          this.snackBar.open(errorMessage, 'Fermer', {
+            duration: 3000,
+            panelClass: ['snackbar-error'],
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
         }
-      });
-    }
+
+        // Même en cas d'erreur, tenter le usePointsFromPalier
+        this.handleUsePalier(dossierId);
+      }
+    });
   });
 }
+
 usePointsFromPalier(dossierId: number): void {
   this.palierService.usePalierPoints(dossierId).subscribe({
     next: (res) => {

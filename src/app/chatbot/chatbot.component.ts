@@ -58,7 +58,7 @@ sendQuestion() {
 
       if (res.type === 'comparaison' || res.type === 'categorie_mismatch') {
         this.messages.push({
-          type: 'bot',
+          type: 'error',
           response: res
         });
       } else {

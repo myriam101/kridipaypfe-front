@@ -42,5 +42,5 @@ export class ChatbotService {
     return this.http.post<AnswerResponse>(this.apiUrl, { question });
   }
 askQuestion2(question: string): Observable<ComparaisonResponse> {
-    return this.http.post<ComparaisonResponse>(this.apiUrl2, { question });
+    return this.http.post<ComparaisonResponse>(this.apiUrl, { question });
   }}

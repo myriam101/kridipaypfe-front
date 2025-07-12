@@ -14,9 +14,7 @@ export enum Designation {
      ASPIRATEUR = 11,
      CHAUFFAGE = 12,
      CHAUFFE_EAU = 13,
-     CHAUDIERE = 14,
-     TV = 15
-
+     CHAUDIERE = 14
   }
   
   

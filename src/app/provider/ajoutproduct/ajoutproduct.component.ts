@@ -84,7 +84,7 @@ export class AjoutproductComponent {
       short_description: [''],
       reference: [''],
       brand: [''],
-      category_id: [null],
+      category_id: [],
       id_provider: [this.providerId],
       bonifvisible: [true],
       bonifpoint: [0],
@@ -101,7 +101,7 @@ export class AjoutproductComponent {
         volume_collect: [],
         seer: [],
         scop: [],
-        energy_class: [null],
+        energy_class: [],
         cycle_duration: [],
         nbr_couvert: [],
         nb_bottle: [],
@@ -129,7 +129,6 @@ onSubmit(): void {
 
         if (newProductId) {
           // 1. Ajout impact carbone
-         // 1. Ajout impact carbone
 this.carbonServie.addCarbonImpact(newProductId, true).subscribe({
   next: () => {
     this.carbonServie.recalculateCarbonBadges().subscribe({
