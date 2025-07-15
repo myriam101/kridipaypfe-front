@@ -71,6 +71,9 @@ provider:any;
   goToHome() {
     this.router.navigate(['home'], { relativeTo: this.route });
   }
+   goToDeliveries() {
+    this.router.navigate(['livraisons'], { relativeTo: this.route });
+  }
 
   toggleSidebar(): void {
     this.sidebarVisible = !this.sidebarVisible;

@@ -51,6 +51,11 @@
          Commandes
         </a>
       </li>
+       <li class="nav-item">
+        <a class="nav-link" [class.active]="currentRoute.includes('livraisons')" (click)="goToDeliveries()">
+         Livraisons
+        </a>
+      </li>
     </ul>
 
     <!-- Bloc connecté en bas -->

@@ -1,0 +1,78 @@
+<div class="container">
+  <!-- Titre principal -->
+  <h4 class="text-center mb-4 fw-bold title-main">
+    <i class="fas fa-truck me-2"></i> Mes Livraisons
+  </h4>
+
+  
+<div class="d-flex align-items-center mb-4" style="background-color: #eaf4fd; padding: 10px; border-left: 4px solid #2196f3; border-radius: 6px; font-size: 0.95rem;">
+  <i class="zmdi zmdi-info-outline me-2 fs-5 text-primary"></i>
+Votre adresse renseignée : <span class="text-muted"> {{ providerAdress }}</span>
+</div>
+  <!-- Filtres -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <label class="fw-bold me-2 text-secondary">
+      <i class="fas fa-filter me-1"></i>Filtrer par statut :
+    </label>
+    <select [(ngModel)]="filterValidated" (change)="loadDeliveries()" class="form-select w-auto shadow-sm">
+      <option [value]="false">En attente</option>
+      <option [value]="true">Expédiée</option>
+    </select>
+  </div>
+
+  <!-- Message si aucune livraison -->
+  <div *ngIf="deliveries.length === 0" class="alert alert-info text-center shadow-sm rounded-3">
+    <i class="fas fa-info-circle me-2"></i>Aucune livraison pour le moment.
+  </div>
+
+  <!-- Cartes de livraisons -->
+ <div class="row" *ngIf="deliveries.length > 0">
+    <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2" *ngFor="let delivery of deliveries">
+      <div class="card border-0 bg-white rounded shadow dossier-card">
+        <div class="card-body p-4">
+
+          <!-- En-tête -->
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <h5 class="fw-bold mb-0" style="color: #216490;">Livraison #{{ delivery.id }}</h5>
+            <span class="badge fs-6 px-3 py-2 rounded-pill shadow"
+                  [ngClass]="delivery.validated ? 'bg-success text-white' : 'bg-warning'">
+              <i class="fas" [ngClass]="delivery.validated ? 'fa-check-circle' : 'fa-clock'"></i>
+              {{ delivery.validated ? 'Expédiée' : 'En attente' }}
+            </span>
+          </div>
+
+          <div class="card-separator mb-2"></div>
+
+          <!-- Adresse client -->
+          <p class="text-muted mb-2">
+            <i class="zmdi zmdi-pin me-2"></i> <strong>Destination :</strong> {{ delivery.adress_client }}
+          </p>
+        <p class="text-muted mb-2"><strong> <i class="bi bi-person me-1"></i> Client :</strong> {{ delivery.client.lastname }} {{ delivery.client.name }}</p>
+
+
+
+          <!-- Détails -->
+          <div class="bg-light p-3 rounded mb-3 border border-primary-subtle">
+            <p class="mb-2 fw-semibold text-primary-emphasis">
+              <i class="fas fa-truck me-1"></i> Détails Livraison
+            </p>
+            <ul class="list-unstyled mb-0">
+              <li><i class="fas fa-weight me-2 text-muted"></i><strong>Poids :</strong> {{ delivery.total_weight | number:'1.1-2' }} kg</li>
+              <li><i class="fas fa-road me-2 text-muted"></i><strong>Distance :</strong> {{ delivery.distance | number:'1.1-2' }} km</li>
+              <li><i class="fas fa-smog me-2 text-muted"></i><strong>CO₂ :</strong> {{ delivery.carbon_footprint | number:'1.2-2' }} kg</li>
+            </ul>
+          </div>
+
+          <!-- Bouton -->
+          <div class="text-end" *ngIf="!delivery.validated">
+            <button class="btn btn-outline-primary btn-sm btn-cloturer-petit"
+                    (click)="onValidateDelivery(delivery.id)">
+              <i class="fas fa-check me-1"></i> Valider
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

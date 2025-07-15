@@ -2,7 +2,6 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { ProductService } from '../services/product.service';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { ClientService } from '../services/client.service';
-import { ComparaisonComponent } from '../comparaison/comparaison.component';
 import { MatDialog } from '@angular/material/dialog';
 import { LogoutModalComponent } from '../pages/logout-modal/logout-modal.component';
 import { CatalogService } from '../services/catalog.service';

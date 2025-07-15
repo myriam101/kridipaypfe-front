@@ -26,4 +26,8 @@ export class ProviderService {
  getProviderDetails(providerId: number): Observable<any> {
     return this.http.get<any>(`${this.apiurl}/details/${providerId}`);
   }
+  getProviderAdress(providerId: number): Observable<any> {
+  return this.http.get<any>(`${this.apiurl}/${providerId}/adresse`);
+}
+
 }

@@ -25,15 +25,15 @@ import { BoardComponent } from './provider/board/board.component';
 import { GestionPointsAdminComponent } from './adminboard/gestion-points-admin/gestion-points-admin.component';
 import { UnauthorizedComponent } from './provider/unauthorized/unauthorized.component';
 import { ChatbotComponent } from './chatbot/chatbot.component';
-import { ComparaisonComponent } from './comparaison/comparaison.component';
 import { LivraisonComponent } from './client/livraison/livraison.component';
 import { PaliersBonifComponent } from './banque/paliers-bonif/paliers-bonif.component';
 import { VerificationComponent } from './adminboard/verification/verification.component';
+import { LivraisonlistComponent } from './provider/livraisonlist/livraisonlist.component';
 
 const routes: Routes = [
   {path:'chatbot',component:ChatbotComponent},
   {path:'client',component: ClientComponent,
-    children :[  {path:'comparateur',component:ComparaisonComponent},{path:'shopping-cart/delivery',component:LivraisonComponent},
+    children :[{path:'shopping-cart/delivery',component:LivraisonComponent},
 {path:'profile',component:ProfileComponent},{path:'shopping-cart',component:ShoppingCartComponent}],
     canActivate: [AuthGuard],data: { roles: ['ROLE_CLIENT']}},
 
@@ -76,6 +76,10 @@ component:GestionCatalogsComponent
         component: AjoutproductComponent
       },
       {path:'commandes',component:CartsComponent},
+       {
+        path:'livraisons',
+        component:LivraisonlistComponent
+      },
     {path:'unauthorized', component:UnauthorizedComponent}],
     canActivate: [AuthGuard],data: { roles: ['ROLE_PROVIDER']}},];
 

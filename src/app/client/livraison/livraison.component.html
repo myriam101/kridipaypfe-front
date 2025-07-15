@@ -42,15 +42,7 @@
             <div class="small text-muted">Émissions estimées pour cette livraison</div>
           </div>
 
-          <div class="mb-3"> <label for="modeliv" class="form-label fw-semibold text-dark small">Mode de livraison</label> <select id="modeliv" class="form-select app-input form-select-sm" formControlName="modeliv"> <option value="" disabled selected>Sélectionnez un mode de livraison</option>
-              <option *ngFor="let option of modelivOptions" [value]="option.value">
-                {{ option.label }}
-              </option>
-            </select>
-            <div *ngIf="form.controls['modeliv'].invalid && (form.controls['modeliv'].dirty || form.controls['modeliv'].touched)" class="text-danger small mt-1">
-                Veuillez sélectionner un mode de livraison.
-            </div>
-          </div>
+      
 
           <div class="app-weight-summary p-3 mb-3 rounded-3 bg-app-lighter-blue"> <div class="d-flex align-items-center mb-2">
               <i class="bi bi-box-seam fs-5 me-2 text-app-blue"></i> <h6 class="fw-bold mb-0 text-dark small">Poids du panier par fournisseur</h6> <i class="bi bi-info-circle-fill ms-auto text-muted small"
@@ -89,12 +81,6 @@
           <i class="bi bi-geo-alt-fill me-2 fs-5 text-app-blue"></i>
           <div>
             <strong class="text-dark">Adresse :</strong><br> {{ summary.adresse }}
-          </div>
-        </li>
-        <li class="mb-2 d-flex align-items-center">
-          <i class="bi bi-box-seam-fill me-2 fs-5 text-app-blue"></i>
-          <div>
-            <strong class="text-dark">Mode :</strong><br> {{ summary.modeLivraison }}
           </div>
         </li>
         <li class="mb-2 d-flex align-items-center">

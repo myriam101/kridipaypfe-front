@@ -1,0 +1,57 @@
+.title-main {
+  color: #216490;
+  font-size: 1.8rem;
+  letter-spacing: 0.5px;
+}
+
+.delivery-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.delivery-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(33, 100, 144, 0.2);
+}
+
+.btn-cloturer-petit {
+  padding: 4px 12px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid #216490;
+  color: #216490;
+  background-color: transparent;
+  transition: all 0.2s ease;
+}
+.btn-cloturer-petit:hover {
+  background-color: #216490;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(33, 100, 144, 0.2);
+}
+.card-separator {
+  border-top: 1px solid rgba(0,0,0,0.1);
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.btn-cloturer-petit {
+  padding: 4px 12px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid #216490;
+  color: #216490;
+  background-color: transparent;
+  transition: all 0.2s ease;
+}
+
+.btn-cloturer-petit:hover {
+  background-color: #216490;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(33, 100, 144, 0.2);
+}
+
+.dossier-card:hover {
+  transform: translateY(-3px);
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 20px rgba(33, 100, 144, 0.15);
+}

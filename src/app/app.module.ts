@@ -56,7 +56,6 @@ import { ConfirmDialogAdminComponent } from './adminboard/confirm-dialog-admin/c
 import { UnauthorizedComponent } from './provider/unauthorized/unauthorized.component';
 import { DetailPointbonifComponent } from './adminboard/detail-pointbonif/detail-pointbonif.component';
 import { ChatbotComponent } from './chatbot/chatbot.component';
-import { ComparaisonComponent } from './comparaison/comparaison.component';
 import { DetailspointComponent } from './adminboard/gestion-points-admin/detailspoint/detailspoint.component';
 import { ProgresscrapperComponent } from './adminboard/progresscrapper/progresscrapper.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -73,6 +72,7 @@ import { EditPalierDialogComponent } from './banque/paliers-bonif/edit-palier-di
 import { ConfirmComponent } from './pages/confirm/confirm.component';
 import { VerificationComponent } from './adminboard/verification/verification.component';
 import { ListproductsAdminComponent } from './adminboard/listproducts-admin/listproducts-admin.component';
+import { LivraisonlistComponent } from './provider/livraisonlist/livraisonlist.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -116,7 +116,6 @@ export function tokenGetter() {
     UnauthorizedComponent,
     DetailPointbonifComponent,
     ChatbotComponent,
-    ComparaisonComponent,
     DetailspointComponent,
     ProgresscrapperComponent,
     LivraisonComponent,
@@ -128,7 +127,8 @@ export function tokenGetter() {
     AddPalierDialogComponent,
     EditPalierDialogComponent,
     ConfirmComponent,
-    VerificationComponent  ],
+    VerificationComponent,
+    LivraisonlistComponent  ],
   imports: [
     BrowserModule,
     PdfViewerModule,

@@ -43,18 +43,10 @@ export class LivraisonComponent implements OnInit {
   selectedLng: number | null = null;
   clientId:any;
   selectedMarker: L.Marker | null = null;
-  clientRide = 'none';
-  everydayRide = false;
   idcart: any;
   form!: FormGroup;
   deliverySummaries: any[] = [];
 
-  modelivOptions = [
-  { value: 'point_relais', label: 'Point relais' },
-  { value: 'domicile', label: 'Domicile' },
-  { value: 'collecte', label: 'Collecte' }
-];
-  modeliv: any;
   weightsByProvider: WeightsByProvider | null = null;
 
   constructor( private snackBar: MatSnackBar,
@@ -167,7 +159,6 @@ ngOnInit() {
     });
 
     this.form = this.fb.group({
-      modeliv: [this.modeliv, Validators.required],
       address: ['', Validators.required],
     });
   
@@ -222,7 +213,7 @@ getProviderNames(): string[] {
 revenirPanier() {
   this.router.navigate(['/client/shopping-cart']);
 }
-createDeliveries(clientId: number, cartId: number, modeliv: string, clientRide: string, everydayRide: boolean) {
+createDeliveries(clientId: number, cartId: number) {
   if (this.selectedLat === null || this.selectedLng === null) {
     this.error = "Adresse non sélectionnée.";
     return of(null); 
@@ -255,9 +246,6 @@ createDeliveries(clientId: number, cartId: number, modeliv: string, clientRide: 
                     adress_client: this.address,
                     distance: route.distance_km,
                     carbon_footprint: co2Res.co2_kg,
-                    everyday_ride: everydayRide,
-                    modeliv: modeliv,
-                    client_ride: clientRide,
                     client_id: clientId,
                     provider_id: providerId,
                     adress_provider: provider.adress,
@@ -269,7 +257,6 @@ createDeliveries(clientId: number, cartId: number, modeliv: string, clientRide: 
                     tap(() => {
                       this.deliverySummaries.push({
                         adresse: payload.adress_client,
-                        modeLivraison: payload.modeliv,
                         fournisseur: payload.adress_provider,
                         distance: payload.distance,
                         poids: providerWeight + ' kg',
@@ -305,10 +292,8 @@ createDeliveries(clientId: number, cartId: number, modeliv: string, clientRide: 
 
 
 submitDelivery() {
-  const modeliv = this.form.get('modeliv')?.value;
   const address = this.form.get('address')?.value;
 
-  this.modeliv = modeliv;
   this.address = address;
 
 const dialogRef = this.dialog.open(ConfirmComponent, {
@@ -322,9 +307,6 @@ const dialogRef = this.dialog.open(ConfirmComponent, {
       this.createDeliveries(
         this.clientId,
         this.idcart,
-        modeliv,
-        this.clientRide,
-        this.everydayRide
       ).subscribe({
         next: () => {
           // Ici on est sûr que TOUTES les livraisons ont été créées (ou tentées)

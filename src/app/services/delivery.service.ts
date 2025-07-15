@@ -89,5 +89,13 @@ getTotalCO2ByCart(cart_id: number) {
     `${this.baseUrl}total-co2/${cart_id}`
   );
 }
+getDeliveriesByProvider(providerId: number, validated: boolean): Observable<any> {
+  return this.http.get<any>(`${this.baseUrl}provider/${providerId}/all`, {
+    params: { validated: validated.toString() }
+  });
+}
+validateDelivery(deliveryId: number): Observable<any> {
+  return this.http.put(`${this.baseUrl}${deliveryId}/validate`, {});
+}
 
 }
